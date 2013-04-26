@@ -1,4 +1,24 @@
 /**
+ * <summary>The time (in ms) between checks.</summary>
+ * <remarks>Default timers from SA-MP are lazy. I suggest using a timer-fix for better output.</remarks>
+ */
+#define AC_WATCHGUARD_INTERVAL			1500
+
+/**
+ * <summary>The time (in ms) after a player is considered AFK.</summary>
+ */
+#define AC_AFK_TIME						1500
+
+/**
+ * <summary>Whether two or three dimension vectors should be used.</summary>
+ * <remarks>
+ *		When 3D vectors are used, falling is reported as speed / teleport hack (sometimes).
+ *		In other words, using 2D vectors reduces the number of fake reports.
+ * </remarks>
+ */
+#define AC_USE_2D_VECTORS				true
+
+/**
  * <summary>Variable that holds the state of specific anti-cheat module and it's name.</summary>
  */
 stock AC::cheats[AC::eCheats][AC::eCheatConfig] = {
@@ -47,12 +67,3 @@ stock AC::cheats[AC::eCheats][AC::eCheatConfig] = {
 	// AC::cModSa
 	{true, "m0d_sa (hacking tool)"}
 };
-
-/**
- * <summary>Should 2D speeds be used?</summary>
- * <remarks>
- * 		Using 2D positions reduces the number of fake reports.
- *		When 3D positions are used, falling is reported as speed / teleport hack (sometimes).
- * </remarks>
- */
-stock AC::use2dPositions = true;

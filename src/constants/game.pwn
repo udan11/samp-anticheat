@@ -1,5 +1,5 @@
 /**
- * <summary>This deals with FPS spikes.</summary>
+ * <summary>Multiple measurements are done to deal with FPS spikes.</summary>
  */
 #define AC_MAX_FPS_INDEX				4
 

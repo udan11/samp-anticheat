@@ -8,12 +8,35 @@
 #endif
 
 #if defined ANTICHEAT_API
+
 	/**
 	 * <summary>API used by remote scripts (other than the core).</summary>
 	 */
-	#define EXTERN:%0<%1>(%2) \
-		stock AC::%0 (%2) \
-			return CallRemoteFunction ("JB_"#%0, #%1, %2)
 	// TODO.
+	
+	#if defined ANTICHEAT_NEW_FUNCTIONS
+		/*
+		REMOTE:IsPlayerAFK<i>(playerid);
+		REMOTE:IsPlayerSpawned<i>(playerid);
+		*/
+	#endif
+	
 	#endinput // We stop here, we don't need the core.
+#endif
+
+/**
+ * Callback triggered when a cheat is detected.
+ * <param name="playerid">Player's ID.</param>
+ * <param name="cheatid">Cheat ID.</param>
+ * <param name="extraid">Additional cheat ID (depends on hack tool, detection method, etc.).</param>
+ * <param name="info">Additional information.</param>
+ */
+forward Anticheat_OnCheatDetected(playerid, cheatid, extraid = 0, info[] = "");
+
+// Defines new functions. Not the real purpose of this anticheat.
+#if defined ANTICHEAT_NEW_FUNCTIONS
+	/*
+	#define IsPlayerAFK				AC::IsPlayerAFK
+	#define IsPlayerSpawned			AC::IsPlayerSpawned
+	*/
 #endif

@@ -1,4 +1,9 @@
 /**
+ * The ID of the watchguard timer.
+ */
+stock AC::watchguardTimer = 0;
+
+/**
  * <summary>Stores a player's game data.</summary>
  */
 enum AC::ePlayer {
@@ -11,12 +16,12 @@ enum AC::ePlayer {
 	/**
 	 * <summary>Player's sync status.</summary>
 	 */
-	AC::pSynced,
+	AC::pSync,
 	
 	/**
 	 * <summary>Keeps track of player's sync failures.</summary>
 	 */
-	AC::pSyncFails[AC_MAX_SYNC],
+	AC::pSyncFails[AC::eSync],
 
 	/**
 	 * <summary>Stores latest FPS measurements.</summary>

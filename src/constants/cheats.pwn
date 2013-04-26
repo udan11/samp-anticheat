@@ -1,17 +1,17 @@
 /**
- * <summary>Maximum name of a cheat.</summary>
+ * <summary>Maximum length of a cheat's name.</summary>
  */
 #define AC_MAX_CHEAT_NAME				32
 
 /**
  * <summary>An enumeration with the basic definitons of the cheats.</summary>
  */
-enum AC::eCheats {
+enum _:AC::eCheats {
 
 	/**
 	 * <summary>Unknown hack (used for internal purpose).</summary>
 	 */
-	AC::cUnknown,  // TODO
+	AC::cUnknown,
 	
 	/**
 	 * <summary>Not an actual hack. Used for desynced players.</summary>

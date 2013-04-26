@@ -37,12 +37,20 @@
 #include <foreach>
 
 /**
- * <summary>Macro used to label variables, functions, etc. used by this anticheat.</summary>
+ * <summary>Checks if a string is null.</summary>
+ */
+#if !defined isnull
+	#define isnull(%1) \
+		((!(%1[0])) || (((%1[0]) == '\1') && (!(%1[1]))))
+#endif
+
+/**
+ * <summary>Macro used to label anticheat's variables, functions, etc.</summary>
  */
 #define AC::							AC_
 
 /**
- * <summary>Macro used to generate automatic forward declarations.</summary>
+ * <summary>Generate forward declarations for public and stock functions.</summary>
  */
 #define AC_PUBLIC:%0(%1) \
 	forward %0(%1); public %0(%1)
