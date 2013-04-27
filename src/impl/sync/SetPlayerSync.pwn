@@ -4,16 +4,16 @@
  * <param name="sync">Sync's ID.</param>
  * <param name="status">Is player synced or not?</param>
  */
-stock AC::SetPlayerSync(playerid, sync, status = 1) {
+stock AC_SetPlayerSync(playerid, sync, status = true) {
 	if (IsPlayerConnected(playerid)) {
 		if (status) {
-			AC::players[playerid][AC::pSync] |= 1 << sync;
-			AC::players[playerid][AC::pSyncFails][sync] = 0;
+			AC_players[playerid][AC_pSync] |= 1 << sync;
+			AC_players[playerid][AC_pSyncFails][sync] = 0;
 		} else {
-			AC::players[playerid][AC::pSync] &= ~(1 << sync);
-			++AC::players[playerid][AC::pSyncFails][sync];
-			if (AC::players[playerid][AC::pSyncFails][sync] % AC_SYNC_MAX_FAILS) {
-				AC::CheatDetected(playerid, AC::cSync, sync, "");
+			AC_players[playerid][AC_pSync] &= ~(1 << sync);
+			++AC_players[playerid][AC_pSyncFails][sync];
+			if (AC_players[playerid][AC_pSyncFails][sync] % AC_SYNC_MAX_FAILS) {
+				AC_CheatDetected(playerid, AC_cSync, sync, "");
 			}
 		}
 	}

@@ -6,123 +6,123 @@
 /**
  * <summary>An enumeration with the basic definitons of the cheats.</summary>
  */
-enum _:AC::eCheats {
+enum _:AC_eCheats {
 
 	/**
 	 * <summary>Unknown hack (used for internal purpose).</summary>
 	 */
-	AC::cUnknown,
+	AC_cUnknown,
 	
 	/**
 	 * <summary>Not an actual hack. Used for desynced players.</summary>
 	 */
-	AC::cSync, // TODO
+	AC_cSync, // TODO
 	
 	/**
 	 * <summary>Not an actual hack. Players with high ping usually spoils other players' gameplay.</summary>
 	 */
-	AC::cPing, // TODO
+	AC_cPing, // TODO
 	
 	/**
 	 * <summary>Not an actual hack. Players with low FPS usually spoils other players' gameplay.</summary>
 	 */
-	AC::cFPS, // TODO
+	AC_cFPS, // TODO
 	
 	/**
 	 * <summary>Not an actual hack. Used for AFK players.</summary>
 	 */
-	AC::cAFK, // TODO
+	AC_cAFK, // TODO
 	
 	/**
 	 * <summary>Health hack. Restores user's health.</summary>
 	 */
-	AC::cHealth, // TODO
+	AC_cHealth, // TODO
 	
 	/**
 	 * <summary>Armour hack. Restores user's armour.</summary>
 	 */
-	AC::cArmour, // TODO
+	AC_cArmour, // TODO
 	
 	/**
 	 * <summary>Money hack.</summary>
 	 */
-	AC::cMoney, // TODO
+	AC_cMoney, // TODO
 	
 	/**
 	 * <summary>Fake kill. The user is reported to have been killed by multiple persons in short interval.</summary>
 	 */
-	AC::cFakeKill, // TODO
+	AC_cFakeKill, // TODO
 	
 	/**
 	 * <summary>Teleport hack. Gives the ability to teleport.</summary>
 	 */
-	AC::cTeleport, // TODO
+	AC_cTeleport, // TODO
 	
 	/**
 	 * <summary>Speed hack. The user / it's vehicle moves faster.</summary>
 	 */
-	AC::cSpeed, // TODO
+	AC_cSpeed, // TODO
 	
 	/**
 	 * <summary>Fly hack. The user looks like he is flying.</summary>
 	 */
-	AC::cFly, // TODO
+	AC_cFly, // TODO
 	
 	/**
 	 * <summary>Airbreak hack.</summary>
 	 */
-	AC::cAirbreak, // TODO
+	AC_cAirbreak, // TODO
 	
 	/**
 	 * <summary>Weapon hack. The user has the ability to spawn weapons.</summary>
 	 */
-	AC::cWeapon, // TODO
+	AC_cWeapon, // TODO
 	
 	/**
 	 * <summary>Not an actual hack. It detect the player using joypads. It's easier to aim using a joypad.</summary>
 	 */
-	AC::cJoypad, // TODO
+	AC_cJoypad, // TODO
 	
 	/**
 	 * <summary>Aim bot detection. This cheat is quite new and detection methods are not very accurate.</summary>
 	 */
-	AC::cAimBot, // TODO
+	AC_cAimBot, // TODO
 	
 	/**
 	 * <summary>Jetpack hack. Detects if a player has acquired a jetpack in a unscripted way.</summary>
 	 */
-	AC::cJetpack, // TODO
+	AC_cJetpack, // TODO
 	
 	/**
 	 * <summary>Vehicle warp hack. The user has the ability to warp vehicles around him.</summary>
 	 */
-	AC::cVehicleWarp, // TODO
+	AC_cVehicleWarp, // TODO
 	
 	/**
 	 * <summary>Vehicle repair hack. The user has the ability to repair its vehicle without going to a repair / modding shop.</summary>
 	 */
-	AC::cVehicleRepair, // TODO
+	AC_cVehicleRepair, // TODO
 	
 	/**
 	 * <summary>Vehicle mod hack. The user adds (illegal) mods without being in a modding shop.</summary>
 	 */
-	AC::cVehicleMod, // TODO
+	AC_cVehicleMod, // TODO
 	
 	/**
 	 * <summary>RCON bruteforces. If a player tries to find the RCON password.</summary>
 	 */
-	AC::cRconBruteforce, // TODO
+	AC_cRconBruteforce, // TODO
 	
 	/**
 	 * <summary>Checks if a player is using the famous `m0d_sa` AIO hacking tool.</summary>
 	 */
-	AC::cModSa, // TODO
+	AC_cModSa, // TODO
 };
 
 /**
  * <summary>Enumeration used to define the configuration of an anti-cheat module.</summary>
  */
-enum AC::eCheatConfig {
-	AC::ccIsEnabled,
-	AC::ccName[AC_MAX_CHEAT_NAME]
+enum AC_eCheatConfig {
+	AC_ccIsEnabled,
+	AC_ccName[AC_MAX_CHEAT_NAME]
 };

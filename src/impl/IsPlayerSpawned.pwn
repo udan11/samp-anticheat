@@ -3,9 +3,9 @@
  * <param name="playerid">Player's ID.</param>
  * <returns>True if player is spawned, false if not.</returns>
  */
-stock AC::IsPlayerSpawned(playerid) {
+stock AC_IsPlayerSpawned(playerid) {
 	if (IsPlayerConnected(playerid)) {
-		return AC::players[playerid][AC::pState] & AC::psSpawn ? true : false;
+		return AC_players[playerid][AC_pState] & AC_psSpawn ? true : false;
 	}
 	return false;
 }

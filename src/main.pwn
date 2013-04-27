@@ -21,6 +21,11 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Special thanks to:
+ *	  cessil - useful anticheat tips
+ *	  Slice - memset
+ *	  Y_Less - very thorough research
  */
  
 // #include guard
@@ -45,20 +50,23 @@
 #endif
 
 /**
- * <summary>Macro used to label anticheat's variables, functions, etc.</summary>
+ * <summary>Macro used for debugging purposes.</summary>
  */
-#define AC::							AC_
+#define AC_DEBUG(%0)					printf(%0)
+//#define DEBUG(%0);
 
 /**
  * <summary>Generate forward declarations for public and stock functions.</summary>
  */
-#define AC_PUBLIC:%0(%1) \
+#define AC_PUBLIC%0\32;%0(%1) \
 	forward %0(%1); public %0(%1)
-#define AC_STOCK:%0(%1) \
+#define AC_STOCK%0\32;%0(%1) \
 	forward %0(%1); stock %0(%1)
 
 /**
  * <summary>Creates a stock that calls remote functions.</summary>
  */
-#define REMOTE:%0<%1>(%2) \
-	stock AC_%0(%2) return CallRemoteFunction(#AC::#%0,#%1,%2)
+#define AC_REMOTE%0\32;%0<%1>(%2) \
+	stock AC_%0(%2) return CallRemoteFunction(#AC_#%0,#%1,%2)
+	
+AC_REMOTE Test<ii>(a, b);

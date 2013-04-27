@@ -6,7 +6,7 @@
 /**
  * <summary>Sync types.</summary>
  */
-enum _:AC::eSync {
-	AC::sHealth,
-	AC::sArmour
+enum _:AC_eSync {
+	AC_sHealth,
+	AC_sArmour
 };

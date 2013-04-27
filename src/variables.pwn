@@ -1,83 +1,88 @@
 /**
  * The ID of the watchguard timer.
  */
-stock AC::watchguardTimer = 0;
+stock AC_watchguardTimer = 0;
 
 /**
  * <summary>Stores a player's game data.</summary>
  */
-enum AC::ePlayer {
+enum _:AC_ePlayer {
 
 	/**
 	 * <summary>Player's last known state.</summary>
 	 */
-	AC::pState,
+	AC_pState,
 	
 	/**
 	 * <summary>Player's sync status.</summary>
 	 */
-	AC::pSync,
+	AC_pSync,
 	
 	/**
 	 * <summary>Keeps track of player's sync failures.</summary>
 	 */
-	AC::pSyncFails[AC::eSync],
+	AC_pSyncFails[AC_eSync],
 
 	/**
 	 * <summary>Stores latest FPS measurements.</summary>
 	 */
-	AC::pFPS[AC_MAX_FPS_INDEX],
+	AC_pFPS[AC_MAX_FPS_INDEX],
+	
+	/**
+	 * <summary>Last FPS index used.</summary>
+	 */
+	AC_pFPSIndex,
 
 	/**
 	 * <summary>The time (in ms) when the player was last updated.</summary>
 	 */
-	AC::pLastUpdate,
+	AC_pLastUpdate,
 
 	/**
 	 * <summary>Player's health.</summary>
 	 */
-	Float:AC::pHealth,
+	Float:AC_pHealth,
 
 	/**
 	 * <summary>Player's armour.</summary>
 	 */
-	Float:AC::pArmour,
+	Float:AC_pArmour,
 
 	/**
 	 * <summary>Player's money.</summary>
 	 */
-	AC::pMoney,
+	AC_pMoney,
 
 	/**
 	 * <summary>The latest time (in ms) when the player died.</summary>
 	 */
-	AC::pLastDeath,
+	AC_pLastDeath,
 	
 	/**
 	 * <summary>Player's latest known position.</summary>
 	 */
-	Float:AC::pPos[3],
+	Float:AC_pPos[3],
 	
 	/**
 	 * <summary>Player's latest known velocity.</summary>
 	 */
-	Float:AC::pVelocity[3],
+	Float:AC_pVelocity[3],
 	
 	/**
 	 * <summary>Player's weapons (ID and ammo).</summary>
 	 * <remarks>Two fields are used instead of a bidimensional array because Pawn doesn't support 4D arrays.</remarks>
 	 */
-	AC::pWeaponsID[AC_MAX_WEAPON_SLOTS],
-	AC::pWeaponsAmmo[AC_MAX_WEAPON_SLOTS],
+	AC_pWeaponsID[AC_MAX_WEAPON_SLOTS],
+	AC_pWeaponsAmmo[AC_MAX_WEAPON_SLOTS],
 	
 	/**
 	 * <summary>Player's special action.</summary>
 	 */
-	AC::pSpecialAction,
+	AC_pSpecialAction,
 	
 };
 
 /**
  * <summary>Stores players' game data.</summary>
  */
-new AC::players[MAX_PLAYERS][AC::ePlayer];
+new AC_players[MAX_PLAYERS][AC_ePlayer];

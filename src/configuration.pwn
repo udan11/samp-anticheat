@@ -21,49 +21,49 @@
 /**
  * <summary>Variable that holds the state of specific anti-cheat module and it's name.</summary>
  */
-stock AC::cheats[AC::eCheats][AC::eCheatConfig] = {
-	// AC::cUnknown
+stock AC_cheats[AC_eCheats][AC_eCheatConfig] = {
+	// AC_cUnknown
 	{false, "unknown hack"},
-	// AC::cSync
+	// AC_cSync
 	{false, "sync hack"},
-	// AC::cPing
+	// AC_cPing
 	{true, "high ping"},
-	// AC::cFPS
+	// AC_cFPS
 	{true, "low fps"},
-	// AC::cAFK
+	// AC_cAFK
 	{false, "afk"},
-	// AC::cHealth
+	// AC_cHealth
 	{true, "health hack"},
-	// AC::cArmour
+	// AC_cArmour
 	{true, "armour hack"},
-	// AC::cMoney
+	// AC_cMoney
 	{true, "money hack"},
-	// AC::cFakeKill
+	// AC_cFakeKill
 	{true, "fake kill"},
-	// AC::cTeleport
+	// AC_cTeleport
 	{true, "teleport hack"},
-	// AC::cSpeed
+	// AC_cSpeed
 	{true, "speed hack"},
-	// AC::cFly
+	// AC_cFly
 	{true, "fly hack"},
-	// AC::cAirbreak
+	// AC_cAirbreak
 	{true, "airbreak hack"},
-	// AC::cWeapon
+	// AC_cWeapon
 	{true, "weapon hack"},
-	// AC::cJoypad
+	// AC_cJoypad
 	{true, "joypad"},
-	// AC::cAimBot
+	// AC_cAimBot
 	{true, "aim bot"},
-	// AC::cJetpack
+	// AC_cJetpack
 	{true, "jetpack hack"},
-	// AC::cVehicleWarp
+	// AC_cVehicleWarp
 	{true, "vehicle warp hack"},
-	// AC::cVehicleRepair
+	// AC_cVehicleRepair
 	{true, "vehicle repair hack"},
-	// AC::cVehicleMod
+	// AC_cVehicleMod
 	{true, "vehicle (illegal) mod"},
-	// AC::cRconBruteforce
+	// AC_cRconBruteforce
 	{true, "RCON bruteforcer"},
-	// AC::cModSa
+	// AC_cModSa
 	{true, "m0d_sa (hacking tool)"}
 };

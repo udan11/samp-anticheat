@@ -1,32 +1,51 @@
-// Injecting watchguard timer.
+/**
+ * <summary>Called when the anticheat's core is being initialized.</summary>
+ */
+stock AC_OnScriptInit() {
+	AC_DEBUG("[anticheat] Anticheat's timer succesfully injected!");
+	AC_watchguardTimer = SetTimer(#AC_Watchguard, AC_WATCHGUARD_INTERVAL, true);
+	return 1;
+}
+
+// Starting watchguard timer.
 #if defined FILTERSCRIPT
 	public OnFilterScriptInit() {
-		AC::watchguardTimer = SetTimer(#AC::Watchguard, AC_WATCHGUARD_INTERVAL, true);
-		if (funcidx(#AC_OnFilterScriptInit) != -1) {
-			CallLocalFunction(#AC_OnFilterScriptInit, "");
-		}
-		return 1;
+		AC_OnScriptInit();
+		#if defined AC_OnFilterScriptInit
+			return AC_OnFilterScriptInit();
+		#else
+			return 1;
+		#endif
 	}
+	
 	#if defined _ALS_OnFilterScriptInit
 		#undef OnFilterScriptInit
 	#else
 		#define _ALS_OnFilterScriptInit
 	#endif
 	#define OnFilterScriptInit AC_OnFilterScriptInit
-	forward AC_OnFilterScriptInit();
+	
+	#if defined AC_OnFilterScriptInit
+		forward AC_OnFilterScriptInit();
+	#endif
 #else
 	public OnGameModeInit() {
-		AC::watchguardTimer = SetTimer(#AC::Watchguard, AC_WATCHGUARD_INTERVAL, true);
-		if (funcidx(#AC_OnGameModeInit) != -1) {
-			CallLocalFunction(#AC_OnGameModeInit, "");
-		}
-		return 1;
+		AC_OnScriptInit();
+		#if defined AC_OnGameModeInit
+			return AC_OnGameModeInit();
+		#else
+			return 1;
+		#endif
 	}
+	
 	#if defined _ALS_OnGameModeInit
 		#undef OnGameModeInit
 	#else
 		#define _ALS_OnGameModeInit
 	#endif
 	#define OnGameModeInit AC_OnGameModeInit
-	forward AC_OnGameModeInit();
+	
+	#if defined AC_OnGameModeInit
+		forward AC_OnGameModeInit();
+	#endif
 #endif

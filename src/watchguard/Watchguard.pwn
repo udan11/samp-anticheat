@@ -1,14 +1,14 @@
 /**
  * <summary>Anticheat's main function. Supervises players' actions.</summary>
  */
-AC_PUBLIC:AC::Watchguard() {
+AC_PUBLIC AC_Watchguard() {
 	foreach (new playerid : Player) {
-		if (!AC::IsPlayerSpawned(playerid)) {
+		if (!AC_IsPlayerSpawned(playerid)) {
 			continue;
-		} else if (AC::IsPlayerAFK(playerid)) {
+		} else if (AC_IsPlayerAFK(playerid)) {
 			continue;
 		}
-		AC::Watchguard_Health(playerid);
-		AC::Watchguard_Armour(playerid);
+		AC_Watchguard_Health(playerid);
+		AC_Watchguard_Armour(playerid);
 	}
 }

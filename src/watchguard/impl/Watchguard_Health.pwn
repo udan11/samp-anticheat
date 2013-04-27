@@ -2,16 +2,16 @@
  * <summary>Checks if a player is using health hack.</summary>
  * <param name="playerid">Player's ID.</param>
  */
-stock AC::Watchguard_Health(playerid) {
+stock AC_Watchguard_Health(playerid) {
 	new Float:health;
 	GetPlayerHealth(playerid, health);
-	if (!AC::IsPlayerSynced(playerid, AC::sHealth)) {
-		AC::SetPlayerSync(playerid, AC::sHealth, health == AC::players[playerid][AC::pHealth]);
+	if (!AC_IsPlayerSynced(playerid, AC_sHealth)) {
+		AC_SetPlayerSync(playerid, AC_sHealth, health == AC_players[playerid][AC_pHealth]);
 	} else {
-		if (health > AC::players[playerid][AC::pHealth]) {
-			AC::CheatDetected(playerid, AC::cHealth);
+		if ((!AC_IsPlayerAtVendingMachine(playerid)) && (health > AC_players[playerid][AC_pHealth])) {
+			AC_CheatDetected(playerid, AC_cHealth);
 		} else {
-			AC::players[playerid][AC::pHealth] = health;
+			AC_players[playerid][AC_pHealth] = health;
 		}
 	}
 }

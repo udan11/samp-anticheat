@@ -36,7 +36,7 @@ forward Anticheat_OnCheatDetected(playerid, cheatid, extraid = 0, info[] = "");
 // Defines new functions. Not the real purpose of this anticheat.
 #if defined ANTICHEAT_NEW_FUNCTIONS
 	/*
-	#define IsPlayerAFK				AC::IsPlayerAFK
-	#define IsPlayerSpawned			AC::IsPlayerSpawned
+	#define IsPlayerAFK				AC_IsPlayerAFK
+	#define IsPlayerSpawned			AC_IsPlayerSpawned
 	*/
 #endif

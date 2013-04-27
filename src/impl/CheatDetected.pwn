@@ -5,7 +5,7 @@
  * <param name="extraid">Additional cheat ID (depends on hack tool, detection method, etc.).</param>
  * <param name="info">Additional information.</param>
  */
-stock AC::CheatDetected(playerid, cheatid, extraid = 0, info[] = "") {
+stock AC_CheatDetected(playerid, cheatid, extraid = 0, info[] = "") {
 	if (isnull(info)) {
 		CallLocalFunction(#Anticheat_OnCheatDetected, "iiis", playerid, cheatid, extraid, "\1");
 	} else {

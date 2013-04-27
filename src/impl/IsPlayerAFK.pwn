@@ -3,9 +3,9 @@
  * <param name="playerid">Player's ID.</param>
  * <returns>True if player is AFK, false if not.</returns>
  */
-stock AC::IsPlayerAFK(playerid) {
+AC_PUBLIC AC_IsPlayerAFK(playerid) {
 	if (IsPlayerConnected(playerid)) {
-		return (GetTickCount() - AC::players[playerid][AC::pLastUpdate]) > AC_AFK_TIME;
+		return (GetTickCount() - AC_players[playerid][AC_pLastUpdate]) > AC_AFK_TIME;
 	}
 	return false;
 }

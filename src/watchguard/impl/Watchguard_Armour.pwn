@@ -2,16 +2,16 @@
  * <summary>Checks if a player is using armour hack.</summary>
  * <param name="playerid">Player's ID.</param>
  */
-stock AC::Watchguard_Armour(playerid) {
+stock AC_Watchguard_Armour(playerid) {
 	new Float:armour;
 	GetPlayerArmour(playerid, armour);
-	if (!AC::IsPlayerSynced(playerid, AC::sArmour)) {
-		AC::SetPlayerSync(playerid, AC::sArmour, armour == AC::players[playerid][AC::pArmour]);
+	if (!AC_IsPlayerSynced(playerid, AC_sArmour)) {
+		AC_SetPlayerSync(playerid, AC_sArmour, armour == AC_players[playerid][AC_pArmour]);
 	} else {
-		if (armour > AC::players[playerid][AC::pArmour]) {
-			AC::CheatDetected(playerid, AC::cArmour);
+		if (armour > AC_players[playerid][AC_pArmour]) {
+			AC_CheatDetected(playerid, AC_cArmour);
 		} else {
-			AC::players[playerid][AC::pArmour] = armour;
+			AC_players[playerid][AC_pArmour] = armour;
 		}
 	}
 }
