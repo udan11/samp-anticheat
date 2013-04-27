@@ -126,3 +126,53 @@ enum AC_eCheatConfig {
 	AC_ccIsEnabled,
 	AC_ccName[AC_MAX_CHEAT_NAME]
 };
+
+/**
+ * <summary>Variable that holds the state of specific anti-cheat module and it's name.</summary>
+ */
+stock AC_cheats[AC_eCheats][AC_eCheatConfig] = {
+	// AC_cUnknown
+	{false, "unknown hack"},
+	// AC_cSync
+	{false, "desynced"},
+	// AC_cPing
+	{true, "high ping"},
+	// AC_cFPS
+	{true, "low fps"},
+	// AC_cAFK
+	{false, "afk"},
+	// AC_cHealth
+	{true, "health hack"},
+	// AC_cArmour
+	{true, "armour hack"},
+	// AC_cMoney
+	{true, "money hack"},
+	// AC_cFakeKill
+	{true, "fake kill"},
+	// AC_cTeleport
+	{true, "teleport hack"},
+	// AC_cSpeed
+	{true, "speed hack"},
+	// AC_cFly
+	{true, "fly hack"},
+	// AC_cAirbreak
+	{true, "airbreak hack"},
+	// AC_cWeapon
+	{true, "weapon hack"},
+	// AC_cJoypad
+	{true, "joypad"},
+	// AC_cAimBot
+	{true, "aim bot"},
+	// AC_cJetpack
+	{true, "jetpack hack"},
+	// AC_cVehicleWarp
+	{true, "vehicle warp hack"},
+	// AC_cVehicleRepair
+	{true, "vehicle repair hack"},
+	// AC_cVehicleMod
+	{true, "vehicle (illegal) mod"},
+	// AC_cRconBruteforce
+	{true, "RCON bruteforcer"},
+	// AC_cModSa
+	{true, "m0d_sa (hacking tool)"}
+};

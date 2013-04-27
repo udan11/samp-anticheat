@@ -2,7 +2,7 @@
  * <summary>Called when the anticheat's core is being initialized.</summary>
  */
 stock AC_OnScriptInit() {
-	AC_DEBUG("[anticheat] Anticheat's timer succesfully injected!");
+	_AC_DEBUG("[anticheat] Anticheat's timer succesfully injected!");
 	AC_watchguardTimer = SetTimer(#AC_Watchguard, AC_WATCHGUARD_INTERVAL, true);
 	return 1;
 }

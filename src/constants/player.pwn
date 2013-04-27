@@ -1,10 +1,15 @@
 /**
+ * <summary>The time (in ms) after a player is considered AFK.</summary>
+ */
+#define AC_AFK_TIME						1500
+
+/**
  * Player states.
  */
 enum _:AC_ePlayerState {
 	AC_psSpawn = 1,						// bitmask  0
-	AC_psFreeze,						// bitmask  1
-	AC_ps02,							// bitmask  2
+	AC_psWasAFK,						// bitmask  1
+	AC_psFreeze,						// bitmask  2
 	AC_ps03,							// bitmask  3
 	AC_ps04,							// bitmask  4
 	AC_ps05,							// bitmask  5

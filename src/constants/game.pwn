@@ -9,9 +9,24 @@
 #define AC_MAX_WEAPON_SLOTS				13
 
 /**
+ * <summary>Whether two or three dimension vectors should be used.</summary>
+ * <remarks>
+ *		When 3D vectors are used, falling is reported as speed / teleport hack (sometimes).
+ *		In other words, using 2D vectors reduces the number of fake reports.
+ * </remarks>
+ */
+#define AC_USE_2D_VECTORS				true
+
+/**
  * <summary>Vending machins' range.</summary>
  */
 #define AC_VENDING_MACHINE_RANGE		15.0
+
+/**
+ * <summary>The time (in ms) between checks.</summary>
+ * <remarks>Default timers from SA-MP are lazy. I suggest using a timer-fix for better output.</remarks>
+ */
+#define AC_WATCHGUARD_INTERVAL			1500
 
 /**
  * <summary>Vending machines' position.</summary>

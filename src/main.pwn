@@ -52,8 +52,11 @@
 /**
  * <summary>Macro used for debugging purposes.</summary>
  */
-#define AC_DEBUG(%0)					printf(%0)
-//#define DEBUG(%0);
+#if defined AC_DEBUG
+	#define _AC_DEBUG(%0)				printf(%0)
+#else
+	#define _AC_DEBUG(%0);
+#endif
 
 /**
  * <summary>Generate forward declarations for public and stock functions.</summary>

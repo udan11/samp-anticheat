@@ -54,8 +54,11 @@
 /**
  * <summary>Macro used for debugging purposes.</summary>
  */
-#define AC_DEBUG(%0)					printf(%0)
-//#define DEBUG(%0);
+#if defined AC_DEBUG
+	#define _AC_DEBUG(%0)				printf(%0)
+#else
+	#define _AC_DEBUG(%0);
+#endif
 
 /**
  * <summary>Generate forward declarations for public and stock functions.</summary>
@@ -73,15 +76,15 @@
 #file "api.pwn"
 #line 0
 // We check if no parameter was passed to the anticheat.
-#if (!defined ANTICHEAT_CORE) && (!defined ANTICHEAT_API)
+#if (!defined AC_CORE) && (!defined AC_API)
 	#if defined FILTERSCRIPT
-		#define ANTICHEAT_API
+		#define AC_API
 	#else
-		#define ANTICHEAT_CORE
+		#define AC_CORE
 	#endif
 #endif
 
-#if defined ANTICHEAT_API
+#if defined AC_API
 
 	/**
 	 * <summary>API used by remote scripts (other than the core).</summary>
@@ -90,7 +93,7 @@
 	AC_REMOTE SetPlayerArmour<if>(playerid, Float:armour);
 	AC_REMOTE SetPlayerHealth<if>(playerid, Float:health);
 	
-	#if defined ANTICHEAT_NEW_FUNCTIONS
+	#if defined AC_NEW_FUNCTIONS
 		AC_REMOTE IsPlayerAFK<i>(playerid);
 		AC_REMOTE IsPlayerSpawned<i>(playerid);
 	#endif
@@ -105,10 +108,10 @@
  * <param name="extraid">Additional cheat ID (depends on hack tool, detection method, etc.).</param>
  * <param name="info">Additional information.</param>
  */
-forward Anticheat_OnCheatDetected(playerid, cheatid, extraid = 0, info[] = "");
+forward AC_OnCheatDetected(playerid, cheatid, extraid = 0, info[] = "");
 
 // Defines new functions. Not the real purpose of this anticheat.
-#if defined ANTICHEAT_NEW_FUNCTIONS
+#if defined AC_NEW_FUNCTIONS
 	#define IsPlayerAFK				AC_IsPlayerAFK
 	#define IsPlayerSpawned			AC_IsPlayerSpawned
 #endif
@@ -242,6 +245,56 @@ enum AC_eCheatConfig {
 	AC_ccIsEnabled,
 	AC_ccName[AC_MAX_CHEAT_NAME]
 };
+
+/**
+ * <summary>Variable that holds the state of specific anti-cheat module and it's name.</summary>
+ */
+stock AC_cheats[AC_eCheats][AC_eCheatConfig] = {
+	// AC_cUnknown
+	{false, "unknown hack"},
+	// AC_cSync
+	{false, "desynced"},
+	// AC_cPing
+	{true, "high ping"},
+	// AC_cFPS
+	{true, "low fps"},
+	// AC_cAFK
+	{false, "afk"},
+	// AC_cHealth
+	{true, "health hack"},
+	// AC_cArmour
+	{true, "armour hack"},
+	// AC_cMoney
+	{true, "money hack"},
+	// AC_cFakeKill
+	{true, "fake kill"},
+	// AC_cTeleport
+	{true, "teleport hack"},
+	// AC_cSpeed
+	{true, "speed hack"},
+	// AC_cFly
+	{true, "fly hack"},
+	// AC_cAirbreak
+	{true, "airbreak hack"},
+	// AC_cWeapon
+	{true, "weapon hack"},
+	// AC_cJoypad
+	{true, "joypad"},
+	// AC_cAimBot
+	{true, "aim bot"},
+	// AC_cJetpack
+	{true, "jetpack hack"},
+	// AC_cVehicleWarp
+	{true, "vehicle warp hack"},
+	// AC_cVehicleRepair
+	{true, "vehicle repair hack"},
+	// AC_cVehicleMod
+	{true, "vehicle (illegal) mod"},
+	// AC_cRconBruteforce
+	{true, "RCON bruteforcer"},
+	// AC_cModSa
+	{true, "m0d_sa (hacking tool)"}
+};
 #file "constants/game.pwn"
 #line 0
 /**
@@ -255,9 +308,24 @@ enum AC_eCheatConfig {
 #define AC_MAX_WEAPON_SLOTS				13
 
 /**
+ * <summary>Whether two or three dimension vectors should be used.</summary>
+ * <remarks>
+ *		When 3D vectors are used, falling is reported as speed / teleport hack (sometimes).
+ *		In other words, using 2D vectors reduces the number of fake reports.
+ * </remarks>
+ */
+#define AC_USE_2D_VECTORS				true
+
+/**
  * <summary>Vending machins' range.</summary>
  */
 #define AC_VENDING_MACHINE_RANGE		15.0
+
+/**
+ * <summary>The time (in ms) between checks.</summary>
+ * <remarks>Default timers from SA-MP are lazy. I suggest using a timer-fix for better output.</remarks>
+ */
+#define AC_WATCHGUARD_INTERVAL			1500
 
 /**
  * <summary>Vending machines' position.</summary>
@@ -304,12 +372,17 @@ stock const Float:AC_VENDING_MACHINES[][3] = {
 #file "constants/player.pwn"
 #line 0
 /**
+ * <summary>The time (in ms) after a player is considered AFK.</summary>
+ */
+#define AC_AFK_TIME						1500
+
+/**
  * Player states.
  */
 enum _:AC_ePlayerState {
 	AC_psSpawn = 1,						// bitmask  0
-	AC_psFreeze,						// bitmask  1
-	AC_ps02,							// bitmask  2
+	AC_psWasAFK,						// bitmask  1
+	AC_psFreeze,						// bitmask  2
 	AC_ps03,							// bitmask  3
 	AC_ps04,							// bitmask  4
 	AC_ps05,							// bitmask  5
@@ -444,77 +517,6 @@ enum _:AC_ePlayer {
  * <summary>Stores players' game data.</summary>
  */
 new AC_players[MAX_PLAYERS][AC_ePlayer];
-#file "configuration.pwn"
-#line 0
-/**
- * <summary>The time (in ms) between checks.</summary>
- * <remarks>Default timers from SA-MP are lazy. I suggest using a timer-fix for better output.</remarks>
- */
-#define AC_WATCHGUARD_INTERVAL			1500
-
-/**
- * <summary>The time (in ms) after a player is considered AFK.</summary>
- */
-#define AC_AFK_TIME						1500
-
-/**
- * <summary>Whether two or three dimension vectors should be used.</summary>
- * <remarks>
- *		When 3D vectors are used, falling is reported as speed / teleport hack (sometimes).
- *		In other words, using 2D vectors reduces the number of fake reports.
- * </remarks>
- */
-#define AC_USE_2D_VECTORS				true
-
-/**
- * <summary>Variable that holds the state of specific anti-cheat module and it's name.</summary>
- */
-stock AC_cheats[AC_eCheats][AC_eCheatConfig] = {
-	// AC_cUnknown
-	{false, "unknown hack"},
-	// AC_cSync
-	{false, "sync hack"},
-	// AC_cPing
-	{true, "high ping"},
-	// AC_cFPS
-	{true, "low fps"},
-	// AC_cAFK
-	{false, "afk"},
-	// AC_cHealth
-	{true, "health hack"},
-	// AC_cArmour
-	{true, "armour hack"},
-	// AC_cMoney
-	{true, "money hack"},
-	// AC_cFakeKill
-	{true, "fake kill"},
-	// AC_cTeleport
-	{true, "teleport hack"},
-	// AC_cSpeed
-	{true, "speed hack"},
-	// AC_cFly
-	{true, "fly hack"},
-	// AC_cAirbreak
-	{true, "airbreak hack"},
-	// AC_cWeapon
-	{true, "weapon hack"},
-	// AC_cJoypad
-	{true, "joypad"},
-	// AC_cAimBot
-	{true, "aim bot"},
-	// AC_cJetpack
-	{true, "jetpack hack"},
-	// AC_cVehicleWarp
-	{true, "vehicle warp hack"},
-	// AC_cVehicleRepair
-	{true, "vehicle repair hack"},
-	// AC_cVehicleMod
-	{true, "vehicle (illegal) mod"},
-	// AC_cRconBruteforce
-	{true, "RCON bruteforcer"},
-	// AC_cModSa
-	{true, "m0d_sa (hacking tool)"}
-};
 #file "utils/CheatDetected.pwn"
 #line 0
 /**
@@ -842,7 +844,7 @@ stock AC_OnScriptExit() {
  * <summary>Called when the anticheat's core is being initialized.</summary>
  */
 stock AC_OnScriptInit() {
-	AC_DEBUG("[anticheat] Anticheat's timer succesfully injected!");
+	_AC_DEBUG("[anticheat] Anticheat's timer succesfully injected!");
 	AC_watchguardTimer = SetTimer(#AC_Watchguard, AC_WATCHGUARD_INTERVAL, true);
 	return 1;
 }
@@ -899,10 +901,24 @@ AC_PUBLIC AC_Watchguard() {
 		if (!AC_IsPlayerSpawned(playerid)) {
 			continue;
 		} else if (AC_IsPlayerAFK(playerid)) {
+			if ((AC_cheats[AC_cAFK][AC_ccIsEnabled]) && ((AC_players[playerid][AC_pState] & AC_psWasAFK) == 0)) {
+				AC_CheatDetected(playerid, AC_cAFK, 1);
+			}
+			AC_players[playerid][AC_pState] |= AC_psWasAFK;
 			continue;
+		} else {
+			if ((AC_cheats[AC_cAFK][AC_ccIsEnabled]) && (AC_players[playerid][AC_pState] & AC_psWasAFK)) {
+				AC_CheatDetected(playerid, AC_cAFK, 0);
+			}
+			AC_players[playerid][AC_pState] &= ~AC_psWasAFK;
 		}
-		AC_Watchguard_Health(playerid);
-		AC_Watchguard_Armour(playerid);
+		if (AC_cheats[AC_cHealth][AC_ccIsEnabled]) {
+			AC_Watchguard_Health(playerid);
+		}
+		if (AC_cheats[AC_cArmour][AC_ccIsEnabled]) {
+			AC_Watchguard_Armour(playerid);
+		}
+		// TODO: Hook other modules.
 	}
 }
 #file "watchguard/impl/Watchguard_Armour.pwn"
