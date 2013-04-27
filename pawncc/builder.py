@@ -63,12 +63,12 @@ if (len(sys.argv) != 3):
 # Reading configuration.
 project_folder = sys.argv[1]
 output_filename = sys.argv[2]
-structure_filename = os.path.join(project_folder, ".structure").replace('\\','/')
+project_filename = os.path.join(project_folder, "_project").replace('\\','/')
 
-# Reading structure.
-if (not os.path.isfile(structure_filename)):
-	sys.exit("  ERROR: No .structure file found in project's folder.")
-file = open(structure_filename)
+# Reading configuration.
+if (not os.path.isfile(project_filename)):
+	sys.exit("  ERROR: No '_project' file found in project's folder.")
+file = open(project_filename)
 structure = file.read().split("\n")
 file.close()
 

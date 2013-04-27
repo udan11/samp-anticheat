@@ -1,0 +1,8 @@
+main.pwn
+api.pwn
+constants/*.pwn
+variables.pwn
+utils/*.pwn
+hooks/natives/*.pwn
+hooks/callbacks/*.pwn
+*.pwn
