@@ -12,13 +12,13 @@
 	/**
 	 * <summary>API used by remote scripts (other than the core).</summary>
 	 */
-	// TODO.
+	
+	AC_REMOTE SetPlayerArmour<if>(playerid, Float:armour);
+	AC_REMOTE SetPlayerHealth<if>(playerid, Float:health);
 	
 	#if defined ANTICHEAT_NEW_FUNCTIONS
-		/*
-		REMOTE:IsPlayerAFK<i>(playerid);
-		REMOTE:IsPlayerSpawned<i>(playerid);
-		*/
+		AC_REMOTE IsPlayerAFK<i>(playerid);
+		AC_REMOTE IsPlayerSpawned<i>(playerid);
 	#endif
 	
 	#endinput // We stop here, we don't need the core.
@@ -35,8 +35,6 @@ forward Anticheat_OnCheatDetected(playerid, cheatid, extraid = 0, info[] = "");
 
 // Defines new functions. Not the real purpose of this anticheat.
 #if defined ANTICHEAT_NEW_FUNCTIONS
-	/*
 	#define IsPlayerAFK				AC_IsPlayerAFK
 	#define IsPlayerSpawned			AC_IsPlayerSpawned
-	*/
 #endif

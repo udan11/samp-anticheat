@@ -68,5 +68,3 @@
  */
 #define AC_REMOTE%0\32;%0<%1>(%2) \
 	stock AC_%0(%2) return CallRemoteFunction(#AC_#%0,#%1,%2)
-	
-AC_REMOTE Test<ii>(a, b);

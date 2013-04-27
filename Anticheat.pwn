@@ -70,8 +70,6 @@
  */
 #define AC_REMOTE%0\32;%0<%1>(%2) \
 	stock AC_%0(%2) return CallRemoteFunction(#AC_#%0,#%1,%2)
-	
-AC_REMOTE Test<ii>(a, b);
 #file "api.pwn"
 #line 0
 // We check if no parameter was passed to the anticheat.
@@ -88,13 +86,13 @@ AC_REMOTE Test<ii>(a, b);
 	/**
 	 * <summary>API used by remote scripts (other than the core).</summary>
 	 */
-	// TODO.
+	
+	AC_REMOTE SetPlayerArmour<if>(playerid, Float:armour);
+	AC_REMOTE SetPlayerHealth<if>(playerid, Float:health);
 	
 	#if defined ANTICHEAT_NEW_FUNCTIONS
-		/*
-		REMOTE:IsPlayerAFK<i>(playerid);
-		REMOTE:IsPlayerSpawned<i>(playerid);
-		*/
+		AC_REMOTE IsPlayerAFK<i>(playerid);
+		AC_REMOTE IsPlayerSpawned<i>(playerid);
 	#endif
 	
 	#endinput // We stop here, we don't need the core.
@@ -111,10 +109,8 @@ forward Anticheat_OnCheatDetected(playerid, cheatid, extraid = 0, info[] = "");
 
 // Defines new functions. Not the real purpose of this anticheat.
 #if defined ANTICHEAT_NEW_FUNCTIONS
-	/*
 	#define IsPlayerAFK				AC_IsPlayerAFK
 	#define IsPlayerSpawned			AC_IsPlayerSpawned
-	*/
 #endif
 #file "constants/cheats.pwn"
 #line 0
@@ -519,6 +515,76 @@ stock AC_cheats[AC_eCheats][AC_eCheatConfig] = {
 	// AC_cModSa
 	{true, "m0d_sa (hacking tool)"}
 };
+#file "utils/CheatDetected.pwn"
+#line 0
+/**
+ * Triggers the `Anticheat_OnCheatDetected` callback.
+ * <param name="playerid">Player's ID.</param>
+ * <param name="cheatid">Cheat ID.</param>
+ * <param name="extraid">Additional cheat ID (depends on hack tool, detection method, etc.).</param>
+ * <param name="info">Additional information.</param>
+ */
+stock AC_CheatDetected(playerid, cheatid, extraid = 0, info[] = "") {
+	if (isnull(info)) {
+		CallLocalFunction(#Anticheat_OnCheatDetected, "iiis", playerid, cheatid, extraid, "\1");
+	} else {
+		CallLocalFunction(#Anticheat_OnCheatDetected, "iiis", playerid, cheatid, extraid, info);
+	}
+}
+#file "utils/GetSpeed.pwn"
+#line 0
+/**
+ * <summary>Calculates the speed of an object using an Euclidean vector.</summary>
+ * <param name="vx">X-axis of the vector.</param>
+ * <param name="vy">Y-axis of the vector.</param>
+ * <param name="vz">Z-axis of the vector.</param>
+ * <returns>The speed.</returns>
+ */
+AC_STOCK Float:GetSpeed(Float:vx, Float:vy, Float:vz) {
+	return floatsqroot(vx * vx + vy * vy + vz * vz)
+	// Forward declaration is required because of the retrun value (float).
+}
+#file "utils/IsPlayerAFK.pwn"
+#line 0
+/**
+ * <summary>Checks if a player is AFK.</summary>
+ * <param name="playerid">Player's ID.</param>
+ * <returns>True if player is AFK, false if not.</returns>
+ */
+AC_PUBLIC AC_IsPlayerAFK(playerid) {
+	if (IsPlayerConnected(playerid)) {
+		return (GetTickCount() - AC_players[playerid][AC_pLastUpdate]) > AC_AFK_TIME;
+	}
+	return false;
+}
+#file "utils/IsPlayerAtVendingMachine.pwn"
+#line 0
+/**
+ * <summary>Checks if a player is around a vending machine.</summary>
+ * <param name="playerid">Player's ID.</param>
+ * <returns>True if the player is near a vending machine or false if not.</returns>
+ */
+stock AC_IsPlayerAtVendingMachine(playerid) {
+	for (new i = 0; i != sizeof(AC_VENDING_MACHINES); ++i) {
+		if (IsPlayerInRangeOfPoint(playerid, AC_VENDING_MACHINE_RANGE, AC_VENDING_MACHINES[i][0], AC_VENDING_MACHINES[i][1], AC_VENDING_MACHINES[i][2])) {
+			return true;
+		}
+	}
+	return false;
+}
+#file "utils/IsPlayerSpawned.pwn"
+#line 0
+/**
+ * <summary>Checks if a player is spawned.</summary>
+ * <param name="playerid">Player's ID.</param>
+ * <returns>True if player is spawned, false if not.</returns>
+ */
+AC_PUBLIC AC_IsPlayerSpawned(playerid) {
+	if (IsPlayerConnected(playerid)) {
+		return AC_players[playerid][AC_pState] & AC_psSpawn ? true : false;
+	}
+	return false;
+}
 #file "utils/memset.pwn"
 #line 0
 /**
@@ -576,77 +642,7 @@ stock memset(aArray[], iValue, iSize = sizeof(aArray)) {
 	// aArray is used, just not by its symbol name
 	#pragma unused aArray
 }
-#file "impl/CheatDetected.pwn"
-#line 0
-/**
- * Triggers the `Anticheat_OnCheatDetected` callback.
- * <param name="playerid">Player's ID.</param>
- * <param name="cheatid">Cheat ID.</param>
- * <param name="extraid">Additional cheat ID (depends on hack tool, detection method, etc.).</param>
- * <param name="info">Additional information.</param>
- */
-stock AC_CheatDetected(playerid, cheatid, extraid = 0, info[] = "") {
-	if (isnull(info)) {
-		CallLocalFunction(#Anticheat_OnCheatDetected, "iiis", playerid, cheatid, extraid, "\1");
-	} else {
-		CallLocalFunction(#Anticheat_OnCheatDetected, "iiis", playerid, cheatid, extraid, info);
-	}
-}
-#file "impl/GetSpeed.pwn"
-#line 0
-/**
- * <summary>Calculates the speed of an object using an Euclidean vector.</summary>
- * <param name="vx">X-axis of the vector.</param>
- * <param name="vy">Y-axis of the vector.</param>
- * <param name="vz">Z-axis of the vector.</param>
- * <returns>The speed.</returns>
- */
-AC_STOCK Float:GetSpeed(Float:vx, Float:vy, Float:vz) {
-	return floatsqroot(vx * vx + vy * vy + vz * vz)
-	// Forward declaration is required because of the retrun value (float).
-}
-#file "impl/IsPlayerAFK.pwn"
-#line 0
-/**
- * <summary>Checks if a player is AFK.</summary>
- * <param name="playerid">Player's ID.</param>
- * <returns>True if player is AFK, false if not.</returns>
- */
-AC_PUBLIC AC_IsPlayerAFK(playerid) {
-	if (IsPlayerConnected(playerid)) {
-		return (GetTickCount() - AC_players[playerid][AC_pLastUpdate]) > AC_AFK_TIME;
-	}
-	return false;
-}
-#file "impl/IsPlayerAtVendingMachine.pwn"
-#line 0
-/**
- * <summary>Checks if a player is around a vending machine.</summary>
- * <param name="playerid">Player's ID.</param>
- * <returns>True if the player is near a vending machine or false if not.</returns>
- */
-stock AC_IsPlayerAtVendingMachine(playerid) {
-	for (new i = 0; i != sizeof(AC_VENDING_MACHINES); ++i) {
-		if (IsPlayerInRangeOfPoint(playerid, AC_VENDING_MACHINE_RANGE, AC_VENDING_MACHINES[i][0], AC_VENDING_MACHINES[i][1], AC_VENDING_MACHINES[i][2])) {
-			return true;
-		}
-	}
-	return false;
-}
-#file "impl/IsPlayerSpawned.pwn"
-#line 0
-/**
- * <summary>Checks if a player is spawned.</summary>
- * <param name="playerid">Player's ID.</param>
- * <returns>True if player is spawned, false if not.</returns>
- */
-stock AC_IsPlayerSpawned(playerid) {
-	if (IsPlayerConnected(playerid)) {
-		return AC_players[playerid][AC_pState] & AC_psSpawn ? true : false;
-	}
-	return false;
-}
-#file "impl/sync/IsPlayerSynced.pwn"
+#file "utils/sync/IsPlayerSynced.pwn"
 #line 0
 /**
  * <summary>Checks a player's sync status.</summary>
@@ -660,7 +656,7 @@ stock AC_IsPlayerSynced(playerid, sync) {
 	}
 	return false;
 }
-#file "impl/sync/SetPlayerSync.pwn"
+#file "utils/sync/SetPlayerSync.pwn"
 #line 0
 /**
  * <summary>Sets a player's sync status.</summary>
@@ -679,44 +675,6 @@ stock AC_SetPlayerSync(playerid, sync, status = true) {
 			if (AC_players[playerid][AC_pSyncFails][sync] % AC_SYNC_MAX_FAILS) {
 				AC_CheatDetected(playerid, AC_cSync, sync, "");
 			}
-		}
-	}
-}
-#file "watchguard/impl/Watchguard_Armour.pwn"
-#line 0
-/**
- * <summary>Checks if a player is using armour hack.</summary>
- * <param name="playerid">Player's ID.</param>
- */
-stock AC_Watchguard_Armour(playerid) {
-	new Float:armour;
-	GetPlayerArmour(playerid, armour);
-	if (!AC_IsPlayerSynced(playerid, AC_sArmour)) {
-		AC_SetPlayerSync(playerid, AC_sArmour, armour == AC_players[playerid][AC_pArmour]);
-	} else {
-		if (armour > AC_players[playerid][AC_pArmour]) {
-			AC_CheatDetected(playerid, AC_cArmour);
-		} else {
-			AC_players[playerid][AC_pArmour] = armour;
-		}
-	}
-}
-#file "watchguard/impl/Watchguard_Health.pwn"
-#line 0
-/**
- * <summary>Checks if a player is using health hack.</summary>
- * <param name="playerid">Player's ID.</param>
- */
-stock AC_Watchguard_Health(playerid) {
-	new Float:health;
-	GetPlayerHealth(playerid, health);
-	if (!AC_IsPlayerSynced(playerid, AC_sHealth)) {
-		AC_SetPlayerSync(playerid, AC_sHealth, health == AC_players[playerid][AC_pHealth]);
-	} else {
-		if ((!AC_IsPlayerAtVendingMachine(playerid)) && (health > AC_players[playerid][AC_pHealth])) {
-			AC_CheatDetected(playerid, AC_cHealth);
-		} else {
-			AC_players[playerid][AC_pHealth] = health;
 		}
 	}
 }
@@ -945,6 +903,44 @@ AC_PUBLIC AC_Watchguard() {
 		}
 		AC_Watchguard_Health(playerid);
 		AC_Watchguard_Armour(playerid);
+	}
+}
+#file "watchguard/impl/Watchguard_Armour.pwn"
+#line 0
+/**
+ * <summary>Checks if a player is using armour hack.</summary>
+ * <param name="playerid">Player's ID.</param>
+ */
+stock AC_Watchguard_Armour(playerid) {
+	new Float:armour;
+	GetPlayerArmour(playerid, armour);
+	if (!AC_IsPlayerSynced(playerid, AC_sArmour)) {
+		AC_SetPlayerSync(playerid, AC_sArmour, armour == AC_players[playerid][AC_pArmour]);
+	} else {
+		if (armour > AC_players[playerid][AC_pArmour]) {
+			AC_CheatDetected(playerid, AC_cArmour);
+		} else {
+			AC_players[playerid][AC_pArmour] = armour;
+		}
+	}
+}
+#file "watchguard/impl/Watchguard_Health.pwn"
+#line 0
+/**
+ * <summary>Checks if a player is using health hack.</summary>
+ * <param name="playerid">Player's ID.</param>
+ */
+stock AC_Watchguard_Health(playerid) {
+	new Float:health;
+	GetPlayerHealth(playerid, health);
+	if (!AC_IsPlayerSynced(playerid, AC_sHealth)) {
+		AC_SetPlayerSync(playerid, AC_sHealth, health == AC_players[playerid][AC_pHealth]);
+	} else {
+		if ((!AC_IsPlayerAtVendingMachine(playerid)) && (health > AC_players[playerid][AC_pHealth])) {
+			AC_CheatDetected(playerid, AC_cHealth);
+		} else {
+			AC_players[playerid][AC_pHealth] = health;
+		}
 	}
 }
 #file "./Anticheat.pwn"
