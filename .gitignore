@@ -1,10 +1,7 @@
 # =========================
 # Anticheat test
 # =========================
-Anticheat_test.*
-samp-server.exe
-server.cfg
-server_log.txt
+test-server/server_log.txt
 
 # =========================
 # Linux

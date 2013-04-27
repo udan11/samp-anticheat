@@ -1,5 +1,6 @@
 // OnPlayerSpawn hook.
 public OnPlayerSpawn(playerid) {
+	AC_players[playerid][AC_pState] = 0;
 	AC_players[playerid][AC_pState] |= AC_psSpawn;
 	AC_players[playerid][AC_pState] &= ~AC_psFreeze;
 	AC_players[playerid][AC_pSync] = 0;

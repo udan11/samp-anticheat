@@ -65,9 +65,3 @@
 	forward %0(%1); public %0(%1)
 #define AC_STOCK%0\32;%0(%1) \
 	forward %0(%1); stock %0(%1)
-
-/**
- * <summary>Creates a stock that calls remote functions.</summary>
- */
-#define AC_REMOTE%0\32;%0<%1>(%2) \
-	stock AC_%0(%2) return CallRemoteFunction(#AC_#%0,#%1,%2)

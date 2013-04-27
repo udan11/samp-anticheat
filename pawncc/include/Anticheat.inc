@@ -67,12 +67,6 @@
 	forward %0(%1); public %0(%1)
 #define AC_STOCK%0\32;%0(%1) \
 	forward %0(%1); stock %0(%1)
-
-/**
- * <summary>Creates a stock that calls remote functions.</summary>
- */
-#define AC_REMOTE%0\32;%0<%1>(%2) \
-	stock AC_%0(%2) return CallRemoteFunction(#AC_#%0,#%1,%2)
 #file "api.pwn"
 #line 0
 // We check if no parameter was passed to the anticheat.
@@ -90,8 +84,25 @@
 	 * <summary>API used by remote scripts (other than the core).</summary>
 	 */
 	
-	AC_REMOTE SetPlayerArmour<if>(playerid, Float:armour);
-	AC_REMOTE SetPlayerHealth<if>(playerid, Float:health);
+	AC_STOCK AC_SetPlayerArmour(playerid, Float:health) {
+		return CallRemoteFunction(#AC_SetPlayerArmour, "if", playerid, health);
+	}
+	#if defined _ALS_SetPlayerArmour
+		#undef SetPlayerArmour
+	#else
+		#define _ALS_SetPlayerArmour
+	#endif
+	#define SetPlayerArmour AC_SetPlayerArmour
+	
+	AC_STOCK AC_SetPlayerHealth(playerid, Float:health) {
+		return CallRemoteFunction(#AC_SetPlayerHealth, "if", playerid, health);
+	}
+	#if defined _ALS_SetPlayerHealth
+		#undef SetPlayerHealth
+	#else
+		#define _ALS_SetPlayerHealth
+	#endif
+	#define SetPlayerHealth AC_SetPlayerHealth
 	
 	#if defined AC_NEW_FUNCTIONS
 		AC_REMOTE IsPlayerAFK<i>(playerid);
@@ -108,7 +119,7 @@
  * <param name="extraid">Additional cheat ID (depends on hack tool, detection method, etc.).</param>
  * <param name="info">Additional information.</param>
  */
-forward AC_OnCheatDetected(playerid, cheatid, extraid = 0, info[] = "");
+forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
 
 // Defines new functions. Not the real purpose of this anticheat.
 #if defined AC_NEW_FUNCTIONS
@@ -135,12 +146,12 @@ enum _:AC_eCheats {
 	/**
 	 * <summary>Not an actual hack. Used for desynced players.</summary>
 	 */
-	AC_cSync, // TODO
+	AC_cSync,
 	
 	/**
 	 * <summary>Not an actual hack. Players with high ping usually spoils other players' gameplay.</summary>
 	 */
-	AC_cPing, // TODO
+	AC_cPing,
 	
 	/**
 	 * <summary>Not an actual hack. Players with low FPS usually spoils other players' gameplay.</summary>
@@ -150,17 +161,17 @@ enum _:AC_eCheats {
 	/**
 	 * <summary>Not an actual hack. Used for AFK players.</summary>
 	 */
-	AC_cAFK, // TODO
+	AC_cAFK,
 	
 	/**
 	 * <summary>Health hack. Restores user's health.</summary>
 	 */
-	AC_cHealth, // TODO
+	AC_cHealth,
 	
 	/**
 	 * <summary>Armour hack. Restores user's armour.</summary>
 	 */
-	AC_cArmour, // TODO
+	AC_cArmour,
 	
 	/**
 	 * <summary>Money hack.</summary>
@@ -253,7 +264,7 @@ stock AC_cheats[AC_eCheats][AC_eCheatConfig] = {
 	// AC_cUnknown
 	{false, "unknown hack"},
 	// AC_cSync
-	{false, "desynced"},
+	{false, "desync"},
 	// AC_cPing
 	{true, "high ping"},
 	// AC_cFPS
@@ -377,9 +388,14 @@ stock const Float:AC_VENDING_MACHINES[][3] = {
 #define AC_AFK_TIME						1500
 
 /**
+ * <summary>Maximum ping allowed. Whoever has a bigger ping will be reported as cheater.</summary>
+ */
+#define AC_MAX_PING						500
+
+/**
  * Player states.
  */
-enum _:AC_ePlayerState {
+enum _:AC_ePlayerState (<<= 1) {
 	AC_psSpawn = 1,						// bitmask  0
 	AC_psWasAFK,						// bitmask  1
 	AC_psFreeze,						// bitmask  2
@@ -527,10 +543,11 @@ new AC_players[MAX_PLAYERS][AC_ePlayer];
  * <param name="info">Additional information.</param>
  */
 stock AC_CheatDetected(playerid, cheatid, extraid = 0, info[] = "") {
+	_AC_DEBUG("[anticheat] AC_CheatDetected(playerid = %d, cheatid = %d, extraid = %d, info = %s", playerid, cheatid, extraid, info);
 	if (isnull(info)) {
-		CallLocalFunction(#Anticheat_OnCheatDetected, "iiis", playerid, cheatid, extraid, "\1");
+		CallLocalFunction(#AC_OnCheatDetected, "iiis", playerid, cheatid, extraid, "\1");
 	} else {
-		CallLocalFunction(#Anticheat_OnCheatDetected, "iiis", playerid, cheatid, extraid, info);
+		CallLocalFunction(#AC_OnCheatDetected, "iiis", playerid, cheatid, extraid, info);
 	}
 }
 #file "utils/GetSpeed.pwn"
@@ -674,7 +691,7 @@ stock AC_SetPlayerSync(playerid, sync, status = true) {
 		} else {
 			AC_players[playerid][AC_pSync] &= ~(1 << sync);
 			++AC_players[playerid][AC_pSyncFails][sync];
-			if (AC_players[playerid][AC_pSyncFails][sync] % AC_SYNC_MAX_FAILS) {
+			if (AC_players[playerid][AC_pSyncFails][sync] % AC_SYNC_MAX_FAILS == 0) {
 				AC_CheatDetected(playerid, AC_cSync, sync, "");
 			}
 		}
@@ -712,6 +729,28 @@ AC_PUBLIC AC_SetPlayerHealth(playerid, Float:health) {
 	#define _ALS_SetPlayerHealth
 #endif
 #define SetPlayerHealth AC_SetPlayerHealth
+#file "hooks/callbacks/OnPlayerCommandText.pwn"
+#line 0
+// OnPlayerCommandText hook.
+public OnPlayerCommandText(playerid, cmdtext[]) {
+	AC_players[playerid][AC_pLastUpdate] = GetTickCount();
+	#if defined AC_OnPlayerCommandText
+		return AC_OnPlayerCommandText(playerid, cmdtext);
+	#else
+		return 1;
+	#endif
+}
+
+#if defined _ALS_OnPlayerCommandText
+	#undef OnPlayerCommandText
+#else
+	#define _ALS_OnPlayerCommandText
+#endif
+#define OnPlayerCommandText AC_OnPlayerCommandText
+
+#if defined AC_OnPlayerCommandText
+	forward AC_OnPlayerCommandText(playerid, cmdtext[]);
+#endif
 #file "hooks/callbacks/OnPlayerConnect.pwn"
 #line 0
 // OnPlayerConnect hook.
@@ -734,10 +773,33 @@ public OnPlayerConnect(playerid) {
 #if defined AC_OnPlayerConnect
 	forward AC_OnPlayerConnect(playerid);
 #endif
+#file "hooks/callbacks/OnPlayerDeath.pwn"
+#line 0
+// OnPlayerDeath hook.
+public OnPlayerDeath(playerid) {
+	AC_players[playerid][AC_pState] &= ~AC_psSpawn;
+	#if defined AC_OnPlayerDeath
+		return AC_OnPlayerDeath(playerid);
+	#else
+		return 1;
+	#endif
+}
+
+#if defined _ALS_OnPlayerDeath
+	#undef OnPlayerDeath
+#else
+	#define _ALS_OnPlayerDeath
+#endif
+#define OnPlayerDeath AC_OnPlayerDeath
+
+#if defined AC_OnPlayerDeath
+	forward AC_OnPlayerDeath(playerid);
+#endif
 #file "hooks/callbacks/OnPlayerSpawn.pwn"
 #line 0
 // OnPlayerSpawn hook.
 public OnPlayerSpawn(playerid) {
+	AC_players[playerid][AC_pState] = 0;
 	AC_players[playerid][AC_pState] |= AC_psSpawn;
 	AC_players[playerid][AC_pState] &= ~AC_psFreeze;
 	AC_players[playerid][AC_pSync] = 0;
@@ -763,6 +825,28 @@ public OnPlayerSpawn(playerid) {
 
 #if defined AC_OnPlayerSpawn
 	forward AC_OnPlayerSpawn(playerid);
+#endif
+#file "hooks/callbacks/OnPlayerText.pwn"
+#line 0
+// OnPlayerText hook.
+public OnPlayerText(playerid, text[]) {
+	AC_players[playerid][AC_pLastUpdate] = GetTickCount();
+	#if defined AC_OnPlayerText
+		return AC_OnPlayerText(playerid, text);
+	#else
+		return 1;
+	#endif
+}
+
+#if defined _ALS_OnPlayerText
+	#undef OnPlayerText
+#else
+	#define _ALS_OnPlayerText
+#endif
+#define OnPlayerText AC_OnPlayerText
+
+#if defined AC_OnPlayerText
+	forward AC_OnPlayerText(playerid, text[]);
 #endif
 #file "hooks/callbacks/OnPlayerUpdate.pwn"
 #line 0
@@ -898,6 +982,7 @@ stock AC_OnScriptInit() {
  */
 AC_PUBLIC AC_Watchguard() {
 	foreach (new playerid : Player) {
+		// There is no point in checking players who are AFK or aren't spawned.
 		if (!AC_IsPlayerSpawned(playerid)) {
 			continue;
 		} else if (AC_IsPlayerAFK(playerid)) {
@@ -912,6 +997,10 @@ AC_PUBLIC AC_Watchguard() {
 			}
 			AC_players[playerid][AC_pState] &= ~AC_psWasAFK;
 		}
+		// Anti-cheat modules calls.
+		if (AC_cheats[AC_cPing][AC_ccIsEnabled]) {
+			AC_Watchguard_Ping(playerid);
+		}
 		if (AC_cheats[AC_cHealth][AC_ccIsEnabled]) {
 			AC_Watchguard_Health(playerid);
 		}
@@ -919,6 +1008,17 @@ AC_PUBLIC AC_Watchguard() {
 			AC_Watchguard_Armour(playerid);
 		}
 		// TODO: Hook other modules.
+	}
+}
+#file "watchguard/impl/AC_Watchguard_Ping.pwn"
+#line 0
+/**
+ * <summary>Checks if a player is using armour hack.</summary>
+ * <param name="playerid">Player's ID.</param>
+ */
+stock AC_Watchguard_Ping(playerid) {
+	if (GetPlayerPing(playerid) > AC_MAX_PING) {
+		AC_CheatDetected(playerid, AC_cPing);
 	}
 }
 #file "watchguard/impl/Watchguard_Armour.pwn"
@@ -935,9 +1035,8 @@ stock AC_Watchguard_Armour(playerid) {
 	} else {
 		if (armour > AC_players[playerid][AC_pArmour]) {
 			AC_CheatDetected(playerid, AC_cArmour);
-		} else {
-			AC_players[playerid][AC_pArmour] = armour;
 		}
+		AC_players[playerid][AC_pArmour] = armour;
 	}
 }
 #file "watchguard/impl/Watchguard_Health.pwn"
@@ -954,10 +1053,9 @@ stock AC_Watchguard_Health(playerid) {
 	} else {
 		if ((!AC_IsPlayerAtVendingMachine(playerid)) && (health > AC_players[playerid][AC_pHealth])) {
 			AC_CheatDetected(playerid, AC_cHealth);
-		} else {
-			AC_players[playerid][AC_pHealth] = health;
 		}
+		AC_players[playerid][AC_pHealth] = health;
 	}
 }
-#file "./Anticheat.pwn"
+#file "./pawncc/include/Anticheat.inc"
 #line 0

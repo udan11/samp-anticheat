@@ -1,39 +1,39 @@
-# Cheat information
+# Cheats
 
-	*	0	unknown hack
+*	__ID = 0:	unknown hack__
+
+	Extra parameter is reserved for debugging purposes.
+
+*	__ID = 1:	desync__
 	
-		Extra parameter is reserved for debugging purposes.
+	Extra parameter is reserved for sync type.
 	
-	*	1	desynced
-		
-		Extra parameter is reserved for sync type.
-		
-	*	2	high ping
+*	__ID = 2:	high ping__
+
+	Extra parameter is reserved for actual ping.
+
+*	__ID = 3:	low fps__
+
+	Extra parameter is reserved for actual FPS rate.
 	
-		Extra parameter is reserved for actual ping.
+*	__ID = 4:	afk__
+
+	Extra parameter is `true` if player is AFK now and `false` if it isn't anymore..
 	
-	*	3	low fps
-	
-		Extra parameter is reserved for actual FPS rate.
-		
-	*	4	afk
-	
-		Extra parameter is `true` if player is AFK now and `false` if it isn't anymore..
-		
-	*	5	health hack
-	*	6	armour hack
-	*	7	money hack
-	*	8	fake kill
-	*	9	teleport hack
-	*	10	speed hack
-	*	11	fly hack
-	*	12	airbreak hack
-	*	13	weapon hack
-	*	14	joypad
-	*	15	aim bot
-	*	16	jetpack hack
-	*	17	vehicle warp hack
-	*	18	vehicle repair hack
-	*	19	vehicle (illegal) mod
-	*	20	RCON bruteforcer
-	*	21	m0d_sa (hacking tool)
+*	__ID = 5:	health hack__
+*	__ID = 6:	armour hack__
+*	__ID = 7:	money hack__
+*	__ID = 8:	fake kill__
+*	__ID = 9:	teleport hack__
+*	__ID = 10:	speed hack__
+*	__ID = 11:	fly hack__
+*	__ID = 12:	airbreak hack__
+*	__ID = 13:	weapon hack__
+*	__ID = 14:	joypad__
+*	__ID = 15:	aim bot__
+*	__ID = 16:	jetpack hack__
+*	__ID = 17:	vehicle warp hack__
+*	__ID = 18:	vehicle repair hack__
+*	__ID = 19:	vehicle (illegal) mod__
+*	__ID = 20:	RCON bruteforcer__
+*	__ID = 21:	m0d_sa (hacking tool)__

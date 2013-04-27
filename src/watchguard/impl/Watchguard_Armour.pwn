@@ -10,8 +10,7 @@ stock AC_Watchguard_Armour(playerid) {
 	} else {
 		if (armour > AC_players[playerid][AC_pArmour]) {
 			AC_CheatDetected(playerid, AC_cArmour);
-		} else {
-			AC_players[playerid][AC_pArmour] = armour;
 		}
+		AC_players[playerid][AC_pArmour] = armour;
 	}
 }

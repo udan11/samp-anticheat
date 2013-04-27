@@ -10,8 +10,7 @@ stock AC_Watchguard_Health(playerid) {
 	} else {
 		if ((!AC_IsPlayerAtVendingMachine(playerid)) && (health > AC_players[playerid][AC_pHealth])) {
 			AC_CheatDetected(playerid, AC_cHealth);
-		} else {
-			AC_players[playerid][AC_pHealth] = health;
 		}
+		AC_players[playerid][AC_pHealth] = health;
 	}
 }

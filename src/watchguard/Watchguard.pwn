@@ -19,6 +19,9 @@ AC_PUBLIC AC_Watchguard() {
 			AC_players[playerid][AC_pState] &= ~AC_psWasAFK;
 		}
 		// Anti-cheat modules calls.
+		if (AC_cheats[AC_cPing][AC_ccIsEnabled]) {
+			AC_Watchguard_Ping(playerid);
+		}
 		if (AC_cheats[AC_cHealth][AC_ccIsEnabled]) {
 			AC_Watchguard_Health(playerid);
 		}

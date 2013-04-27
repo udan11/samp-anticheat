@@ -4,9 +4,14 @@
 #define AC_AFK_TIME						1500
 
 /**
+ * <summary>Maximum ping allowed. Whoever has a bigger ping will be reported as cheater.</summary>
+ */
+#define AC_MAX_PING						500
+
+/**
  * Player states.
  */
-enum _:AC_ePlayerState {
+enum _:AC_ePlayerState (<<= 1) {
 	AC_psSpawn = 1,						// bitmask  0
 	AC_psWasAFK,						// bitmask  1
 	AC_psFreeze,						// bitmask  2

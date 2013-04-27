@@ -16,12 +16,12 @@ enum _:AC_eCheats {
 	/**
 	 * <summary>Not an actual hack. Used for desynced players.</summary>
 	 */
-	AC_cSync, // TODO
+	AC_cSync,
 	
 	/**
 	 * <summary>Not an actual hack. Players with high ping usually spoils other players' gameplay.</summary>
 	 */
-	AC_cPing, // TODO
+	AC_cPing,
 	
 	/**
 	 * <summary>Not an actual hack. Players with low FPS usually spoils other players' gameplay.</summary>
@@ -31,17 +31,17 @@ enum _:AC_eCheats {
 	/**
 	 * <summary>Not an actual hack. Used for AFK players.</summary>
 	 */
-	AC_cAFK, // TODO
+	AC_cAFK,
 	
 	/**
 	 * <summary>Health hack. Restores user's health.</summary>
 	 */
-	AC_cHealth, // TODO
+	AC_cHealth,
 	
 	/**
 	 * <summary>Armour hack. Restores user's armour.</summary>
 	 */
-	AC_cArmour, // TODO
+	AC_cArmour,
 	
 	/**
 	 * <summary>Money hack.</summary>
@@ -134,7 +134,7 @@ stock AC_cheats[AC_eCheats][AC_eCheatConfig] = {
 	// AC_cUnknown
 	{false, "unknown hack"},
 	// AC_cSync
-	{false, "desynced"},
+	{false, "desync"},
 	// AC_cPing
 	{true, "high ping"},
 	// AC_cFPS

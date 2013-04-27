@@ -1,0 +1,2297 @@
+#pragma ctrlchar 0x5c
+#pragma pack false
+#pragma semicolon true
+#pragma tabsize 8
+#file test-server/filterscripts/test.pwn
+#line 2
+
+#file D:\Files\Programming\samp-anticheat\pawncc\include\a_samp.inc
+#line 1
+
+
+
+
+
+
+#line 11
+#pragma library samp
+
+#pragma tabsize 4
+
+
+
+#file D:\Files\Programming\samp-anticheat\pawncc\include\core.inc
+#line 1
+
+
+
+
+
+#line 10
+#pragma library Core
+
+native heapspace();
+
+native funcidx(const name[]);
+
+native numargs();
+native getarg(arg, index=0);
+native setarg(arg, index=0, value);
+
+native tolower(c);
+native toupper(c);
+native swapchars(c);
+
+native random(max);
+
+native min(value1, value2);
+native max(value1, value2);
+native clamp(value, min=cellmin, max=cellmax);
+
+native getproperty(id=0, const name[]="", value=cellmin, string[]="");
+native setproperty(id=0, const name[]="", value=cellmin, const string[]="");
+native deleteproperty(id=0, const name[]="", value=cellmin);
+native existproperty(id=0, const name[]="", value=cellmin);
+
+
+#file D:\Files\Programming\samp-anticheat\pawncc\include\a_samp.inc
+#file D:\Files\Programming\samp-anticheat\pawncc\include\float.inc
+#line 1
+
+
+
+
+
+
+
+
+
+#line 14
+#pragma library Float
+
+
+enum floatround_method {
+  floatround_round,
+  floatround_floor,
+  floatround_ceil,
+  floatround_tozero,
+  floatround_unbiased
+}
+enum anglemode {
+  radian,
+  degrees,
+  grades
+}
+
+
+
+native Float:float(value);
+
+
+
+native Float:floatstr(const string[]);
+
+
+
+native Float:floatmul(Float:oper1, Float:oper2);
+
+
+
+native Float:floatdiv(Float:dividend, Float:divisor);
+
+
+
+native Float:floatadd(Float:oper1, Float:oper2);
+
+
+
+native Float:floatsub(Float:oper1, Float:oper2);
+
+
+
+native Float:floatfract(Float:value);
+
+
+
+native floatround(Float:value, floatround_method:method=floatround_round);
+
+
+
+
+
+native floatcmp(Float:oper1, Float:oper2);
+
+
+
+native Float:floatsqroot(Float:value);
+
+
+
+native Float:floatpower(Float:value, Float:exponent);
+
+
+
+native Float:floatlog(Float:value, Float:base=10.0);
+
+
+
+
+native Float:floatsin(Float:value, anglemode:mode=radian);
+native Float:floatcos(Float:value, anglemode:mode=radian);
+native Float:floattan(Float:value, anglemode:mode=radian);
+
+
+
+native Float:floatabs(Float:value);
+
+
+
+#pragma rational Float
+
+
+native Float:operator*(Float:oper1, Float:oper2) = floatmul;
+native Float:operator/(Float:oper1, Float:oper2) = floatdiv;
+native Float:operator+(Float:oper1, Float:oper2) = floatadd;
+native Float:operator-(Float:oper1, Float:oper2) = floatsub;
+native Float:operator=(oper) = float;
+
+stock Float:operator++(Float:oper)
+    return oper+1.0;
+
+stock Float:operator--(Float:oper)
+    return oper-1.0;
+
+stock Float:operator-(Float:oper)
+    return oper^Float:cellmin;                                                      
+
+stock Float:operator*(Float:oper1, oper2)
+    return floatmul(oper1, float(oper2));                               
+
+stock Float:operator/(Float:oper1, oper2)
+    return floatdiv(oper1, float(oper2));
+
+stock Float:operator/(oper1, Float:oper2)
+    return floatdiv(float(oper1), oper2);
+
+stock Float:operator+(Float:oper1, oper2)
+    return floatadd(oper1, float(oper2));                               
+
+stock Float:operator-(Float:oper1, oper2)
+    return floatsub(oper1, float(oper2));
+
+stock Float:operator-(oper1, Float:oper2)
+    return floatsub(float(oper1), oper2);
+
+stock bool:operator==(Float:oper1, Float:oper2)
+    return floatcmp(oper1, oper2) == 0;
+
+stock bool:operator==(Float:oper1, oper2)
+    return floatcmp(oper1, float(oper2)) == 0;                           
+
+stock bool:operator!=(Float:oper1, Float:oper2)
+    return floatcmp(oper1, oper2) != 0;
+
+stock bool:operator!=(Float:oper1, oper2)
+    return floatcmp(oper1, float(oper2)) != 0;                           
+
+stock bool:operator>(Float:oper1, Float:oper2)
+    return floatcmp(oper1, oper2) > 0;
+
+stock bool:operator>(Float:oper1, oper2)
+    return floatcmp(oper1, float(oper2)) > 0;
+
+stock bool:operator>(oper1, Float:oper2)
+    return floatcmp(float(oper1), oper2) > 0;
+
+stock bool:operator>=(Float:oper1, Float:oper2)
+    return floatcmp(oper1, oper2) >= 0;
+
+stock bool:operator>=(Float:oper1, oper2)
+    return floatcmp(oper1, float(oper2)) >= 0;
+
+stock bool:operator>=(oper1, Float:oper2)
+    return floatcmp(float(oper1), oper2) >= 0;
+
+stock bool:operator<(Float:oper1, Float:oper2)
+    return floatcmp(oper1, oper2) < 0;
+
+stock bool:operator<(Float:oper1, oper2)
+    return floatcmp(oper1, float(oper2)) < 0;
+
+stock bool:operator<(oper1, Float:oper2)
+    return floatcmp(float(oper1), oper2) < 0;
+
+stock bool:operator<=(Float:oper1, Float:oper2)
+    return floatcmp(oper1, oper2) <= 0;
+
+stock bool:operator<=(Float:oper1, oper2)
+    return floatcmp(oper1, float(oper2)) <= 0;
+
+stock bool:operator<=(oper1, Float:oper2)
+    return floatcmp(float(oper1), oper2) <= 0;
+
+stock bool:operator!(Float:oper)
+    return (_:oper & cellmax) == 0;
+
+
+forward operator%(Float:oper1, Float:oper2);
+forward operator%(Float:oper1, oper2);
+forward operator%(oper1, Float:oper2);
+
+
+#file D:\Files\Programming\samp-anticheat\pawncc\include\a_samp.inc
+#file D:\Files\Programming\samp-anticheat\pawncc\include\string.inc
+#line 1
+
+
+
+
+
+#line 10
+#pragma library String
+
+native strlen(const string[]);
+native strpack(dest[], const source[], maxlength=sizeof dest);
+native strunpack(dest[], const source[], maxlength=sizeof dest);
+native strcat(dest[], const source[], maxlength=sizeof dest);
+
+native strmid(dest[], const source[], start, end, maxlength=sizeof dest);
+native bool: strins(string[], const substr[], pos, maxlength=sizeof string);
+native bool: strdel(string[], start, end);
+
+native strcmp(const string1[], const string2[], bool:ignorecase=false, length=cellmax);
+native strfind(const string[], const sub[], bool:ignorecase=false, pos=0);
+
+native strval(const string[]);
+native valstr(dest[], value, bool:pack=false);
+native bool: ispacked(const string[]);
+
+native uudecode(dest[], const source[], maxlength=sizeof dest);
+native uuencode(dest[], const source[], numbytes, maxlength=sizeof dest);
+native memcpy(dest[], const source[], index=0, numbytes, maxlength=sizeof dest);
+
+#file D:\Files\Programming\samp-anticheat\pawncc\include\a_samp.inc
+#file D:\Files\Programming\samp-anticheat\pawncc\include\file.inc
+#line 1
+
+
+
+
+
+#line 10
+#pragma library File
+
+enum filemode
+    {
+    io_read,                                 
+    io_write,                                   
+    io_readwrite,                                                          
+    io_append,                                            
+    }
+
+enum seek_whence
+    {
+    seek_start,
+    seek_current,
+    seek_end,
+    }
+
+const EOF = -1;
+
+native File:fopen(const name[], filemode: mode = io_readwrite);
+native bool:fclose(File: handle);
+native File:ftemp();
+native bool:fremove(const name[]);
+
+native fwrite(File: handle, const string[]);
+native fread(File: handle, string[], size = sizeof string, bool: pack = false);
+native bool:fputchar(File: handle, value, bool: utf8 = true);
+native fgetchar(File: handle, value, bool: utf8 = true);
+native fblockwrite(File: handle, const buffer[], size = sizeof buffer);
+native fblockread(File: handle, buffer[], size = sizeof buffer);
+
+native fseek(File: handle, position = 0, seek_whence: whence = seek_start);
+native flength(File: handle);
+native fexist(const pattern[]);
+native bool:fmatch(name[], const pattern[], index = 0, size = sizeof name);
+
+#file D:\Files\Programming\samp-anticheat\pawncc\include\a_samp.inc
+#file D:\Files\Programming\samp-anticheat\pawncc\include\time.inc
+#line 1
+
+
+
+
+
+#line 10
+#pragma library Time
+
+native gettime(&hour=0, &minute=0, &second=0);
+native getdate(&year=0, &month=0, &day=0);
+native tickcount(&granularity=0);
+
+#file D:\Files\Programming\samp-anticheat\pawncc\include\a_samp.inc
+#file D:\Files\Programming\samp-anticheat\pawncc\include\datagram.inc
+#line 1
+
+
+
+
+
+#line 10
+#pragma library DGram
+
+native sendstring(const message[], const destination[]="");
+native sendpacket(const packet[], size, const destination[]="");
+
+native listenport(port);
+
+forward @receivestring(const message[], const source[]);
+forward @receivepacket(const packet[], size, const source[]);
+
+#file D:\Files\Programming\samp-anticheat\pawncc\include\a_samp.inc
+#file D:\Files\Programming\samp-anticheat\pawncc\include\a_players.inc
+#line 1
+
+
+
+
+
+
+#line 11
+#pragma library players
+
+#line 32
+
+#line 39
+
+#line 51
+
+#line 57
+
+
+native SetSpawnInfo(playerid, team, skin, Float:x, Float:y, Float:z, Float:rotation, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
+native SpawnPlayer(playerid);
+
+
+native SetPlayerPos(playerid, Float:x, Float:y, Float:z);
+native SetPlayerPosFindZ(playerid, Float:x, Float:y, Float:z);
+native GetPlayerPos(playerid, &Float:x, &Float:y, &Float:z);
+native SetPlayerFacingAngle(playerid,Float:ang);
+native GetPlayerFacingAngle(playerid,&Float:ang);
+native IsPlayerInRangeOfPoint(playerid, Float:range, Float:x, Float:y, Float:z);
+native Float:GetPlayerDistanceFromPoint(playerid, Float:X, Float:Y, Float:Z);
+native IsPlayerStreamedIn(playerid, forplayerid);
+native SetPlayerInterior(playerid,interiorid);
+native GetPlayerInterior(playerid);
+native SetPlayerHealth(playerid, Float:health);
+native GetPlayerHealth(playerid, &Float:health);
+native SetPlayerArmour(playerid, Float:armour);
+native GetPlayerArmour(playerid, &Float:armour);
+native SetPlayerAmmo(playerid, weaponslot, ammo);
+native GetPlayerAmmo(playerid);
+native GetPlayerWeaponState(playerid);
+native GetPlayerTargetPlayer(playerid);
+native SetPlayerTeam(playerid, teamid);
+native GetPlayerTeam(playerid);
+native SetPlayerScore(playerid,score);
+native GetPlayerScore(playerid);
+native GetPlayerDrunkLevel(playerid);
+native SetPlayerDrunkLevel(playerid, level);
+native SetPlayerColor(playerid,color);
+native GetPlayerColor(playerid);
+native SetPlayerSkin(playerid, skinid);
+native GetPlayerSkin(playerid);
+native GivePlayerWeapon(playerid, weaponid, ammo);
+native ResetPlayerWeapons(playerid);
+native SetPlayerArmedWeapon(playerid, weaponid);
+native GetPlayerWeaponData(playerid, slot, &weapons, &ammo);
+native GivePlayerMoney(playerid,money);
+native ResetPlayerMoney(playerid);
+native SetPlayerName(playerid, const name[]);
+native GetPlayerMoney(playerid);
+native GetPlayerState(playerid);
+native GetPlayerIp(playerid, name[], len);
+native GetPlayerPing(playerid);
+native GetPlayerWeapon(playerid);
+native GetPlayerKeys(playerid, &keys, &updown, &leftright);
+native GetPlayerName(playerid, const name[], len);
+native SetPlayerTime(playerid, hour, minute);
+native GetPlayerTime(playerid, &hour, &minute);
+native TogglePlayerClock(playerid, toggle);
+native SetPlayerWeather(playerid, weather);
+native ForceClassSelection(playerid);
+native SetPlayerWantedLevel(playerid, level);
+native GetPlayerWantedLevel(playerid);
+native SetPlayerFightingStyle(playerid, style);
+native GetPlayerFightingStyle(playerid);
+native SetPlayerVelocity(playerid, Float:X, Float:Y, Float:Z);
+native GetPlayerVelocity( playerid, &Float:X, &Float:Y, &Float:Z );
+native PlayCrimeReportForPlayer(playerid, suspectid, crime);
+native PlayAudioStreamForPlayer(playerid, url[], Float:posX = 0.0, Float:posY = 0.0, Float:posZ = 0.0, Float:distance = 50.0, usepos = 0);
+native StopAudioStreamForPlayer(playerid);
+native SetPlayerShopName(playerid, shopname[]);
+native SetPlayerSkillLevel(playerid, skill, level);
+native GetPlayerSurfingVehicleID(playerid);
+native GetPlayerSurfingObjectID(playerid);
+native RemoveBuildingForPlayer(playerid, modelid, Float:fX, Float:fY, Float:fZ, Float:fRadius);
+
+
+
+#line 128
+
+native SetPlayerAttachedObject(playerid, index, modelid, bone, Float:fOffsetX = 0.0, Float:fOffsetY = 0.0, Float:fOffsetZ = 0.0, Float:fRotX = 0.0, Float:fRotY = 0.0, Float:fRotZ = 0.0, Float:fScaleX = 1.0, Float:fScaleY = 1.0, Float:fScaleZ = 1.0, materialcolor1 = 0, materialcolor2 = 0);
+native RemovePlayerAttachedObject(playerid, index);
+native IsPlayerAttachedObjectSlotUsed(playerid, index);
+native EditAttachedObject(playerid, index);
+
+
+native PlayerText:CreatePlayerTextDraw(playerid, Float:x, Float:y, text[]);
+native PlayerTextDrawDestroy(playerid, PlayerText:text);
+native PlayerTextDrawLetterSize(playerid, PlayerText:text, Float:x, Float:y);
+native PlayerTextDrawTextSize(playerid, PlayerText:text, Float:x, Float:y);
+native PlayerTextDrawAlignment(playerid, PlayerText:text, alignment);
+native PlayerTextDrawColor(playerid, PlayerText:text, color);
+native PlayerTextDrawUseBox(playerid, PlayerText:text, use);
+native PlayerTextDrawBoxColor(playerid, PlayerText:text, color);
+native PlayerTextDrawSetShadow(playerid, PlayerText:text, size);
+native PlayerTextDrawSetOutline(playerid, PlayerText:text, size);
+native PlayerTextDrawBackgroundColor(playerid, PlayerText:text, color);
+native PlayerTextDrawFont(playerid, PlayerText:text, font);
+native PlayerTextDrawSetProportional(playerid, PlayerText:text, set);
+native PlayerTextDrawSetSelectable(playerid, PlayerText:text, set);
+native PlayerTextDrawShow(playerid, PlayerText:text);
+native PlayerTextDrawHide(playerid, PlayerText:text);
+native PlayerTextDrawSetString(playerid, PlayerText:text, string[]);
+native PlayerTextDrawSetPreviewModel(playerid, PlayerText:text, modelindex);
+native PlayerTextDrawSetPreviewRot(playerid, PlayerText:text, Float:fRotX, Float:fRotY, Float:fRotZ, Float:fZoom = 1.0);
+native PlayerTextDrawSetPreviewVehCol(playerid, PlayerText:text, color1, color2);
+
+
+native SetPVarInt(playerid, varname[], int_value);
+native GetPVarInt(playerid, varname[]);
+native SetPVarString(playerid, varname[], string_value[]);
+native GetPVarString(playerid, varname[], string_return[], len);
+native SetPVarFloat(playerid, varname[], Float:float_value);
+native Float:GetPVarFloat(playerid, varname[]);
+native DeletePVar(playerid, varname[]);
+
+
+#line 170
+
+native GetPVarsUpperIndex(playerid);
+native GetPVarNameAtIndex(playerid, index, ret_varname[], ret_len);
+native GetPVarType(playerid, varname[]);
+
+#line 176
+native SetPlayerChatBubble(playerid, text[], color, Float:drawdistance, expiretime);
+
+
+native PutPlayerInVehicle(playerid, vehicleid, seatid);
+native GetPlayerVehicleID(playerid);
+native GetPlayerVehicleSeat(playerid);
+native RemovePlayerFromVehicle(playerid);
+native TogglePlayerControllable(playerid, toggle);
+native PlayerPlaySound(playerid, soundid, Float:x, Float:y, Float:z);
+native ApplyAnimation(playerid, animlib[], animname[], Float:fDelta, loop, lockx, locky, freeze, time, forcesync = 0);
+native ClearAnimations(playerid, forcesync = 0);
+native GetPlayerAnimationIndex(playerid); 
+native GetAnimationName(index, animlib[], len1, animname[], len2); 
+native GetPlayerSpecialAction(playerid);
+native SetPlayerSpecialAction(playerid,actionid);
+
+
+native SetPlayerCheckpoint(playerid, Float:x, Float:y, Float:z, Float:size);
+native DisablePlayerCheckpoint(playerid);
+native SetPlayerRaceCheckpoint(playerid, type, Float:x, Float:y, Float:z, Float:nextx, Float:nexty, Float:nextz, Float:size);
+native DisablePlayerRaceCheckpoint(playerid);
+native SetPlayerWorldBounds(playerid,Float:x_max,Float:x_min,Float:y_max,Float:y_min);
+native SetPlayerMarkerForPlayer(playerid, showplayerid, color);
+native ShowPlayerNameTagForPlayer(playerid, showplayerid, show);
+
+#line 205
+
+native SetPlayerMapIcon(playerid, iconid, Float:x, Float:y, Float:z, markertype, color, style = 0);
+native RemovePlayerMapIcon(playerid, iconid);
+
+native AllowPlayerTeleport(playerid, allow);
+
+
+native SetPlayerCameraPos(playerid,Float:x, Float:y, Float:z);
+
+#line 216
+
+native SetPlayerCameraLookAt(playerid, Float:x, Float:y, Float:z, cut = 2);
+native SetCameraBehindPlayer(playerid);
+native GetPlayerCameraPos(playerid, &Float:x, &Float:y, &Float:z);
+native GetPlayerCameraFrontVector(playerid, &Float:x, &Float:y, &Float:z);
+native GetPlayerCameraMode(playerid);
+native AttachCameraToObject(playerid, objectid);
+native AttachCameraToPlayerObject(playerid, playerobjectid);
+native InterpolateCameraPos(playerid, Float:FromX, Float:FromY, Float:FromZ, Float:ToX, Float:ToY, Float:ToZ, time, cut = 2);
+native InterpolateCameraLookAt(playerid, Float:FromX, Float:FromY, Float:FromZ, Float:ToX, Float:ToY, Float:ToZ, time, cut = 2);
+
+
+native IsPlayerConnected(playerid);
+native IsPlayerInVehicle(playerid, vehicleid);
+native IsPlayerInAnyVehicle(playerid);
+native IsPlayerInCheckpoint(playerid);
+native IsPlayerInRaceCheckpoint(playerid);
+
+
+native SetPlayerVirtualWorld(playerid, worldid);
+native GetPlayerVirtualWorld(playerid);
+
+
+native EnableStuntBonusForPlayer(playerid, enable);
+native EnableStuntBonusForAll(enable);
+
+
+#line 246
+
+native TogglePlayerSpectating(playerid, toggle);
+native PlayerSpectatePlayer(playerid, targetplayerid, mode = 1);
+native PlayerSpectateVehicle(playerid, targetvehicleid, mode = 1);
+
+
+#line 255
+
+native StartRecordingPlayerData(playerid, recordtype, recordname[]);
+native StopRecordingPlayerData(playerid);
+
+native SelectTextDraw(playerid, hovercolor); 
+native CancelSelectTextDraw(playerid);	
+#file D:\Files\Programming\samp-anticheat\pawncc\include\a_samp.inc
+#file D:\Files\Programming\samp-anticheat\pawncc\include\a_vehicles.inc
+#line 1
+
+
+
+
+
+
+#line 11
+#pragma library vehicles
+
+#line 27
+
+#line 31
+
+
+native CreateVehicle(vehicletype, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawn_delay);
+native DestroyVehicle(vehicleid);
+native IsVehicleStreamedIn(vehicleid, forplayerid);
+native GetVehiclePos(vehicleid, &Float:x, &Float:y, &Float:z);
+native SetVehiclePos(vehicleid, Float:x, Float:y, Float:z);
+native GetVehicleZAngle(vehicleid, &Float:z_angle);
+native GetVehicleRotationQuat(vehicleid, &Float:w, &Float:x, &Float:y, &Float:z);
+native Float:GetVehicleDistanceFromPoint(vehicleid, Float:X, Float:Y, Float:Z);
+native SetVehicleZAngle(vehicleid, Float:z_angle);
+native SetVehicleParamsForPlayer(vehicleid,playerid,objective,doorslocked);
+native ManualVehicleEngineAndLights();
+native SetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
+native GetVehicleParamsEx(vehicleid, &engine, &lights, &alarm, &doors, &bonnet, &boot, &objective);
+native SetVehicleToRespawn(vehicleid);
+native LinkVehicleToInterior(vehicleid, interiorid);
+native AddVehicleComponent(vehicleid, componentid);
+native RemoveVehicleComponent(vehicleid, componentid);
+native ChangeVehicleColor(vehicleid, color1, color2);
+native ChangeVehiclePaintjob(vehicleid, paintjobid);
+native SetVehicleHealth(vehicleid, Float:health);
+native GetVehicleHealth(vehicleid, &Float:health);
+native AttachTrailerToVehicle(trailerid, vehicleid);
+native DetachTrailerFromVehicle(vehicleid);
+native IsTrailerAttachedToVehicle(vehicleid);
+native GetVehicleTrailer(vehicleid);
+native SetVehicleNumberPlate(vehicleid, numberplate[]);
+native GetVehicleModel(vehicleid);
+native GetVehicleComponentInSlot(vehicleid, slot); 
+native GetVehicleComponentType(component); 
+native RepairVehicle(vehicleid); 
+native GetVehicleVelocity(vehicleid, &Float:X, &Float:Y, &Float:Z);
+native SetVehicleVelocity(vehicleid, Float:X, Float:Y, Float:Z);
+native SetVehicleAngularVelocity(vehicleid, Float:X, Float:Y, Float:Z);
+native GetVehicleDamageStatus(vehicleid, &panels, &doors, &lights, &tires);
+native UpdateVehicleDamageStatus(vehicleid, panels, doors, lights, tires);
+
+#line 78
+
+native GetVehicleModelInfo(vehiclemodel, infotype, &Float:X, &Float:Y, &Float:Z);
+
+
+native SetVehicleVirtualWorld(vehicleid, worldid);
+native GetVehicleVirtualWorld(vehicleid);#file D:\Files\Programming\samp-anticheat\pawncc\include\a_samp.inc
+#file D:\Files\Programming\samp-anticheat\pawncc\include\a_objects.inc
+#line 1
+
+
+
+
+
+
+#line 11
+#pragma library objects
+
+
+
+native CreateObject(modelid, Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 0.0);
+native AttachObjectToVehicle(objectid, vehicleid, Float:OffsetX, Float:OffsetY, Float:OffsetZ, Float:RotX, Float:RotY, Float:RotZ);
+native AttachObjectToObject(objectid, attachtoid, Float:OffsetX, Float:OffsetY, Float:OffsetZ, Float:RotX, Float:RotY, Float:RotZ, SyncRotation = 1);
+native AttachObjectToPlayer(objectid, playerid, Float:OffsetX, Float:OffsetY, Float:OffsetZ, Float:RotX, Float:RotY, Float:RotZ);
+native SetObjectPos(objectid, Float:X, Float:Y, Float:Z);
+native GetObjectPos(objectid, &Float:X, &Float:Y, &Float:Z);
+native SetObjectRot(objectid, Float:RotX, Float:RotY, Float:RotZ);
+native GetObjectRot(objectid, &Float:RotX, &Float:RotY, &Float:RotZ);
+native IsValidObject(objectid);
+native DestroyObject(objectid);
+native MoveObject(objectid, Float:X, Float:Y, Float:Z, Float:Speed, Float:RotX = -1000.0, Float:RotY = -1000.0, Float:RotZ = -1000.0);
+native StopObject(objectid);
+native IsObjectMoving(objectid);
+native EditObject(playerid, objectid);
+native EditPlayerObject(playerid, objectid);
+native SelectObject(playerid);
+native CancelEdit(playerid);
+native CreatePlayerObject(playerid, modelid, Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 0.0);
+native AttachPlayerObjectToVehicle(playerid, objectid, vehicleid, Float:fOffsetX, Float:fOffsetY, Float:fOffsetZ, Float:fRotX, Float:fRotY, Float:RotZ);
+native SetPlayerObjectPos(playerid, objectid, Float:X, Float:Y, Float:Z);
+native GetPlayerObjectPos(playerid, objectid, &Float:X, &Float:Y, &Float:Z);
+native SetPlayerObjectRot(playerid, objectid, Float:RotX, Float:RotY, Float:RotZ);
+native GetPlayerObjectRot(playerid, objectid, &Float:RotX, &Float:RotY, &Float:RotZ);
+native IsValidPlayerObject(playerid, objectid);
+native DestroyPlayerObject(playerid, objectid);
+native MovePlayerObject(playerid, objectid, Float:X, Float:Y, Float:Z, Float:Speed, Float:RotX = -1000.0, Float:RotY = -1000.0, Float:RotZ = -1000.0);
+native StopPlayerObject(playerid, objectid);
+native IsPlayerObjectMoving(playerid, objectid);
+native AttachPlayerObjectToPlayer(objectplayer, objectid, attachplayer, Float:OffsetX, Float:OffsetY, Float:OffsetZ, Float:rX, Float:rY, Float:rZ);
+
+#line 59
+
+#line 63
+
+native SetObjectMaterial(objectid, materialindex, modelid, txdname[], texturename[], materialcolor=0);
+native SetPlayerObjectMaterial(playerid, objectid, materialindex, modelid, txdname[], texturename[], materialcolor=0);
+
+native SetObjectMaterialText(objectid, text[], materialindex = 0, materialsize = 90, fontface[] = "Arial", fontsize = 24, bold = 1, fontcolor = 0xFFFFFFFF, backcolor = 0, textalignment = 0);
+native SetPlayerObjectMaterialText(playerid, objectid, text[], materialindex = 0, materialsize = 90, fontface[] = "Arial", fontsize = 24, bold = 1, fontcolor = 0xFFFFFFFF, backcolor = 0, textalignment = 0);#file D:\Files\Programming\samp-anticheat\pawncc\include\a_samp.inc
+#file D:\Files\Programming\samp-anticheat\pawncc\include\a_sampdb.inc
+#line 1
+
+
+
+
+
+
+#line 11
+#pragma library sampdb
+
+native DB:db_open(name[]);
+native db_close(DB:db);
+native DBResult:db_query(DB:db,query[]);
+native db_free_result(DBResult:dbresult);
+native db_num_rows(DBResult:dbresult);
+native db_next_row(DBResult:dbresult);
+native db_num_fields(DBResult:dbresult);
+native db_field_name(DBResult:dbresult, field, result[], maxlength);
+native db_get_field(DBResult:dbresult, field, result[], maxlength);
+native db_get_field_assoc(DBResult:dbresult, const field[], result[], maxlength);#file D:\Files\Programming\samp-anticheat\pawncc\include\a_samp.inc
+#line 27
+
+
+#line 48
+
+
+
+
+
+
+native print(const string[]);
+native printf(const format[], {Float,_}:...);
+native format(output[], len, const format[], {Float,_}:...);
+native SendClientMessage(playerid, color, const message[]);
+native SendClientMessageToAll(color, const message[]);
+native SendPlayerMessageToPlayer(playerid, senderid, const message[]);
+native SendPlayerMessageToAll(senderid, const message[]);
+native SendDeathMessage(killer,killee,weapon);
+native GameTextForAll(const string[],time,style);
+native GameTextForPlayer(playerid,const string[],time,style);
+native SetTimer(funcname[], interval, repeating);
+native SetTimerEx(funcname[], interval, repeating, const format[], {Float,_}:...);
+native KillTimer(timerid);
+native GetTickCount();
+native GetMaxPlayers();
+native CallRemoteFunction(const function[], const format[], {Float,_}:...);
+native CallLocalFunction(const function[], const format[], {Float,_}:...);
+native Float:asin(Float:value);
+native Float:acos(Float:value);
+native Float:atan(Float:value);
+native Float:atan2(Float:x, Float:y);
+
+
+native SetGameModeText(const string[]);
+native SetTeamCount(count);
+native AddPlayerClass(modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:z_angle, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
+native AddPlayerClassEx(teamid, modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:z_angle, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
+native AddStaticVehicle(modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:z_angle, color1, color2);
+native AddStaticVehicleEx(modelid, Float:spawn_x, Float:spawn_y, Float:spawn_z, Float:z_angle, color1, color2, respawn_delay);
+native AddStaticPickup(model, type, Float:X, Float:Y, Float:Z, virtualworld = 0);
+native CreatePickup(model, type, Float:X, Float:Y, Float:Z, virtualworld = 0);
+native DestroyPickup(pickup);
+native ShowNameTags(show);
+native ShowPlayerMarkers(mode);
+native GameModeExit();
+native SetWorldTime(hour);
+native GetWeaponName(weaponid, const weapon[], len);
+native EnableTirePopping(enable); 
+native EnableVehicleFriendlyFire();
+native AllowInteriorWeapons(allow);
+native SetWeather(weatherid);
+native SetGravity(Float:gravity);
+native AllowAdminTeleport(allow);
+native SetDeathDropAmount(amount);
+native CreateExplosion(Float:X, Float:Y, Float:Z, type, Float:Radius);
+native EnableZoneNames(enable);
+native UsePlayerPedAnims();		
+native DisableInteriorEnterExits();  
+native SetNameTagDrawDistance(Float:distance); 
+native DisableNameTagLOS(); 
+native LimitGlobalChatRadius(Float:chat_radius);
+native LimitPlayerMarkerRadius(Float:marker_radius);
+
+
+native ConnectNPC(name[], script[]);
+native IsPlayerNPC(playerid);
+
+
+native IsPlayerAdmin(playerid);
+native Kick(playerid);
+native Ban(playerid);
+native BanEx(playerid, const reason[]);
+native SendRconCommand(command[]);
+native GetServerVarAsString(const varname[], buffer[], len);
+native GetServerVarAsInt(const varname[]);
+native GetServerVarAsBool(const varname[]);
+native GetPlayerNetworkStats(playerid, retstr[], retstr_size);
+native GetNetworkStats(retstr[], retstr_size);
+native GetPlayerVersion(playerid, const version[], len); 
+
+
+native Menu:CreateMenu(const title[], columns, Float:x, Float:y, Float:col1width, Float:col2width = 0.0);
+native DestroyMenu(Menu:menuid);
+native AddMenuItem(Menu:menuid, column, const menutext[]);
+native SetMenuColumnHeader(Menu:menuid, column, const columnheader[]);
+native ShowMenuForPlayer(Menu:menuid, playerid);
+native HideMenuForPlayer(Menu:menuid, playerid);
+native IsValidMenu(Menu:menuid);
+native DisableMenu(Menu:menuid);
+native DisableMenuRow(Menu:menuid, row);
+native Menu:GetPlayerMenu(playerid);
+
+
+#line 139
+
+native Text:TextDrawCreate(Float:x, Float:y, text[]);
+native TextDrawDestroy(Text:text);
+native TextDrawLetterSize(Text:text, Float:x, Float:y);
+native TextDrawTextSize(Text:text, Float:x, Float:y);
+native TextDrawAlignment(Text:text, alignment);
+native TextDrawColor(Text:text, color);
+native TextDrawUseBox(Text:text, use);
+native TextDrawBoxColor(Text:text, color);
+native TextDrawSetShadow(Text:text, size);
+native TextDrawSetOutline(Text:text, size);
+native TextDrawBackgroundColor(Text:text, color);
+native TextDrawFont(Text:text, font);
+native TextDrawSetProportional(Text:text, set);
+native TextDrawSetSelectable(Text:text, set);
+native TextDrawShowForPlayer(playerid, Text:text);
+native TextDrawHideForPlayer(playerid, Text:text);
+native TextDrawShowForAll(Text:text);
+native TextDrawHideForAll(Text:text);
+native TextDrawSetString(Text:text, string[]);
+native TextDrawSetPreviewModel(Text:text, modelindex);
+native TextDrawSetPreviewRot(Text:text, Float:fRotX, Float:fRotY, Float:fRotZ, Float:fZoom = 1.0);
+native TextDrawSetPreviewVehCol(Text:text, color1, color2);
+
+
+native GangZoneCreate(Float:minx, Float:miny, Float:maxx, Float:maxy);
+native GangZoneDestroy(zone);
+native GangZoneShowForPlayer(playerid, zone, color);
+native GangZoneShowForAll(zone, color);
+native GangZoneHideForPlayer(playerid, zone);
+native GangZoneHideForAll(zone);
+native GangZoneFlashForPlayer(playerid, zone, flashcolor);
+native GangZoneFlashForAll(zone, flashcolor);
+native GangZoneStopFlashForPlayer(playerid, zone);
+native GangZoneStopFlashForAll(zone);
+
+
+native Text3D:Create3DTextLabel(text[], color, Float:X, Float:Y, Float:Z, Float:DrawDistance, virtualworld, testLOS=0);
+native Delete3DTextLabel(Text3D:id);
+native Attach3DTextLabelToPlayer(Text3D:id, playerid, Float:OffsetX, Float:OffsetY, Float:OffsetZ);
+native Attach3DTextLabelToVehicle(Text3D:id, vehicleid, Float:OffsetX, Float:OffsetY, Float:OffsetZ);
+native Update3DTextLabelText(Text3D:id, color, text[]);
+
+
+native PlayerText3D:CreatePlayer3DTextLabel(playerid, text[], color, Float:X, Float:Y, Float:Z, Float:DrawDistance, attachedplayer=(0xFFFF), attachedvehicle=(0xFFFF), testLOS=0);
+native DeletePlayer3DTextLabel(playerid, PlayerText3D:id);
+native UpdatePlayer3DTextLabelText(playerid, PlayerText3D:id, color, text[]);
+
+
+#line 192
+
+native ShowPlayerDialog(playerid, dialogid, style, caption[], info[], button1[], button2[]);
+
+
+
+
+
+
+#line 210
+
+
+#line 215
+
+
+#line 261
+
+
+#line 282
+
+#line 287
+
+
+
+
+
+forward OnGameModeInit();
+forward OnGameModeExit();
+forward OnFilterScriptInit();
+forward OnFilterScriptExit();
+forward OnPlayerConnect(playerid);
+forward OnPlayerDisconnect(playerid, reason);
+forward OnPlayerSpawn(playerid);
+forward OnPlayerDeath(playerid, killerid, reason);
+forward OnVehicleSpawn(vehicleid);
+forward OnVehicleDeath(vehicleid, killerid);
+forward OnPlayerText(playerid, text[]);
+forward OnPlayerCommandText(playerid, cmdtext[]);
+forward OnPlayerRequestClass(playerid, classid);
+forward OnPlayerEnterVehicle(playerid, vehicleid, ispassenger);
+forward OnPlayerExitVehicle(playerid, vehicleid);
+forward OnPlayerStateChange(playerid, newstate, oldstate);
+forward OnPlayerEnterCheckpoint(playerid);
+forward OnPlayerLeaveCheckpoint(playerid);
+forward OnPlayerEnterRaceCheckpoint(playerid);
+forward OnPlayerLeaveRaceCheckpoint(playerid);
+forward OnRconCommand(cmd[]);
+forward OnPlayerRequestSpawn(playerid);
+forward OnObjectMoved(objectid);
+forward OnPlayerObjectMoved(playerid, objectid);
+forward OnPlayerPickUpPickup(playerid, pickupid);
+forward OnVehicleMod(playerid, vehicleid, componentid);
+forward OnEnterExitModShop(playerid, enterexit, interiorid);
+forward OnVehiclePaintjob(playerid, vehicleid, paintjobid);
+forward OnVehicleRespray(playerid, vehicleid, color1, color2);
+forward OnVehicleDamageStatusUpdate(vehicleid, playerid);
+forward OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat);
+forward OnPlayerSelectedMenuRow(playerid, row);
+forward OnPlayerExitedMenu(playerid);
+forward OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid);
+forward OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
+forward OnRconLoginAttempt( ip[], password[], success );
+forward OnPlayerUpdate(playerid);
+forward OnPlayerStreamIn(playerid, forplayerid);
+forward OnPlayerStreamOut(playerid, forplayerid);
+forward OnVehicleStreamIn(vehicleid, forplayerid);
+forward OnVehicleStreamOut(vehicleid, forplayerid);
+forward OnDialogResponse(playerid, dialogid, response, listitem, inputtext[]);
+forward OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid);
+forward OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid);
+forward OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ);
+forward OnPlayerClickTextDraw(playerid, Text:clickedid);
+forward OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid);
+
+#line 341
+forward OnPlayerClickPlayer(playerid, clickedplayerid, source);
+
+#line 346
+
+forward OnPlayerEditObject( playerid, playerobject, objectid, response, 
+Float:fX, Float:fY, Float:fZ, Float:fRotX, Float:fRotY, Float:fRotZ );
+
+forward OnPlayerEditAttachedObject( playerid, response, index, modelid, boneid,
+Float:fOffsetX, Float:fOffsetY, Float:fOffsetZ,
+Float:fRotX, Float:fRotY, Float:fRotZ,
+Float:fScaleX, Float:fScaleY, Float:fScaleZ );
+
+#line 357
+
+forward OnPlayerSelectObject(playerid, type, objectid, modelid, Float:fX, Float:fY, Float:fZ);
+
+
+#file test-server/filterscripts/test.pwn
+#file D:\Files\Programming\samp-anticheat\pawncc\include\Anticheat.inc
+#line 1
+#file "main.pwn"
+#line 0
+#line 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 36
+
+
+#line 41
+
+#file D:\Files\Programming\samp-anticheat\pawncc\include\foreach.inc
+#line 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 187
+
+
+#line 197
+
+#line 200
+
+
+#line 206
+
+#line 214
+
+#line 218
+
+#line 224
+
+
+
+
+
+
+
+#line 234
+
+#line 238
+
+#line 242
+
+#line 245
+
+#line 249
+
+#line 251
+
+#line 253
+    static stock
+        YSI_g_sCallbacks = 0;
+#line 256
+
+#line 258
+    forward Itter_OPDCInternal(playerid);
+#line 260
+
+#line 262
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 280
+
+
+#line 283
+
+#line 285
+
+
+
+
+
+
+#line 293
+
+#line 295
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 311
+
+#line 313
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 330
+
+
+#line 333
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 349
+
+
+#line 352
+
+
+#line 355
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 370
+
+#line 372
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 388
+
+#line 390
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 406
+
+#line 408
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 427
+
+#line 429
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 444
+
+#line 446
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 460
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 475
+
+#line 477
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 492
+
+#line 494
+
+
+
+#line 498
+    new
+        _Y_ITER_C3:Player@YSII_Cg,Player@YSII_Ag[((500))+1]={((500))*2,((500))*2-1,...};
+
+#line 502
+        new
+            _Y_ITER_C3:Bot@YSII_Cg,Bot@YSII_Ag[((500))+1]={((500))*2,((500))*2-1,...},
+            _Y_ITER_C3:Character@YSII_Cg,Character@YSII_Ag[((500))+1]={((500))*2,((500))*2-1,...};
+
+
+#line 509
+
+
+#line 513
+
+#line 515
+
+
+
+
+
+static stock
+    YSI_gsOnPlayerConnect[] = "Itter_OnPlayerConnect",
+    YSI_gsOnPlayerDisconnect[] = "Itter_OnPlayerDisconnect",
+    YSI_gsOnGameModeInit[] = "Itter_OnGameModeInit",
+    YSI_gsSpecifier@i[] = "i",
+    YSI_gsSpecifier@[] = "";
+
+#line 528
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 545
+
+#line 547
+
+
+
+
+
+#line 553
+
+
+#line 556
+
+
+#line 559
+
+
+#line 562
+
+
+
+
+
+
+
+#line 570
+
+
+
+
+#line 575
+
+
+
+
+#line 580
+
+
+
+
+
+
+
+
+
+
+
+#line 592
+
+
+#line 595
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 613
+    public OnPlayerConnect(playerid)
+    {
+
+#line 617
+            if (!IsPlayerNPC(playerid))
+            {
+                Itter_AddInternal(_:_Y_ITER_C0:Player@YSII_Cg,_:_Y_ITER_C0:Player@YSII_Ag, playerid,_:_Y_ITER_C1:_Y_ITER_C2:sizeof Player@YSII_Ag-1);
+            }
+#line 622
+                else
+                {
+                    Itter_AddInternal(_:_Y_ITER_C0:Bot@YSII_Cg,_:_Y_ITER_C0:Bot@YSII_Ag, playerid,_:_Y_ITER_C1:_Y_ITER_C2:sizeof Bot@YSII_Ag-1);
+                }
+                #pragma tabsize 4
+                Itter_AddInternal(_:_Y_ITER_C0:Character@YSII_Cg,_:_Y_ITER_C0:Character@YSII_Ag, playerid,_:_Y_ITER_C1:_Y_ITER_C2:sizeof Character@YSII_Ag-1);
+#line 632
+        if (YSI_g_sCallbacks & 2)
+        {
+            CallLocalFunction(YSI_gsOnPlayerConnect, YSI_gsSpecifier@i, playerid);
+        }
+
+        return 1;
+    }
+
+#line 646
+    forward Itter_OnPlayerConnect(playerid);
+#line 648
+
+#line 650
+
+
+
+
+
+
+
+
+
+
+
+#line 662
+    public OnFilterScriptInit()
+    {
+
+        if (funcidx(YSI_gsOnPlayerDisconnect) != -1)
+        {
+            YSI_g_sCallbacks |= 1;
+        }
+        if (funcidx(YSI_gsOnPlayerConnect) != -1)
+        {
+            YSI_g_sCallbacks |= 2;
+        }
+#line 674
+            Bot@YSII_Cg = _Y_ITER_C3:0;
+            Character@YSII_Cg = _Y_ITER_C3:0;
+            new
+                lastBot = (500),
+                lastCharacter = (500);
+#line 680
+        Player@YSII_Cg = _Y_ITER_C3:0;
+        new
+            lastPlayer = (500);
+        for (new i = 0; i != (500); ++i)
+        {
+            if (IsPlayerConnected(i))
+            {
+#line 688
+
+                    if (!IsPlayerNPC(i))
+                    {
+                        Player@YSII_Ag[lastPlayer] = i;
+                        ++Player@YSII_Cg;
+                        lastPlayer = i;
+                    }
+#line 696
+                        else
+                        {
+                            Bot@YSII_Ag[lastBot] = i;
+                            ++Bot@YSII_Cg;
+                            lastBot = i;
+                        }
+                        #pragma tabsize 4
+                        Character@YSII_Ag[lastCharacter] = i;
+                        ++Character@YSII_Cg;
+                        lastCharacter = i;
+#line 712
+            }
+            else
+            {
+#line 716
+                    Bot@YSII_Ag[i] = (500) + 1;
+
+                    Character@YSII_Ag[i] = (500) + 1;
+
+#line 721
+                Player@YSII_Ag[i] = (500) + 1;
+
+            }
+        }
+#line 726
+            Bot@YSII_Ag[lastPlayer] = (500);
+            Character@YSII_Ag[lastPlayer] = (500);
+#line 729
+        Player@YSII_Ag[lastPlayer] = (500);
+        CallLocalFunction("Itter_OnFilterScriptInit", YSI_gsSpecifier@);
+
+        return 1;
+    }
+
+#line 741
+    forward Itter_OnFilterScriptInit();
+#line 743
+
+#line 745
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 759
+    public OnGameModeInit()
+    {
+
+
+        if (funcidx(YSI_gsOnPlayerDisconnect) != -1)
+        {
+            YSI_g_sCallbacks |= 1;
+        }
+        if (funcidx(YSI_gsOnPlayerConnect) != -1)
+        {
+            YSI_g_sCallbacks |= 2;
+        }
+        if (!Player@YSII_Cg)
+        {
+#line 774
+                CallLocalFunction(YSI_gsOnGameModeInit, YSI_gsSpecifier@, Bot@YSII_Cg, Character@YSII_Cg, Player@YSII_Cg);
+#line 786
+
+            return 1;
+        }
+
+#line 791
+            Bot@YSII_Cg = _Y_ITER_C3:0;
+            Bot@YSII_Ag[(500)] = (500);
+            Character@YSII_Ag[(500)] = (500);
+            Character@YSII_Cg = _Y_ITER_C3:0;
+            new
+                lastBot = (500),
+                lastCharacter = (500);
+#line 799
+        Player@YSII_Cg = _Y_ITER_C3:0;
+        Player@YSII_Ag[(500)] = (500);
+        new
+            lastPlayer = (500);
+        for (new i = 0; i != (500); ++i)
+        {
+            if (IsPlayerConnected(i))
+            {
+#line 808
+
+                    if (!IsPlayerNPC(i))
+                    {
+                        Player@YSII_Ag[lastPlayer] = i;
+                        ++Player@YSII_Cg;
+                        lastPlayer = i;
+                    }
+#line 816
+                        else
+                        {
+                            Bot@YSII_Ag[lastBot] = i;
+                            ++Bot@YSII_Cg;
+                            lastBot = i;
+                        }
+                        #pragma tabsize 4
+                        Character@YSII_Ag[lastCharacter] = i;
+                        ++Character@YSII_Cg;
+                        lastCharacter = i;
+#line 832
+            }
+            else
+            {
+#line 836
+                    Bot@YSII_Ag[i] = (500) + 1;
+
+                    Character@YSII_Ag[i] = (500) + 1;
+
+#line 841
+                Player@YSII_Ag[i] = (500) + 1;
+
+            }
+        }
+#line 846
+            Bot@YSII_Ag[lastPlayer] = (500);
+            Character@YSII_Ag[lastPlayer] = (500);
+#line 849
+        Player@YSII_Ag[lastPlayer] = (500);
+
+        CallLocalFunction(YSI_gsOnGameModeInit, YSI_gsSpecifier@);
+#line 860
+        return 1;
+    }
+
+#line 869
+    forward Itter_OnGameModeInit();
+#line 871
+
+#line 873
+
+
+
+
+
+
+
+
+
+
+
+
+#line 886
+    public OnPlayerDisconnect(playerid, reason)
+    {
+        if (YSI_g_sCallbacks & 1)
+        {
+            CallLocalFunction(YSI_gsOnPlayerDisconnect, "ii", playerid, reason);
+        }
+        SetTimerEx("Itter_OPDCInternal", 0, false, YSI_gsSpecifier@i, playerid);
+        return 1;
+    }
+
+#line 902
+    forward Itter_OnPlayerDisconnect(playerid, reason);
+#line 904
+
+#line 906
+
+
+
+
+
+
+
+
+
+
+
+#line 918
+    public Itter_OPDCInternal(playerid)
+    {
+        if (IsPlayerConnected(playerid))
+        {
+            return;
+        }
+#line 925
+            if (!IsPlayerNPC(playerid))
+            {
+                Itter_RemoveInternal(_:_Y_ITER_C0:Player@YSII_Cg,_:_Y_ITER_C0:Player@YSII_Ag, playerid,_:_Y_ITER_C1:_Y_ITER_C2:sizeof Player@YSII_Ag-1);
+            }
+#line 930
+                else
+                {
+                    Itter_RemoveInternal(_:_Y_ITER_C0:Bot@YSII_Cg,_:_Y_ITER_C0:Bot@YSII_Ag, playerid,_:_Y_ITER_C1:_Y_ITER_C2:sizeof Bot@YSII_Ag-1);
+                }
+                #pragma tabsize 4
+                Itter_RemoveInternal(_:_Y_ITER_C0:Character@YSII_Cg,_:_Y_ITER_C0:Character@YSII_Ag, playerid,_:_Y_ITER_C1:_Y_ITER_C2:sizeof Character@YSII_Ag-1);
+#line 940
+    }
+#line 942
+
+#line 944
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#line 981
+
+
+
+
+
+
+
+
+
+
+
+
+stock
+    Itter_RandomInternal(count, array[], size)
+{
+    if (count == 0)
+    {
+        return -1;
+    }
+    new
+        rnd = random(count),
+        cur = array[size];
+    while (cur != size)
+    {
+        if (rnd-- == 0)
+        {
+            return cur;
+        }
+        cur = array[cur];
+    }
+    return -1;
+}
+
+#line 1015
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+stock
+    Itter_FreeInternal(array[], size)
+{
+    for (new i = 0; i != size; ++i)
+    {
+        if (array[i] > size)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+#line 1045
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+stock
+    Itter_AddInternal(&count, array[], value, size)
+{
+    if (0 <= value < size && array[value] > size)
+    {
+        new
+            last = size,
+            next = array[last];
+        while (next < value)
+        {
+            last = next;
+            next = array[last];
+        }
+        array[last] = value;
+        array[value] = next;
+        ++count;
+        return 1;
+    }
+    return 0;
+}
+
+#line 1082
+
+
+
+
+
+
+
+
+
+
+
+
+stock
+    Itter_RemoveInternal(&count, array[], value, size)
+{
+    new
+        last;
+    return Itter_SafeRemoveInternal(count, array, value, last, size);
+}
+
+#line 1103
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+stock
+    Itter_SafeRemoveInternal(&count, array[], value, &last, size)
+{
+    if (0 <= value < size && array[value] <= size)
+    {
+        last = size;
+        new
+            next = array[last];
+        while (next != value)
+        {
+            last = next;
+            next = array[last];
+        }
+        array[last] = array[value];
+        array[value] = size + 1;
+        --count;
+        return 1;
+    }
+    return 0;
+}
+
+#line 1139
+
+
+
+
+
+
+
+
+
+
+
+
+stock
+    Itter_ContainsInternal(array[], value, size)
+{
+    return 0 <= value < size && array[value] <= size;
+}
+
+#line 1158
+
+
+
+
+
+
+
+
+
+
+
+
+
+stock
+    Itter_ClearInternal(&count, array[], size)
+{
+    for (new i = 0, t = size + 1; i < size; ++i)
+    {
+        array[i] = t;
+    }
+    array[size] = size;
+    count = 0;
+}
+
+#line 1183
+
+
+
+
+
+
+
+
+
+
+
+
+
+stock
+    Itter_InitInternal(arr[][], s0, s1)
+{
+    for (new i = 0, t = s1 + 1; i < s0; ++i)
+    {
+        for (new j = 0; j < s1; ++j)
+        {
+            arr[i][j] = t;
+        }
+        arr[i][s1] = s1;
+    }
+}
+
+#line 1210
+
+
+
+
+
+
+
+
+
+
+
+
+stock
+    Itter_PrevInternal(array[], size, slot)
+{
+    if (0 <= slot <= size && array[slot] <= size)
+    {
+        for (new last = slot; last--; )
+        {
+            if (array[last] == slot)
+            {
+                return last;
+            }
+        }
+    }
+    return size;
+}
+
+#line 1239
+
+
+
+
+
+
+
+
+
+
+#line 1251
+
+#line 1253
+
+
+
+
+
+
+
+
+
+
+#line 1265
+
+#line 1267
+
+
+
+
+
+
+
+
+
+
+#line 1279
+
+#line 1281
+
+
+
+
+
+
+
+
+
+
+#line 1293
+
+#line 1295
+
+
+
+
+
+
+
+
+
+
+
+#line 1308
+
+#line 1310
+
+
+
+
+
+
+
+
+
+
+
+#line 1323
+
+#line 1325
+
+
+
+
+
+
+
+
+
+
+#line 1337
+
+#line 1339
+
+
+
+
+
+
+
+
+
+
+#line 1350
+
+#file main.pwn
+#line 43
+
+
+
+
+#line 51
+
+
+
+
+#line 60
+
+
+
+
+#line 68
+#file "api.pwn"
+#line 0
+#line 0
+
+#line 9
+
+#line 11
+
+
+
+
+
+	forward AC_SetPlayerArmour(playerid, Float:health); stock AC_SetPlayerArmour(playerid, Float:health) {
+		return CallRemoteFunction(#AC_SetPlayerArmour, "if", playerid, health);
+	}
+#line 25
+
+	forward AC_SetPlayerHealth(playerid, Float:health); stock AC_SetPlayerHealth(playerid, Float:health) {
+		return CallRemoteFunction(#AC_SetPlayerHealth, "if", playerid, health);
+	}
+#line 35
+
+#line 40
+
+	#endinput 
+#file test-server/filterscripts/test.pwn
+#line 5
+
+main() {
+	print(" >> Anticheat test filterscript.");
+}
+
+public OnPlayerCommandText(playerid, cmdtext[]) {
+	new idx, cmd[256];
+	cmd = strtok(cmdtext, idx);
+	if (strcmp(cmd, "/fh50", true) == 0) {
+		AC_SetPlayerHealth(playerid, 50.0);
+		return 1;
+	} else if (strcmp(cmd, "/fh100", true) == 0) {
+		AC_SetPlayerHealth(playerid, 100.0);
+		return 1;
+	}
+	return 0;
+}
+
+public Itter_OnFilterScriptInit() {
+	return 1;
+}
+
+public OnFilterScriptExit() {
+	return 1;
+}
+
+strtok(const string[], &index) {
+	new length = strlen(string);
+	while ((index < length) && (string[index] <= ' ')) {
+		index++;
+	}
+	new offset = index;
+	new result[20];
+	while ((index < length) && (string[index] > ' ') && ((index - offset) < (sizeof(result) - 1))) {
+		result[index - offset] = string[index];
+		index++;
+	}
+	result[index - offset] = EOS;
+	return result;
+}
