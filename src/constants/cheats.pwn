@@ -46,7 +46,7 @@ enum _:AC_eCheats {
 	/**
 	 * <summary>Money hack.</summary>
 	 */
-	AC_cMoney, // TODO
+	AC_cMoney,
 	
 	/**
 	 * <summary>Fake kill. The user is reported to have been killed by multiple persons in short interval.</summary>
@@ -81,7 +81,7 @@ enum _:AC_eCheats {
 	/**
 	 * <summary>Not an actual hack. It detect the player using joypads. It's easier to aim using a joypad.</summary>
 	 */
-	AC_cJoypad, // TODO
+	AC_cJoypad,
 	
 	/**
 	 * <summary>Aim bot detection. This cheat is quite new and detection methods are not very accurate.</summary>
@@ -91,7 +91,7 @@ enum _:AC_eCheats {
 	/**
 	 * <summary>Jetpack hack. Detects if a player has acquired a jetpack in a unscripted way.</summary>
 	 */
-	AC_cJetpack, // TODO
+	AC_cJetpack,
 	
 	/**
 	 * <summary>Vehicle warp hack. The user has the ability to warp vehicles around him.</summary>

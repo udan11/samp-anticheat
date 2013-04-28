@@ -78,11 +78,45 @@
 	#endif
 #endif
 
+// Rename old natives (unprotected).
+native U_GetPlayerMoney(playerid) = GetPlayerMoney;
+native U_GetPlayerSpecialAction(playerid) = GetPlayerSpecialAction;
+
 #if defined AC_API
 
 	/**
 	 * <summary>API used by remote scripts (other than the core).</summary>
 	 */
+	 
+	AC_STOCK AC_GetPlayerMoney(playerid) {
+		return CallRemoteFunction(#AC_GetPlayerMoney, "i", playerid);
+	}
+	#if defined _ALS_GetPlayerMoney
+		#undef GetPlayerMoney
+	#else
+		#define _ALS_GetPlayerMoney
+	#endif
+	#define GetPlayerMoney AC_GetPlayerMoney
+	
+	AC_STOCK AC_GivePlayerMoney(playerid, money) {
+		return CallRemoteFunction(#AC_GivePlayerMoney, "ii", playerid, money);
+	}
+	#if defined _ALS_GivePlayerMoney
+		#undef GivePlayerMoney
+	#else
+		#define _ALS_GivePlayerMoney
+	#endif
+	#define GivePlayerMoney AC_GivePlayerMoney
+	
+	AC_STOCK AC_ResetPlayerMoney(playerid) {
+		return CallRemoteFunction(#AC_ResetPlayerMoney, "i", playerid);
+	}
+	#if defined _ALS_ResetPlayerMoney
+		#undef ResetPlayerMoney
+	#else
+		#define _ALS_ResetPlayerMoney
+	#endif
+	#define ResetPlayerMoney AC_ResetPlayerMoney
 	
 	AC_STOCK AC_SetPlayerArmour(playerid, Float:health) {
 		return CallRemoteFunction(#AC_SetPlayerArmour, "if", playerid, health);
@@ -176,7 +210,7 @@ enum _:AC_eCheats {
 	/**
 	 * <summary>Money hack.</summary>
 	 */
-	AC_cMoney, // TODO
+	AC_cMoney,
 	
 	/**
 	 * <summary>Fake kill. The user is reported to have been killed by multiple persons in short interval.</summary>
@@ -211,7 +245,7 @@ enum _:AC_eCheats {
 	/**
 	 * <summary>Not an actual hack. It detect the player using joypads. It's easier to aim using a joypad.</summary>
 	 */
-	AC_cJoypad, // TODO
+	AC_cJoypad,
 	
 	/**
 	 * <summary>Aim bot detection. This cheat is quite new and detection methods are not very accurate.</summary>
@@ -221,7 +255,7 @@ enum _:AC_eCheats {
 	/**
 	 * <summary>Jetpack hack. Detects if a player has acquired a jetpack in a unscripted way.</summary>
 	 */
-	AC_cJetpack, // TODO
+	AC_cJetpack,
 	
 	/**
 	 * <summary>Vehicle warp hack. The user has the ability to warp vehicles around him.</summary>
@@ -697,6 +731,66 @@ stock AC_SetPlayerSync(playerid, sync, status = true) {
 		}
 	}
 }
+#file "hooks/natives/GetPlayerMoney.pwn"
+#line 0
+// GetPlayerMoney hook.
+AC_PUBLIC AC_GetPlayerMoney(playerid) {
+	if (IsPlayerConnected(playerid)) {
+		return AC_players[playerid][AC_pMoney];
+	}
+	return 0;
+}
+#if defined _ALS_GetPlayerMoney
+	#undef GetPlayerMoney
+#else
+	#define _ALS_GetPlayerMoney
+#endif
+#define GetPlayerMoney AC_GetPlayerMoney
+#file "hooks/natives/GetPlayerSpecialAction.pwn"
+#line 0
+// GetPlayerSpecialAction hook.
+AC_PUBLIC AC_GetPlayerSpecialAction(playerid) {
+	if (IsPlayerConnected(playerid)) {
+		return AC_players[playerid][AC_pSpecialAction];
+	}
+	return SPECIAL_ACTION_NONE;
+}
+#if defined _ALS_GetPlayerSpecialAction
+	#undef GetPlayerSpecialAction
+#else
+	#define _ALS_GetPlayerSpecialAction
+#endif
+#define GetPlayerSpecialAction AC_GetPlayerSpecialAction
+#file "hooks/natives/GivePlayerMoney.pwn"
+#line 0
+// GivePlayerMoney hook.
+AC_PUBLIC AC_GivePlayerMoney(playerid, money) {
+	if (IsPlayerConnected(playerid)) {
+		AC_players[playerid][AC_pMoney] += money;
+	}
+	return GivePlayerMoney(playerid, money);
+}
+#if defined _ALS_GivePlayerMoney
+	#undef GivePlayerMoney
+#else
+	#define _ALS_GivePlayerMoney
+#endif
+#define GivePlayerMoney AC_GivePlayerMoney
+#file "hooks/natives/ResetPlayerMoney.pwn"
+#line 0
+// ResetPlayerMoney hook.
+AC_PUBLIC AC_ResetPlayerMoney(playerid) {
+	if (IsPlayerConnected(playerid)) {
+		AC_players[playerid][AC_pMoney] = 0;
+	}
+	return ResetPlayerMoney(playerid);
+}
+#if defined _ALS_ResetPlayerMoney
+	#undef ResetPlayerMoney
+#else
+	#define _ALS_ResetPlayerMoney
+#endif
+#define ResetPlayerMoney AC_ResetPlayerMoney
 #file "hooks/natives/SetPlayerArmour.pwn"
 #line 0
 // SetPlayerArmour hook.
@@ -729,6 +823,21 @@ AC_PUBLIC AC_SetPlayerHealth(playerid, Float:health) {
 	#define _ALS_SetPlayerHealth
 #endif
 #define SetPlayerHealth AC_SetPlayerHealth
+#file "hooks/natives/SetPlayerSpecialAction.pwn"
+#line 0
+// SetPlayerSpecialAction hook.
+AC_PUBLIC AC_SetPlayerSpecialAction(playerid, actionid) {
+	if (IsPlayerConnected(playerid)) {
+		AC_players[playerid][AC_pSpecialAction] = actionid;
+	}
+	return SetPlayerSpecialAction(playerid, actionid);
+}
+#if defined _ALS_SetPlayerSpecialAction
+	#undef SetPlayerSpecialAction
+#else
+	#define _ALS_SetPlayerSpecialAction
+#endif
+#define SetPlayerSpecialAction AC_SetPlayerSpecialAction
 #file "hooks/callbacks/OnPlayerCommandText.pwn"
 #line 0
 // OnPlayerCommandText hook.
@@ -1007,6 +1116,15 @@ AC_PUBLIC AC_Watchguard() {
 		if (AC_cheats[AC_cArmour][AC_ccIsEnabled]) {
 			AC_Watchguard_Armour(playerid);
 		}
+		if (AC_cheats[AC_cMoney][AC_ccIsEnabled]) {
+			AC_Watchguard_Money(playerid);
+		}
+		if (AC_cheats[AC_cJoypad][AC_ccIsEnabled]) {
+			AC_Watchguard_Joypad(playerid);
+		}
+		if (AC_cheats[AC_cJetpack][AC_ccIsEnabled]) {
+			AC_Watchguard_Jetpack(playerid);
+		}
 		// TODO: Hook other modules.
 	}
 }
@@ -1055,6 +1173,44 @@ stock AC_Watchguard_Health(playerid) {
 			AC_CheatDetected(playerid, AC_cHealth);
 		}
 		AC_players[playerid][AC_pHealth] = health;
+	}
+}
+#file "watchguard/impl/Watchguard_Jetpack.pwn"
+#line 0
+/**
+ * <summary>Checks if a player is using jetpack hack.</summary>
+ * <param name="playerid">Player's ID.</param>
+ */
+stock AC_Watchguard_Jetpack(playerid) {
+	new bad_action = U_GetPlayerSpecialAction(playerid), action = GetPlayerSpecialAction(playerid);
+	if ((bad_action == SPECIAL_ACTION_USEJETPACK) && (action != SPECIAL_ACTION_USEJETPACK)) {
+		// TODO: Check if the player is near a jetpack pickup.
+		AC_CheatDetected(playerid, AC_cJetpack);
+	}
+}
+#file "watchguard/impl/Watchguard_Joypad.pwn"
+#line 0
+/**
+ * <summary>Checks if a player is using a joypad.</summary>
+ * <param name="playerid">Player's ID.</param>
+ */
+stock AC_Watchguard_Joypad(playerid) {
+	new keys, ud, lr;
+	GetPlayerKeys(playerid, keys, ud, lr);
+	if (((ud != 128) && (ud != 0) && (ud != -128)) || ((lr != 128) && (lr != 0) && (lr != -128))) {
+		AC_CheatDetected(playerid, AC_cJoypad);
+	}
+}
+#file "watchguard/impl/Watchguard_Money.pwn"
+#line 0
+/**
+ * <summary>Checks if a player is using money hack.</summary>
+ * <param name="playerid">Player's ID.</param>
+ */
+stock AC_Watchguard_Money(playerid) {
+	new bad_money = U_GetPlayerMoney(playerid), money = GetPlayerMoney(playerid);
+	if (bad_money > money) {
+		AC_CheatDetected(playerid, AC_cMoney);
 	}
 }
 #file "./pawncc/include/Anticheat.inc"

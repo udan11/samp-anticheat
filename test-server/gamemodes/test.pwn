@@ -20,6 +20,17 @@ public OnPlayerCommandText(playerid, cmdtext[]) {
 	} else if (strcmp(cmd, "/gh100", true) == 0) {
 		SetPlayerHealth(playerid, 100.0);
 		return 1;
+	} else if (strcmp(cmd, "/money", true) == 0) {
+		GivePlayerMoney(playerid, 1500);
+		return 1;
+	} else if (strcmp(cmd, "/rmoney", true) == 0) {
+		ResetPlayerMoney(playerid);
+		return 1;
+	} else if (strcmp(cmd, "/veh", true) == 0) {
+		new Float:x, Float:y, Float:z;
+		GetPlayerPos(playerid, x, y, z);
+		CreateVehicle(522, x, y, z, 0.0, 0, 0, -1);
+		return 1;
 	}
 	return 0;
 }
@@ -63,8 +74,4 @@ strtok(const string[], &index) {
 	}
 	result[index - offset] = EOS;
 	return result;
-}
-
-public AC_OnCheatDetected(playerid, cheatid, extraid, info[]) {
-	printf("[AC_OnCheatDetected] %d, %d, %d, %s", playerid, cheatid, extraid, info);
 }

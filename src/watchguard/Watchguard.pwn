@@ -28,6 +28,15 @@ AC_PUBLIC AC_Watchguard() {
 		if (AC_cheats[AC_cArmour][AC_ccIsEnabled]) {
 			AC_Watchguard_Armour(playerid);
 		}
+		if (AC_cheats[AC_cMoney][AC_ccIsEnabled]) {
+			AC_Watchguard_Money(playerid);
+		}
+		if (AC_cheats[AC_cJoypad][AC_ccIsEnabled]) {
+			AC_Watchguard_Joypad(playerid);
+		}
+		if (AC_cheats[AC_cJetpack][AC_ccIsEnabled]) {
+			AC_Watchguard_Jetpack(playerid);
+		}
 		// TODO: Hook other modules.
 	}
 }

@@ -7,11 +7,45 @@
 	#endif
 #endif
 
+// Rename old natives (unprotected).
+native U_GetPlayerMoney(playerid) = GetPlayerMoney;
+native U_GetPlayerSpecialAction(playerid) = GetPlayerSpecialAction;
+
 #if defined AC_API
 
 	/**
 	 * <summary>API used by remote scripts (other than the core).</summary>
 	 */
+	 
+	AC_STOCK AC_GetPlayerMoney(playerid) {
+		return CallRemoteFunction(#AC_GetPlayerMoney, "i", playerid);
+	}
+	#if defined _ALS_GetPlayerMoney
+		#undef GetPlayerMoney
+	#else
+		#define _ALS_GetPlayerMoney
+	#endif
+	#define GetPlayerMoney AC_GetPlayerMoney
+	
+	AC_STOCK AC_GivePlayerMoney(playerid, money) {
+		return CallRemoteFunction(#AC_GivePlayerMoney, "ii", playerid, money);
+	}
+	#if defined _ALS_GivePlayerMoney
+		#undef GivePlayerMoney
+	#else
+		#define _ALS_GivePlayerMoney
+	#endif
+	#define GivePlayerMoney AC_GivePlayerMoney
+	
+	AC_STOCK AC_ResetPlayerMoney(playerid) {
+		return CallRemoteFunction(#AC_ResetPlayerMoney, "i", playerid);
+	}
+	#if defined _ALS_ResetPlayerMoney
+		#undef ResetPlayerMoney
+	#else
+		#define _ALS_ResetPlayerMoney
+	#endif
+	#define ResetPlayerMoney AC_ResetPlayerMoney
 	
 	AC_STOCK AC_SetPlayerArmour(playerid, Float:health) {
 		return CallRemoteFunction(#AC_SetPlayerArmour, "if", playerid, health);

@@ -2234,23 +2234,42 @@ stock
 
 #line 9
 
-#line 11
+
+native U_GetPlayerMoney(playerid) = GetPlayerMoney;
+native U_GetPlayerSpecialAction(playerid) = GetPlayerSpecialAction;
+
+#line 15
 
 
 
 
+
+	forward AC_GetPlayerMoney(playerid); stock AC_GetPlayerMoney(playerid) {
+		return CallRemoteFunction(#AC_GetPlayerMoney, "i", playerid);
+	}
+#line 29
+
+	forward AC_GivePlayerMoney(playerid, money); stock AC_GivePlayerMoney(playerid, money) {
+		return CallRemoteFunction(#AC_GivePlayerMoney, "ii", playerid, money);
+	}
+#line 39
+
+	forward AC_ResetPlayerMoney(playerid); stock AC_ResetPlayerMoney(playerid) {
+		return CallRemoteFunction(#AC_ResetPlayerMoney, "i", playerid);
+	}
+#line 49
 
 	forward AC_SetPlayerArmour(playerid, Float:health); stock AC_SetPlayerArmour(playerid, Float:health) {
 		return CallRemoteFunction(#AC_SetPlayerArmour, "if", playerid, health);
 	}
-#line 25
+#line 59
 
 	forward AC_SetPlayerHealth(playerid, Float:health); stock AC_SetPlayerHealth(playerid, Float:health) {
 		return CallRemoteFunction(#AC_SetPlayerHealth, "if", playerid, health);
 	}
-#line 35
+#line 69
 
-#line 40
+#line 74
 
 	#endinput 
 #file test-server/filterscripts/test.pwn
