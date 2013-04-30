@@ -2857,11 +2857,12 @@ stock AC_SetPlayerSync(playerid, sync, status = true) {
 
 forward AC_GetPlayerMoney(playerid); public AC_GetPlayerMoney(playerid) {
 	if (IsPlayerConnected(playerid)) {
-		return AC_players[playerid][AC_pMoney];
+		new bad_money = U_GetPlayerMoney(playerid);
+		return bad_money < AC_players[playerid][AC_pMoney] ? bad_money : AC_players[playerid][AC_pMoney];
 	}
 	return 0;
 }
-#line 14
+#line 15
 #file "hooks/natives/GetPlayerSpecialAction.pwn"
 #line 0
 #line 0
@@ -3214,7 +3215,7 @@ stock AC_Watchguard_Money(playerid) {
 		AC_CheatDetected(playerid, AC_cMoney);
 	}
 }
-#file "./pawncc/include/Anticheat.inc"
+#file "./Anticheat.inc"
 #line 0
 #line 0#file test-server/gamemodes/test.pwn
 #line 4

@@ -1,4 +1,7 @@
-# Cheats
+Cheats
+------
+
+The list below shows cheats IDs and additional information that is passed via AC_OnCheatDetected.
 
 *	__ID = 0:	unknown hack__
 
@@ -18,7 +21,7 @@
 	
 *	__ID = 4:	afk__
 
-	Extra parameter is `true` if player is AFK now and `false` if it isn't anymore..
+	Extra parameter is `true` if player is AFK now and `false` if it isn't anymore.
 	
 *	__ID = 5:	health hack__
 *	__ID = 6:	armour hack__

@@ -1,6 +1,9 @@
 @echo off
 cls
-"pawncc/builder.py" "./src/" "./pawncc/include/Anticheat.inc"
+"pawncc/builder.py" "./src/" "./Anticheat.inc"
+echo.
+echo ---- Building the test server -------------------------------------------------
+copy "Anticheat.inc" "pawncc/include/Anticheat.inc"
 echo.
 echo ---- Compiling gamemode -------------------------------------------------------
 "pawncc/pawncc.exe" "test-server/gamemodes/test.pwn" -; -( -l

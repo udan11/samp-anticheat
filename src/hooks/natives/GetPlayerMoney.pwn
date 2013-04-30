@@ -1,7 +1,8 @@
 // GetPlayerMoney hook.
 AC_PUBLIC AC_GetPlayerMoney(playerid) {
 	if (IsPlayerConnected(playerid)) {
-		return AC_players[playerid][AC_pMoney];
+		new bad_money = U_GetPlayerMoney(playerid);
+		return bad_money < AC_players[playerid][AC_pMoney] ? bad_money : AC_players[playerid][AC_pMoney];
 	}
 	return 0;
 }

@@ -1,9 +1,9 @@
 // We check if no parameter was passed to the anticheat.
-#if (!defined AC_CORE) && (!defined AC_API)
+#if (!defined AC_MASTER) && (!defined AC_SLAVE)
 	#if defined FILTERSCRIPT
-		#define AC_API
+		#define AC_SLAVE
 	#else
-		#define AC_CORE
+		#define AC_MASTER
 	#endif
 #endif
 
@@ -11,7 +11,7 @@
 native U_GetPlayerMoney(playerid) = GetPlayerMoney;
 native U_GetPlayerSpecialAction(playerid) = GetPlayerSpecialAction;
 
-#if defined AC_API
+#if defined AC_SLAVE
 
 	/**
 	 * <summary>API used by remote scripts (other than the core).</summary>
