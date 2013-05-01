@@ -969,6 +969,9 @@ forward OnPlayerSelectObject(playerid, type, objectid, modelid, Float:fX, Float:
 
 #line 41
 
+
+#line 48
+
 #file D:\Files\Programming\samp-anticheat\pawncc\include\foreach.inc
 #line 2
 
@@ -2210,51 +2213,29 @@ stock
 #line 1350
 
 #file main.pwn
-#line 43
+#line 50
 
 
 
 
-#line 51
+#line 58
 
 
 
 
-#line 60
+#line 67
 
 
 
 
-#line 68
-#file "api.pwn"
-#line 0
-#line 0
+#line 75
 
-#line 9
+
+#line 81
 
 
 native U_GetPlayerMoney(playerid) = GetPlayerMoney;
 native U_GetPlayerSpecialAction(playerid) = GetPlayerSpecialAction;
-
-#line 15
-
-
-
-
-
-#line 29
-
-#line 39
-
-#line 49
-
-#line 59
-
-#line 69
-
-#line 74
-
-#line 77
 
 
 
@@ -2264,421 +2245,432 @@ native U_GetPlayerSpecialAction(playerid) = GetPlayerSpecialAction;
 
 
 forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
-
-
-#line 92
 #file "constants/cheats.pwn"
 #line 0
 #line 0
+#line 2
 
 
 
-#line 5
 
+#line 7
 
 
 
-enum _:AC_eCheats {
 
+	enum _:AC_eCheats {
 
 
 
-	AC_cUnknown,
 
+		AC_cUnknown,
 
 
 
-	AC_cSync,
 
+		AC_cSync,
 
 
 
-	AC_cPing,
 
+		AC_cPing,
 
 
 
-	AC_cFPS, 
 
+		AC_cFPS, 
 
 
 
-	AC_cAFK,
 
+		AC_cAFK,
 
 
 
-	AC_cHealth,
 
+		AC_cHealth,
 
 
 
-	AC_cArmour,
 
+		AC_cArmour,
 
 
 
-	AC_cMoney,
 
+		AC_cMoney,
 
 
 
-	AC_cFakeKill, 
 
+		AC_cFakeKill, 
 
 
 
-	AC_cTeleport, 
 
+		AC_cTeleport, 
 
 
 
-	AC_cSpeed, 
 
+		AC_cSpeed, 
 
 
 
-	AC_cFly, 
 
+		AC_cFly, 
 
 
 
-	AC_cAirbreak, 
 
+		AC_cAirbreak, 
 
 
 
-	AC_cWeapon, 
 
+		AC_cWeapon, 
 
 
 
-	AC_cJoypad,
 
+		AC_cJoypad,
 
 
 
-	AC_cAimBot, 
 
+		AC_cAimBot, 
 
 
 
-	AC_cJetpack,
 
+		AC_cJetpack,
 
 
 
-	AC_cVehicleWarp, 
 
+		AC_cVehicleWarp, 
 
 
 
-	AC_cVehicleRepair, 
 
+		AC_cVehicleRepair, 
 
 
 
-	AC_cVehicleMod, 
 
+		AC_cVehicleMod, 
 
 
 
-	AC_cRconBruteforce, 
 
+		AC_cRconBruteforce, 
 
 
 
-	AC_cModSa, 
-};
 
+		AC_cModSa, 
+	};
 
 
 
-enum AC_eCheatConfig {
-	AC_ccIsEnabled,
-	AC_ccName[32]
-};
 
+	enum AC_eCheatConfig {
+		AC_ccIsEnabled,
+		AC_ccName[32]
+	};
 
 
 
-stock AC_cheats[AC_eCheats][AC_eCheatConfig] = {
 
-	{false, "unknown hack"},
+	stock AC_cheats[AC_eCheats][AC_eCheatConfig] = {
 
-	{false, "desync"},
+		{true, "unknown hack"},
 
-	{true, "high ping"},
+		{false, "desync"},
 
-	{true, "low fps"},
+		{true, "high ping"},
 
-	{false, "afk"},
+		{true, "low fps"},
 
-	{true, "health hack"},
+		{false, "afk"},
 
-	{true, "armour hack"},
+		{true, "health hack"},
 
-	{true, "money hack"},
+		{true, "armour hack"},
 
-	{true, "fake kill"},
+		{true, "money hack"},
 
-	{true, "teleport hack"},
+		{true, "fake kill"},
 
-	{true, "speed hack"},
+		{true, "teleport hack"},
 
-	{true, "fly hack"},
+		{true, "speed hack"},
 
-	{true, "airbreak hack"},
+		{true, "fly hack"},
 
-	{true, "weapon hack"},
+		{true, "airbreak hack"},
 
-	{true, "joypad"},
+		{true, "weapon hack"},
 
-	{true, "aim bot"},
+		{true, "joypad"},
 
-	{true, "jetpack hack"},
+		{true, "aim bot"},
 
-	{true, "vehicle warp hack"},
+		{true, "jetpack hack"},
 
-	{true, "vehicle repair hack"},
+		{true, "vehicle warp hack"},
 
-	{true, "vehicle (illegal) mod"},
+		{true, "vehicle repair hack"},
 
-	{true, "RCON bruteforcer"},
+		{true, "vehicle (illegal) mod"},
 
-	{true, "m0d_sa (hacking tool)"}
-};
+		{true, "RCON bruteforcer"},
+
+		{true, "m0d_sa (hacking tool)"}
+	};
+
+#line 183
 #file "constants/game.pwn"
 #line 0
 #line 0
-
-
-
-#line 5
-
-
-
-
-#line 10
+#line 2
 
 
 
 
+#line 7
 
 
 
 
-#line 19
-
-
-
-
-#line 24
+#line 12
 
 
 
 
 
-#line 30
+
+
+
+#line 21
 
 
 
 
-stock const Float:AC_VENDING_MACHINES[][3] = {
-	{-14.70, 1175.36, 18.95}, 		{201.02, -107.62, 0.90}, 
-	{662.43, -552.16, 15.71}, 		{-76.03, 1227.99, 19.13}, 
-	{1154.73, -1460.89, 15.16}, 	{1277.84, 372.52, 18.95}, 
-	{1398.84, 2222.61, 10.42}, 		{1520.15, 1055.27, 10.00}, 
-	{1634.11, -2237.53, 12.89}, 	{1659.46, 1722.86, 10.22}, 
-	{1729.79, -1943.05, 12.95}, 	{1789.21, -1369.27, 15.16}, 
-	{1928.73, -1772.45, 12.95}, 	{2060.12, -1897.64, 12.93}, 
-	{2085.77, 2071.36, 10.45}, 		{2139.52, -1161.48, 23.36}, 
-	{2153.23, -1016.15, 62.23}, 	{2271.73, -76.46, 25.96}, 
-	{2319.99, 2532.85, 10.22}, 		{2325.98, -1645.13, 14.21}, 
-	{2352.18, -1357.16, 23.77}, 	{2480.86, -1959.27, 12.96}, 
-	{2503.14, 1243.70, 10.22}, 		{-253.74, 2597.95, 62.24}, 
-	{-253.74, 2599.76, 62.24}, 		{2647.70, 1129.66, 10.22}, 
-	{2845.73, 1295.05, 10.79}, 		{-862.83, 1536.61, 21.98}, 
-	{-1350.12, 492.29, 10.59}, 		{-1350.12, 493.86, 10.59}, 
-	{-1455.12, 2591.66, 55.23}, 	{-1980.79, 142.66, 27.07}, 
-	{-2005.65, -490.05, 34.73}, 	{-2011.14, -398.34, 34.73}, 
-	{-2034.46, -490.05, 34.73}, 	{-2039.85, -398.34, 34.73}, 
-	{-2063.27, -490.05, 34.73}, 	{-2068.56, -398.34, 34.73}, 
-	{-2092.09, -490.05, 34.73}, 	{-2097.27, -398.34, 34.73}, 
-	{-2118.62, -422.41, 34.73}, 	{-2118.97, -423.65, 34.73}, 
-	{-2229.19, 286.41, 34.70}, 		{-2420.18, 985.95, 44.30}, 
-	{-2420.22, 984.58, 44.30}, 		{2155.84, 1607.88, 1000.06}, 
-	{2155.91, 1606.77, 1000.05}, 	{2202.45, 1617.01, 1000.06}, 
-	{2209.24, 1621.21, 1000.06}, 	{2209.91, 1607.20, 1000.05}, 
-	{2222.20, 1606.77, 1000.05}, 	{2222.37, 1602.64, 1000.06}, 
-	{2225.20, -1153.42, 1025.91}, 	{-15.10, -140.23, 1003.63}, 
-	{-16.12, -91.64, 1003.63}, 		{-16.53, -140.30, 1003.63}, 
-	{-17.55, -91.71, 1003.63}, 		{-19.04, -57.84, 1003.63}, 
-	{-32.45, -186.70, 1003.63},		{-33.88, -186.77, 1003.63},
-	{330.68, 178.50, 1020.07}, 		{331.92, 178.50, 1020.07}, 
-	{-35.73, -140.23, 1003.63}, 	{350.91, 206.09, 1008.48}, 
-	{-36.15, -57.88, 1003.63}, 		{361.56, 158.62, 1008.48}, 
-	{371.59, 178.45, 1020.07}, 		{373.83, -178.14, 1000.73}, 
-	{374.89, 188.98, 1008.48}, 		{379.04, -178.88, 1000.73}, 
-	{495.97, -24.32, 1000.73}, 		{500.56, -1.37, 1000.73}, 
-	{501.83, -1.43, 1000.73}, 		{2576.70, -1284.43, 1061.09}
-};
+#line 26
+
+
+
+
+
+#line 32
+
+
+
+
+	stock const Float:AC_VENDING_MACHINES[][3] = {
+		{-14.70, 1175.36, 18.95}, 		{201.02, -107.62, 0.90}, 
+		{662.43, -552.16, 15.71}, 		{-76.03, 1227.99, 19.13}, 
+		{1154.73, -1460.89, 15.16}, 	{1277.84, 372.52, 18.95}, 
+		{1398.84, 2222.61, 10.42}, 		{1520.15, 1055.27, 10.00}, 
+		{1634.11, -2237.53, 12.89}, 	{1659.46, 1722.86, 10.22}, 
+		{1729.79, -1943.05, 12.95}, 	{1789.21, -1369.27, 15.16}, 
+		{1928.73, -1772.45, 12.95}, 	{2060.12, -1897.64, 12.93}, 
+		{2085.77, 2071.36, 10.45}, 		{2139.52, -1161.48, 23.36}, 
+		{2153.23, -1016.15, 62.23}, 	{2271.73, -76.46, 25.96}, 
+		{2319.99, 2532.85, 10.22}, 		{2325.98, -1645.13, 14.21}, 
+		{2352.18, -1357.16, 23.77}, 	{2480.86, -1959.27, 12.96}, 
+		{2503.14, 1243.70, 10.22}, 		{-253.74, 2597.95, 62.24}, 
+		{-253.74, 2599.76, 62.24}, 		{2647.70, 1129.66, 10.22}, 
+		{2845.73, 1295.05, 10.79}, 		{-862.83, 1536.61, 21.98}, 
+		{-1350.12, 492.29, 10.59}, 		{-1350.12, 493.86, 10.59}, 
+		{-1455.12, 2591.66, 55.23}, 	{-1980.79, 142.66, 27.07}, 
+		{-2005.65, -490.05, 34.73}, 	{-2011.14, -398.34, 34.73}, 
+		{-2034.46, -490.05, 34.73}, 	{-2039.85, -398.34, 34.73}, 
+		{-2063.27, -490.05, 34.73}, 	{-2068.56, -398.34, 34.73}, 
+		{-2092.09, -490.05, 34.73}, 	{-2097.27, -398.34, 34.73}, 
+		{-2118.62, -422.41, 34.73}, 	{-2118.97, -423.65, 34.73}, 
+		{-2229.19, 286.41, 34.70}, 		{-2420.18, 985.95, 44.30}, 
+		{-2420.22, 984.58, 44.30}, 		{2155.84, 1607.88, 1000.06}, 
+		{2155.91, 1606.77, 1000.05}, 	{2202.45, 1617.01, 1000.06}, 
+		{2209.24, 1621.21, 1000.06}, 	{2209.91, 1607.20, 1000.05}, 
+		{2222.20, 1606.77, 1000.05}, 	{2222.37, 1602.64, 1000.06}, 
+		{2225.20, -1153.42, 1025.91}, 	{-15.10, -140.23, 1003.63}, 
+		{-16.12, -91.64, 1003.63}, 		{-16.53, -140.30, 1003.63}, 
+		{-17.55, -91.71, 1003.63}, 		{-19.04, -57.84, 1003.63}, 
+		{-32.45, -186.70, 1003.63},		{-33.88, -186.77, 1003.63},
+		{330.68, 178.50, 1020.07}, 		{331.92, 178.50, 1020.07}, 
+		{-35.73, -140.23, 1003.63}, 	{350.91, 206.09, 1008.48}, 
+		{-36.15, -57.88, 1003.63}, 		{361.56, 158.62, 1008.48}, 
+		{371.59, 178.45, 1020.07}, 		{373.83, -178.14, 1000.73}, 
+		{374.89, 188.98, 1008.48}, 		{379.04, -178.88, 1000.73}, 
+		{495.97, -24.32, 1000.73}, 		{500.56, -1.37, 1000.73}, 
+		{501.83, -1.43, 1000.73}, 		{2576.70, -1284.43, 1061.09}
+	};
+
+#line 77
 #file "constants/player.pwn"
 #line 0
 #line 0
-
-
-
-#line 5
-
-
-
-
-#line 10
+#line 2
 
 
 
 
-enum _:AC_ePlayerState (<<= 1) {
-	AC_psSpawn = 1,						
-	AC_psWasAFK,						
-	AC_psFreeze,						
-	AC_ps03,							
-	AC_ps04,							
-	AC_ps05,							
-	AC_ps06,							
-	AC_ps07,							
-	AC_ps08,							
-	AC_ps09,							
-	AC_ps10,							
-	AC_ps11,							
-	AC_ps12,							
-	AC_ps13,							
-	AC_ps14,							
-	AC_ps15,							
-	AC_ps16,							
-	AC_ps17,							
-	AC_ps18,							
-	AC_ps19,							
-	AC_ps20,							
-	AC_ps21,							
-	AC_ps22,							
-	AC_ps23,							
-	AC_ps24,							
-	AC_ps25,							
-	AC_ps26,							
-	AC_ps27,							
-	AC_ps28,							
-	AC_ps29,							
-	AC_ps30,							
-	AC_ps31,							
-};
-#file "constants/sync.pwn"
-#line 0
-#line 0
-
-
-
-#line 5
+#line 7
 
 
 
 
-enum _:AC_eSync {
-	AC_sHealth,
-	AC_sArmour
-};
+#line 12
+
+
+
+
+#line 17
+
+
+
+
+	enum _:AC_ePlayerState (<<= 1) {
+		AC_psSpawn = 1,						
+		AC_psWasAFK,						
+		AC_psFreeze,						
+		AC_ps03,							
+		AC_ps04,							
+		AC_ps05,							
+		AC_ps06,							
+		AC_ps07,							
+		AC_ps08,							
+		AC_ps09,							
+		AC_ps10,							
+		AC_ps11,							
+		AC_ps12,							
+		AC_ps13,							
+		AC_ps14,							
+		AC_ps15,							
+		AC_ps16,							
+		AC_ps17,							
+		AC_ps18,							
+		AC_ps19,							
+		AC_ps20,							
+		AC_ps21,							
+		AC_ps22,							
+		AC_ps23,							
+		AC_ps24,							
+		AC_ps25,							
+		AC_ps26,							
+		AC_ps27,							
+		AC_ps28,							
+		AC_ps29,							
+		AC_ps30,							
+		AC_ps31,							
+	};
+
+
+
+
+	enum _:AC_eSync {
+		AC_sHealth,
+		AC_sArmour
+	};
+
+#line 65
 #file "variables.pwn"
 #line 0
 #line 0
+#line 2
 
 
 
-stock AC_watchguardTimer = 0;
 
+	stock AC_watchguardTimer = 0;
 
 
 
-enum _:AC_ePlayer {
 
+	enum _:AC_ePlayer {
 
 
 
-	AC_pState,
 
+		AC_pState,
 
 
 
-	AC_pSync,
 
+		AC_pSync,
 
 
 
-	AC_pSyncFails[AC_eSync],
 
+		AC_pSyncFails[AC_eSync],
 
 
 
-	AC_pFPS[4],
 
+		AC_pFPS[4],
 
 
 
-	AC_pFPSIndex,
 
+		AC_pFPSIndex,
 
 
 
-	AC_pLastUpdate,
 
+		AC_pLastUpdate,
 
 
 
-	Float:AC_pHealth,
 
+		Float:AC_pHealth,
 
 
 
-	Float:AC_pArmour,
 
+		Float:AC_pArmour,
 
 
 
-	AC_pMoney,
 
+		AC_pMoney,
 
 
 
-	AC_pLastDeath,
 
+		AC_pLastDeath,
 
 
 
-	Float:AC_pPos[3],
 
+		Float:AC_pPos[3],
 
 
 
-	Float:AC_pVelocity[3],
 
+		Float:AC_pVelocity[3],
 
 
 
 
-	AC_pWeaponsID[13],
-	AC_pWeaponsAmmo[13],
 
+		AC_pWeaponsID[13],
+		AC_pWeaponsAmmo[13],
 
 
 
-	AC_pSpecialAction,
 
-};
+		AC_pSpecialAction,
 
+	};
 
 
 
-new AC_players[(500)][AC_ePlayer];
+
+	new AC_players[(500)][AC_ePlayer];
+
+#line 93
 #file "utils/CheatDetected.pwn"
 #line 0
 #line 0
@@ -2720,10 +2712,12 @@ forward Float:GetSpeed(Float:vx, Float:vy, Float:vz); stock Float:GetSpeed(Float
 
 
 forward AC_IsPlayerAFK(playerid); public AC_IsPlayerAFK(playerid) {
-	if (IsPlayerConnected(playerid)) {
-		return (GetTickCount() - AC_players[playerid][AC_pLastUpdate]) > 1500;
-	}
-	return false;
+#line 8
+		if (IsPlayerConnected(playerid)) {
+			return (GetTickCount() - AC_players[playerid][AC_pLastUpdate]) > 1500;
+		}
+		return false;
+#line 15
 }
 #file "utils/IsPlayerAtVendingMachine.pwn"
 #line 0
@@ -2750,10 +2744,12 @@ stock AC_IsPlayerAtVendingMachine(playerid) {
 
 
 forward AC_IsPlayerSpawned(playerid); public AC_IsPlayerSpawned(playerid) {
-	if (IsPlayerConnected(playerid)) {
-		return AC_players[playerid][AC_pState] & AC_psSpawn ? true : false;
-	}
-	return false;
+#line 8
+		if (IsPlayerConnected(playerid)) {
+			return AC_players[playerid][AC_pState] & AC_psSpawn ? true : false;
+		}
+		return false;
+#line 15
 }
 #file "utils/memset.pwn"
 #line 0
@@ -2762,7 +2758,7 @@ forward AC_IsPlayerSpawned(playerid); public AC_IsPlayerSpawned(playerid) {
 
 
 
-stock memset(aArray[], iValue, iSize = sizeof(aArray)) {
+stock AC_memset(aArray[], iValue, iSize = sizeof(aArray)) {
 	new iAddress;
 
 	#emit LOAD.S.pri 12
@@ -2856,369 +2852,494 @@ stock AC_SetPlayerSync(playerid, sync, status = true) {
 #line 0
 
 forward AC_GetPlayerMoney(playerid); public AC_GetPlayerMoney(playerid) {
-	if (IsPlayerConnected(playerid)) {
-		new bad_money = U_GetPlayerMoney(playerid);
-		return bad_money < AC_players[playerid][AC_pMoney] ? bad_money : AC_players[playerid][AC_pMoney];
-	}
-	return 0;
+#line 4
+		if (IsPlayerConnected(playerid)) {
+			new bad_money = U_GetPlayerMoney(playerid);
+			return bad_money < AC_players[playerid][AC_pMoney] ? bad_money : AC_players[playerid][AC_pMoney];
+		}
+		return 0;
+#line 12
 }
-#line 15
+#line 19
 #file "hooks/natives/GetPlayerSpecialAction.pwn"
 #line 0
 #line 0
 
 forward AC_GetPlayerSpecialAction(playerid); public AC_GetPlayerSpecialAction(playerid) {
-	if (IsPlayerConnected(playerid)) {
-		return AC_players[playerid][AC_pSpecialAction];
-	}
-	return 0;
+#line 4
+		if (IsPlayerConnected(playerid)) {
+			return AC_players[playerid][AC_pSpecialAction];
+		}
+		return 0;
+#line 11
 }
-#line 14
+#line 18
 #file "hooks/natives/GivePlayerMoney.pwn"
 #line 0
 #line 0
 
 forward AC_GivePlayerMoney(playerid, money); public AC_GivePlayerMoney(playerid, money) {
-	if (IsPlayerConnected(playerid)) {
-		AC_players[playerid][AC_pMoney] += money;
-	}
-	return GivePlayerMoney(playerid, money);
+#line 4
+		if (IsPlayerConnected(playerid)) {
+			AC_players[playerid][AC_pMoney] += money;
+		}
+		return GivePlayerMoney(playerid, money);
+#line 11
 }
-#line 14
+#line 18
 #file "hooks/natives/ResetPlayerMoney.pwn"
 #line 0
 #line 0
 
 forward AC_ResetPlayerMoney(playerid); public AC_ResetPlayerMoney(playerid) {
-	if (IsPlayerConnected(playerid)) {
-		AC_players[playerid][AC_pMoney] = 0;
-	}
-	return ResetPlayerMoney(playerid);
+#line 4
+		if (IsPlayerConnected(playerid)) {
+			AC_players[playerid][AC_pMoney] = 0;
+		}
+		return ResetPlayerMoney(playerid);
+#line 11
 }
-#line 14
+#line 18
 #file "hooks/natives/SetPlayerArmour.pwn"
 #line 0
 #line 0
 
 forward AC_SetPlayerArmour(playerid, Float:armour); public AC_SetPlayerArmour(playerid, Float:armour) {
-	if (IsPlayerConnected(playerid)) {
-		AC_players[playerid][AC_pArmour] = armour;
-		AC_SetPlayerSync(playerid, AC_sArmour, false);
-	}
-	return SetPlayerArmour(playerid, armour);
+#line 4
+		if (IsPlayerConnected(playerid)) {
+			AC_players[playerid][AC_pArmour] = armour;
+			AC_SetPlayerSync(playerid, AC_sArmour, false);
+		}
+		return SetPlayerArmour(playerid, armour);
+#line 12
 }
-#line 15
+#line 19
 #file "hooks/natives/SetPlayerHealth.pwn"
 #line 0
 #line 0
 
 forward AC_SetPlayerHealth(playerid, Float:health); public AC_SetPlayerHealth(playerid, Float:health) {
-	if (IsPlayerConnected(playerid)) {
-		AC_players[playerid][AC_pHealth] = health;
-		AC_SetPlayerSync(playerid, AC_sHealth, false);
-	}
-	return SetPlayerHealth(playerid, health);
+#line 4
+		if (IsPlayerConnected(playerid)) {
+			AC_players[playerid][AC_pHealth] = health;
+			AC_SetPlayerSync(playerid, AC_sHealth, false);
+		}
+		return SetPlayerHealth(playerid, health);
+#line 12
 }
-#line 15
+#line 19
 #file "hooks/natives/SetPlayerSpecialAction.pwn"
 #line 0
 #line 0
 
 forward AC_SetPlayerSpecialAction(playerid, actionid); public AC_SetPlayerSpecialAction(playerid, actionid) {
-	if (IsPlayerConnected(playerid)) {
-		AC_players[playerid][AC_pSpecialAction] = actionid;
-	}
-	return SetPlayerSpecialAction(playerid, actionid);
+#line 4
+		if (IsPlayerConnected(playerid)) {
+			AC_players[playerid][AC_pSpecialAction] = actionid;
+		}
+		return SetPlayerSpecialAction(playerid, actionid);
+#line 11
 }
-#line 14
+#line 18
+#file "hooks/natives/TogglePlayerControllable.pwn"
+#line 0
+#line 0
+
+forward AC_TogglePlayerControllable(playerid, toggle); public AC_TogglePlayerControllable(playerid, toggle) {
+#line 4
+		if (IsPlayerConnected(playerid)) {
+			if (toggle) {
+				AC_players[playerid][AC_pState] &= ~AC_psFreeze;
+			} else {
+				AC_players[playerid][AC_pState] |= AC_psFreeze;
+			}
+		}
+		return TogglePlayerControllable(playerid, toggle);
+#line 15
+}
+#line 22
+#file "hooks/natives/TogglePlayerSpectating.pwn"
+#line 0
+#line 0
+
+forward AC_TogglePlayerSpectating(playerid, toggle); public AC_TogglePlayerSpectating(playerid, toggle) {
+#line 4
+		if (IsPlayerConnected(playerid)) {
+			if (toggle) {
+				AC_players[playerid][AC_pState] &= ~AC_psSpawn;
+			}
+		}
+		return TogglePlayerSpectating(playerid, toggle);
+#line 13
+}
+#line 20
 #file "hooks/callbacks/OnPlayerCommandText.pwn"
 #line 0
 #line 0
+#line 2
 
-public OnPlayerCommandText(playerid, cmdtext[]) {
-	AC_players[playerid][AC_pLastUpdate] = GetTickCount();
-#line 7
-		return 1;
+
+	public OnPlayerCommandText(playerid, cmdtext[]) {
+		AC_players[playerid][AC_pLastUpdate] = GetTickCount();
 #line 9
-}
-
-#line 17
-
-#line 21
-#file "hooks/callbacks/OnPlayerConnect.pwn"
-#line 0
-#line 0
-
-public Itter_OnPlayerConnect(playerid) {
-	memset(AC_players[playerid], 0, AC_ePlayer);
-#line 7
-		return 1;
-#line 9
-}
-
-#line 17
-
-#line 21
-#file "hooks/callbacks/OnPlayerDeath.pwn"
-#line 0
-#line 0
-
-public OnPlayerDeath(playerid) {
-	AC_players[playerid][AC_pState] &= ~AC_psSpawn;
-#line 7
-		return 1;
-#line 9
-}
-
-#line 17
-
-#line 21
-#file "hooks/callbacks/OnPlayerSpawn.pwn"
-#line 0
-#line 0
-
-public OnPlayerSpawn(playerid) {
-	AC_players[playerid][AC_pState] = 0;
-	AC_players[playerid][AC_pState] |= AC_psSpawn;
-	AC_players[playerid][AC_pState] &= ~AC_psFreeze;
-	AC_players[playerid][AC_pSync] = 0;
-	AC_players[playerid][AC_pLastUpdate] = GetTickCount();
-	AC_players[playerid][AC_pHealth] = 100.0;
-	AC_players[playerid][AC_pArmour] = 0.0;
-
-
-	AC_players[playerid][AC_pSpecialAction] = 0;
-#line 16
-		return 1;
-#line 18
-}
-
-#line 26
-
-#line 30
-#file "hooks/callbacks/OnPlayerText.pwn"
-#line 0
-#line 0
-
-public OnPlayerText(playerid, text[]) {
-	AC_players[playerid][AC_pLastUpdate] = GetTickCount();
-#line 7
-		return 1;
-#line 9
-}
-
-#line 17
-
-#line 21
-#file "hooks/callbacks/OnPlayerUpdate.pwn"
-#line 0
-#line 0
-
-public OnPlayerUpdate(playerid) {
-	AC_players[playerid][AC_pLastUpdate] = GetTickCount();
-#line 7
-		return 1;
-#line 9
-}
-
-#line 17
-
-#line 21
-#file "hooks/callbacks/OnScriptExit.pwn"
-#line 0
-#line 0
-
-
-
-stock AC_OnScriptExit() {
-	KillTimer(AC_watchguardTimer);
-	return 1;
-}
-
+			return 1;
+#line 11
+	}
 
 #line 19
 
-#line 26
+#line 23
 
-#line 31
-	public OnGameModeExit() {
-		AC_OnScriptExit();
-#line 36
+#line 25
+#file "hooks/callbacks/OnPlayerConnect.pwn"
+#line 0
+#line 0
+#line 2
+
+
+	public Itter_OnPlayerConnect(playerid) {
+		AC_memset(AC_players[playerid], 0, AC_ePlayer);
+#line 9
 			return 1;
-#line 38
+#line 11
 	}
 
-#line 46
+#line 19
 
-#line 51
+#line 23
+
+#line 25
+#file "hooks/callbacks/OnPlayerDeath.pwn"
+#line 0
+#line 0
+#line 2
+
+
+	public OnPlayerDeath(playerid) {
+		AC_players[playerid][AC_pState] &= ~AC_psSpawn;
+#line 9
+			return 1;
+#line 11
+	}
+
+#line 19
+
+#line 23
+
+#line 25
+#file "hooks/callbacks/OnPlayerSpawn.pwn"
+#line 0
+#line 0
+#line 2
+
+
+	public OnPlayerSpawn(playerid) {
+		AC_players[playerid][AC_pState] = 0;
+		AC_players[playerid][AC_pState] |= AC_psSpawn;
+		AC_players[playerid][AC_pState] &= ~AC_psFreeze;
+		AC_players[playerid][AC_pSync] = 0;
+		AC_players[playerid][AC_pLastUpdate] = GetTickCount();
+		AC_players[playerid][AC_pHealth] = 100.0;
+		AC_players[playerid][AC_pArmour] = 0.0;
+
+
+		AC_players[playerid][AC_pSpecialAction] = 0;
+#line 18
+			return 1;
+#line 20
+	}
+
+#line 28
+
+#line 32
+
+#line 34
+#file "hooks/callbacks/OnPlayerText.pwn"
+#line 0
+#line 0
+#line 2
+
+
+	public OnPlayerText(playerid, text[]) {
+		AC_players[playerid][AC_pLastUpdate] = GetTickCount();
+#line 9
+			return 1;
+#line 11
+	}
+
+#line 19
+
+#line 23
+
+#line 25
+#file "hooks/callbacks/OnPlayerUpdate.pwn"
+#line 0
+#line 0
+#line 2
+
+
+	public OnPlayerUpdate(playerid) {
+		AC_players[playerid][AC_pLastUpdate] = GetTickCount();
+#line 9
+			return 1;
+#line 11
+	}
+
+#line 19
+
+#line 23
+
+#line 25
+#file "hooks/callbacks/OnScriptExit.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+	stock AC_OnScriptExit() {
+		KillTimer(AC_watchguardTimer);
+		return 1;
+	}
+
+
+#line 21
+
+#line 28
+
+#line 33
+		public OnGameModeExit() {
+			AC_OnScriptExit();
+#line 38
+				return 1;
+#line 40
+		}
+
+#line 48
+
+#line 53
+
+#line 55
 #file "hooks/callbacks/OnScriptInit.pwn"
 #line 0
 #line 0
+#line 2
 
 
 
-stock AC_OnScriptInit() {
-	printf("[anticheat] Anticheat's timer succesfully injected!");
-	AC_watchguardTimer = SetTimer(#AC_Watchguard, 1500, true);
-	return 1;
-}
 
-
-#line 20
-
-#line 27
-
-#line 32
-	public Itter_OnGameModeInit() {
-		AC_OnScriptInit();
-#line 37
-			return 1;
-#line 39
+	stock AC_OnScriptInit() {
+		printf("[anticheat] Anticheat's timer succesfully injected!");
+		AC_watchguardTimer = SetTimer(#AC_Watchguard, 1500, true);
+		return 1;
 	}
 
-#line 47
 
-#line 52
+#line 22
+
+#line 29
+
+#line 34
+		public Itter_OnGameModeInit() {
+			AC_OnScriptInit();
+#line 39
+				return 1;
+#line 41
+		}
+
+#line 49
+
+#line 54
+
+#line 56
 #file "watchguard/Watchguard.pwn"
 #line 0
 #line 0
+#line 2
 
 
 
-forward AC_Watchguard(); public AC_Watchguard() {
-	for(new  playerid =_:_Y_ITER_C1:_Y_ITER_C2:sizeof  Player@YSII_Ag-1;_:( playerid =_:_Y_ITER_C0: Player@YSII_Ag[ playerid ])!=_:_Y_ITER_C1:_Y_ITER_C2:sizeof  Player@YSII_Ag-1;) {
 
-		if (!AC_IsPlayerSpawned(playerid)) {
-			continue;
-		} else if (AC_IsPlayerAFK(playerid)) {
-			if ((AC_cheats[AC_cAFK][AC_ccIsEnabled]) && ((AC_players[playerid][AC_pState] & AC_psWasAFK) == 0)) {
-				AC_CheatDetected(playerid, AC_cAFK, 1);
+	forward AC_Watchguard(); public AC_Watchguard() {
+		for(new  playerid =_:_Y_ITER_C1:_Y_ITER_C2:sizeof  Player@YSII_Ag-1;_:( playerid =_:_Y_ITER_C0: Player@YSII_Ag[ playerid ])!=_:_Y_ITER_C1:_Y_ITER_C2:sizeof  Player@YSII_Ag-1;) {
+
+			if (!AC_IsPlayerSpawned(playerid)) {
+				continue;
+			} else if (AC_IsPlayerAFK(playerid)) {
+				if ((AC_cheats[AC_cAFK][AC_ccIsEnabled]) && ((AC_players[playerid][AC_pState] & AC_psWasAFK) == 0)) {
+					AC_CheatDetected(playerid, AC_cAFK, 1);
+				}
+				AC_players[playerid][AC_pState] |= AC_psWasAFK;
+				continue;
+			} else {
+				if ((AC_cheats[AC_cAFK][AC_ccIsEnabled]) && (AC_players[playerid][AC_pState] & AC_psWasAFK)) {
+					AC_CheatDetected(playerid, AC_cAFK, 0);
+				}
+				AC_players[playerid][AC_pState] &= ~AC_psWasAFK;
 			}
-			AC_players[playerid][AC_pState] |= AC_psWasAFK;
-			continue;
-		} else {
-			if ((AC_cheats[AC_cAFK][AC_ccIsEnabled]) && (AC_players[playerid][AC_pState] & AC_psWasAFK)) {
-				AC_CheatDetected(playerid, AC_cAFK, 0);
+
+			if (AC_cheats[AC_cUnknown][AC_ccIsEnabled]) {
+				AC_Watchguard_Freeze(playerid);
 			}
-			AC_players[playerid][AC_pState] &= ~AC_psWasAFK;
-		}
+			if (AC_cheats[AC_cPing][AC_ccIsEnabled]) {
+				AC_Watchguard_Ping(playerid);
+			}
+			if (AC_cheats[AC_cHealth][AC_ccIsEnabled]) {
+				AC_Watchguard_Health(playerid);
+			}
+			if (AC_cheats[AC_cArmour][AC_ccIsEnabled]) {
+				AC_Watchguard_Armour(playerid);
+			}
+			if (AC_cheats[AC_cMoney][AC_ccIsEnabled]) {
+				AC_Watchguard_Money(playerid);
+			}
+			if (AC_cheats[AC_cJoypad][AC_ccIsEnabled]) {
+				AC_Watchguard_Joypad(playerid);
+			}
+			if (AC_cheats[AC_cJetpack][AC_ccIsEnabled]) {
+				AC_Watchguard_Jetpack(playerid);
+			}
 
-		if (AC_cheats[AC_cPing][AC_ccIsEnabled]) {
-			AC_Watchguard_Ping(playerid);
 		}
-		if (AC_cheats[AC_cHealth][AC_ccIsEnabled]) {
-			AC_Watchguard_Health(playerid);
-		}
-		if (AC_cheats[AC_cArmour][AC_ccIsEnabled]) {
-			AC_Watchguard_Armour(playerid);
-		}
-		if (AC_cheats[AC_cMoney][AC_ccIsEnabled]) {
-			AC_Watchguard_Money(playerid);
-		}
-		if (AC_cheats[AC_cJoypad][AC_ccIsEnabled]) {
-			AC_Watchguard_Joypad(playerid);
-		}
-		if (AC_cheats[AC_cJetpack][AC_ccIsEnabled]) {
-			AC_Watchguard_Jetpack(playerid);
-		}
-
 	}
-}
-#file "watchguard/impl/AC_Watchguard_Ping.pwn"
-#line 0
-#line 0
 
-
-
-
-stock AC_Watchguard_Ping(playerid) {
-	if (GetPlayerPing(playerid) > 500) {
-		AC_CheatDetected(playerid, AC_cPing);
-	}
-}
+#line 50
 #file "watchguard/impl/Watchguard_Armour.pwn"
 #line 0
 #line 0
+#line 2
 
 
 
 
-stock AC_Watchguard_Armour(playerid) {
-	new Float:armour;
-	GetPlayerArmour(playerid, armour);
-	if (!AC_IsPlayerSynced(playerid, AC_sArmour)) {
-		AC_SetPlayerSync(playerid, AC_sArmour, armour == AC_players[playerid][AC_pArmour]);
-	} else {
-		if (armour > AC_players[playerid][AC_pArmour]) {
-			AC_CheatDetected(playerid, AC_cArmour);
+
+	stock AC_Watchguard_Armour(playerid) {
+		new Float:armour;
+		GetPlayerArmour(playerid, armour);
+		if (!AC_IsPlayerSynced(playerid, AC_sArmour)) {
+			AC_SetPlayerSync(playerid, AC_sArmour, armour == AC_players[playerid][AC_pArmour]);
+		} else {
+			if (armour > AC_players[playerid][AC_pArmour]) {
+				AC_CheatDetected(playerid, AC_cArmour);
+			}
+			AC_players[playerid][AC_pArmour] = armour;
 		}
-		AC_players[playerid][AC_pArmour] = armour;
 	}
-}
+
+#line 21
+#file "watchguard/impl/Watchguard_Freeze.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+
+	stock AC_Watchguard_Freeze(playerid) {
+		if (AC_players[playerid][AC_pState] & AC_psFreeze) {
+			AC_TogglePlayerControllable(playerid, false);
+		}
+	}
+
+#line 14
 #file "watchguard/impl/Watchguard_Health.pwn"
 #line 0
 #line 0
+#line 2
 
 
 
 
-stock AC_Watchguard_Health(playerid) {
-	new Float:health;
-	GetPlayerHealth(playerid, health);
-	if (!AC_IsPlayerSynced(playerid, AC_sHealth)) {
-		AC_SetPlayerSync(playerid, AC_sHealth, health == AC_players[playerid][AC_pHealth]);
-	} else {
-		if ((!AC_IsPlayerAtVendingMachine(playerid)) && (health > AC_players[playerid][AC_pHealth])) {
-			AC_CheatDetected(playerid, AC_cHealth);
+
+	stock AC_Watchguard_Health(playerid) {
+		new Float:health;
+		GetPlayerHealth(playerid, health);
+		if (!AC_IsPlayerSynced(playerid, AC_sHealth)) {
+			AC_SetPlayerSync(playerid, AC_sHealth, health == AC_players[playerid][AC_pHealth]);
+		} else {
+			if ((!AC_IsPlayerAtVendingMachine(playerid)) && (health > AC_players[playerid][AC_pHealth])) {
+				AC_CheatDetected(playerid, AC_cHealth);
+			}
+			AC_players[playerid][AC_pHealth] = health;
 		}
-		AC_players[playerid][AC_pHealth] = health;
 	}
-}
+
+#line 21
 #file "watchguard/impl/Watchguard_Jetpack.pwn"
 #line 0
 #line 0
+#line 2
 
 
 
 
-stock AC_Watchguard_Jetpack(playerid) {
-	new bad_action = U_GetPlayerSpecialAction(playerid), action = AC_GetPlayerSpecialAction(playerid);
-	if ((bad_action == 2) && (action != 2)) {
 
-		AC_CheatDetected(playerid, AC_cJetpack);
+	stock AC_Watchguard_Jetpack(playerid) {
+		new bad_action = U_GetPlayerSpecialAction(playerid), action = AC_GetPlayerSpecialAction(playerid);
+		if ((bad_action == 2) && (action != 2)) {
+
+			AC_CheatDetected(playerid, AC_cJetpack);
+		}
 	}
-}
+
+#line 16
 #file "watchguard/impl/Watchguard_Joypad.pwn"
 #line 0
 #line 0
+#line 2
 
 
 
 
-stock AC_Watchguard_Joypad(playerid) {
-	new keys, ud, lr;
-	GetPlayerKeys(playerid, keys, ud, lr);
-	if (((ud != 128) && (ud != 0) && (ud != -128)) || ((lr != 128) && (lr != 0) && (lr != -128))) {
-		AC_CheatDetected(playerid, AC_cJoypad);
+
+	stock AC_Watchguard_Joypad(playerid) {
+		new keys, ud, lr;
+		GetPlayerKeys(playerid, keys, ud, lr);
+		if (((ud != 128) && (ud != 0) && (ud != -128)) || ((lr != 128) && (lr != 0) && (lr != -128))) {
+			AC_CheatDetected(playerid, AC_cJoypad);
+		}
 	}
-}
+
+#line 16
 #file "watchguard/impl/Watchguard_Money.pwn"
 #line 0
 #line 0
+#line 2
 
 
 
 
-stock AC_Watchguard_Money(playerid) {
-	new bad_money = U_GetPlayerMoney(playerid), money = AC_GetPlayerMoney(playerid);
-	if (bad_money > money) {
-		AC_CheatDetected(playerid, AC_cMoney);
+
+	stock AC_Watchguard_Money(playerid) {
+		new bad_money = U_GetPlayerMoney(playerid), money = AC_GetPlayerMoney(playerid);
+		if (bad_money > money) {
+			AC_CheatDetected(playerid, AC_cMoney);
+		}
 	}
-}
+
+#line 15
+#file "watchguard/impl/Watchguard_Ping.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+
+	stock AC_Watchguard_Ping(playerid) {
+		if (GetPlayerPing(playerid) > 500) {
+			AC_CheatDetected(playerid, AC_cPing);
+		}
+	}
+
+#line 14
 #file "./Anticheat.inc"
 #line 0
 #line 0#file test-server/gamemodes/test.pwn
-#line 4
+#line 5
 
 main() {
 	print(" >> Anticheat test gamemode.");

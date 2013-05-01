@@ -2,7 +2,7 @@
  * <author>Slice</author>
  * <remarks>http://forum.sa-mp.com/showthread.php?p=1606781</remarks>
  */
-stock memset(aArray[], iValue, iSize = sizeof(aArray)) {
+stock AC_memset(aArray[], iValue, iSize = sizeof(aArray)) {
 	new iAddress;
 	// Store the address of the array
 	#emit LOAD.S.pri 12

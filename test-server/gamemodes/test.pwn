@@ -1,5 +1,6 @@
 #include <a_samp>
 #define AC_DEBUG
+#define AC_MASTER
 #include <Anticheat>
 
 main() {

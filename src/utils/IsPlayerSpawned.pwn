@@ -4,8 +4,12 @@
  * <returns>True if player is spawned, false if not.</returns>
  */
 AC_PUBLIC AC_IsPlayerSpawned(playerid) {
-	if (IsPlayerConnected(playerid)) {
-		return AC_players[playerid][AC_pState] & AC_psSpawn ? true : false;
-	}
-	return false;
+	#if defined AC_MASTER
+		if (IsPlayerConnected(playerid)) {
+			return AC_players[playerid][AC_pState] & AC_psSpawn ? true : false;
+		}
+		return false;
+	#else
+		return CallRemoteFunction(#AC_IsPlayerSpawned, "i", playerid);
+	#endif
 }

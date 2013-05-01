@@ -1,5 +1,4 @@
 main.pwn
-api.pwn
 constants/*.pwn
 variables.pwn
 utils/*.pwn

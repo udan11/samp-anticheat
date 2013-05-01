@@ -1,10 +1,14 @@
 // GetPlayerMoney hook.
 AC_PUBLIC AC_GetPlayerMoney(playerid) {
-	if (IsPlayerConnected(playerid)) {
-		new bad_money = U_GetPlayerMoney(playerid);
-		return bad_money < AC_players[playerid][AC_pMoney] ? bad_money : AC_players[playerid][AC_pMoney];
-	}
-	return 0;
+	#if defined AC_MASTER
+		if (IsPlayerConnected(playerid)) {
+			new bad_money = U_GetPlayerMoney(playerid);
+			return bad_money < AC_players[playerid][AC_pMoney] ? bad_money : AC_players[playerid][AC_pMoney];
+		}
+		return 0;
+	#else
+		return CallRemoteFunction(#AC_GetPlayerMoney, "i", playerid);
+	#endif
 }
 #if defined _ALS_GetPlayerMoney
 	#undef GetPlayerMoney

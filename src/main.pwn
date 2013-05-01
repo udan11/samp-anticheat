@@ -39,6 +39,13 @@
 	#error "Please include <a_samp> before the anticheat."
 #endif
 
+// Checking parameters.
+#if ((!defined AC_MASTER) && (!defined AC_SLAVE))
+	#error "Define AC_MASTER or AC_SLAVE first."
+#elseif ((defined AC_MASTER) && (defined AC_SLAVE))
+	#error "Is this script a master or a slave?"
+#endif
+
 #include <foreach>
 
 /**
@@ -65,3 +72,22 @@
 	forward %0(%1); public %0(%1)
 #define AC_STOCK%0\32;%0(%1) \
 	forward %0(%1); stock %0(%1)
+
+// Defines new functions. Not the real purpose of this anticheat.
+#if defined AC_NEW_FUNCTIONS
+	#define IsPlayerAFK				AC_IsPlayerAFK
+	#define IsPlayerSpawned			AC_IsPlayerSpawned
+#endif
+
+// Rename old natives (unprotected).
+native U_GetPlayerMoney(playerid) = GetPlayerMoney;
+native U_GetPlayerSpecialAction(playerid) = GetPlayerSpecialAction;
+
+/**
+ * Callback triggered when a cheat is detected.
+ * <param name="playerid">Player's ID.</param>
+ * <param name="cheatid">Cheat ID.</param>
+ * <param name="extraid">Additional cheat ID (depends on hack tool, detection method, etc.).</param>
+ * <param name="info">Additional information.</param>
+ */
+forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);

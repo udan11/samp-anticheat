@@ -1,6 +1,7 @@
 #define FILTERSCRIPT
 
 #include <a_samp>
+#define AC_SLAVE
 #include <Anticheat>
 
 main() {

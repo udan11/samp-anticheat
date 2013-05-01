@@ -971,6 +971,9 @@ forward OnPlayerSelectObject(playerid, type, objectid, modelid, Float:fX, Float:
 
 #line 41
 
+
+#line 48
+
 #file D:\Files\Programming\samp-anticheat\pawncc\include\foreach.inc
 #line 2
 
@@ -2212,68 +2215,876 @@ stock
 #line 1350
 
 #file main.pwn
-#line 43
+#line 50
 
 
 
 
-#line 51
+#line 58
 
 
 
 
-#line 60
+#line 67
 
 
 
 
-#line 68
-#file "api.pwn"
-#line 0
-#line 0
+#line 75
 
-#line 9
+
+#line 81
 
 
 native U_GetPlayerMoney(playerid) = GetPlayerMoney;
 native U_GetPlayerSpecialAction(playerid) = GetPlayerSpecialAction;
 
-#line 15
 
 
 
 
 
-	forward AC_GetPlayerMoney(playerid); stock AC_GetPlayerMoney(playerid) {
-		return CallRemoteFunction(#AC_GetPlayerMoney, "i", playerid);
+
+
+forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
+#file "constants/cheats.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+#line 7
+
+
+
+
+#line 12
+
+
+
+
+#line 17
+
+
+
+
+#line 22
+
+
+
+
+#line 27
+
+
+
+
+#line 32
+
+
+
+
+#line 37
+
+
+
+
+#line 42
+
+
+
+
+#line 47
+
+
+
+
+#line 52
+
+
+
+
+#line 57
+
+
+
+
+#line 62
+
+
+
+
+#line 67
+
+
+
+
+#line 72
+
+
+
+
+#line 77
+
+
+
+
+#line 82
+
+
+
+
+#line 87
+
+
+
+
+#line 92
+
+
+
+
+#line 97
+
+
+
+
+#line 102
+
+
+
+
+#line 107
+
+
+
+
+#line 112
+
+
+
+
+#line 117
+
+
+
+
+#line 123
+
+
+
+
+#line 131
+
+
+
+
+#line 136
+
+#line 138
+
+#line 140
+
+#line 142
+
+#line 144
+
+#line 146
+
+#line 148
+
+#line 150
+
+#line 152
+
+#line 154
+
+#line 156
+
+#line 158
+
+#line 160
+
+#line 162
+
+#line 164
+
+#line 166
+
+#line 168
+
+#line 170
+
+#line 172
+
+#line 174
+
+#line 176
+
+#line 178
+
+#line 181
+
+#line 183
+#file "constants/game.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+#line 7
+
+
+
+
+#line 12
+
+
+
+
+
+
+
+
+#line 21
+
+
+
+
+#line 26
+
+
+
+
+
+#line 32
+
+
+
+
+#line 75
+
+#line 77
+#file "constants/player.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+#line 7
+
+
+
+
+#line 12
+
+
+
+
+#line 17
+
+
+
+
+#line 55
+
+
+
+
+#line 63
+
+#line 65
+#file "variables.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+#line 7
+
+
+
+
+#line 12
+
+
+
+
+#line 17
+
+
+
+
+#line 22
+
+
+
+
+#line 27
+
+
+
+
+#line 32
+
+
+
+
+#line 37
+
+
+
+
+#line 42
+
+
+
+
+#line 47
+
+
+
+
+#line 52
+
+
+
+
+#line 57
+
+
+
+
+#line 62
+
+
+
+
+#line 67
+
+
+
+
+#line 72
+
+
+
+
+
+#line 79
+
+
+
+
+#line 84
+
+#line 86
+
+
+
+
+#line 91
+
+#line 93
+#file "utils/CheatDetected.pwn"
+#line 0
+#line 0
+
+
+
+
+
+
+
+stock AC_CheatDetected(playerid, cheatid, extraid = 0, info[] = "") {
+	
+	if (((!(info[0])) || (((info[0]) == '\1') && (!(info[1]))))) {
+		CallLocalFunction(#AC_OnCheatDetected, "iiis", playerid, cheatid, extraid, "\1");
+	} else {
+		CallLocalFunction(#AC_OnCheatDetected, "iiis", playerid, cheatid, extraid, info);
 	}
+}
+#file "utils/GetSpeed.pwn"
+#line 0
+#line 0
+
+
+
+
+
+
+
+forward Float:GetSpeed(Float:vx, Float:vy, Float:vz); stock Float:GetSpeed(Float:vx, Float:vy, Float:vz) {
+	return floatsqroot(vx * vx + vy * vy + vz * vz)
+
+}
+#file "utils/IsPlayerAFK.pwn"
+#line 0
+#line 0
+
+
+
+
+
+forward AC_IsPlayerAFK(playerid); public AC_IsPlayerAFK(playerid) {
+#line 13
+		return CallRemoteFunction(#AC_IsPlayerAFK, "i", playerid);
+#line 15
+}
+#file "utils/IsPlayerAtVendingMachine.pwn"
+#line 0
+#line 0
+
+
+
+
+
+stock AC_IsPlayerAtVendingMachine(playerid) {
+	for (new i = 0; i != sizeof(AC_VENDING_MACHINES); ++i) {
+		if (IsPlayerInRangeOfPoint(playerid, AC_VENDING_MACHINE_RANGE, AC_VENDING_MACHINES[i][0], AC_VENDING_MACHINES[i][1], AC_VENDING_MACHINES[i][2])) {
+			return true;
+		}
+	}
+	return false;
+}
+#file "utils/IsPlayerSpawned.pwn"
+#line 0
+#line 0
+
+
+
+
+
+forward AC_IsPlayerSpawned(playerid); public AC_IsPlayerSpawned(playerid) {
+#line 13
+		return CallRemoteFunction(#AC_IsPlayerSpawned, "i", playerid);
+#line 15
+}
+#file "utils/memset.pwn"
+#line 0
+#line 0
+
+
+
+
+stock AC_memset(aArray[], iValue, iSize = sizeof(aArray)) {
+	new iAddress;
+
+	#emit LOAD.S.pri 12
+	#emit STOR.S.pri iAddress
+
+	iSize *= 4;
+
+	while (iSize > 0) {
+
+		if (iSize >= 4096) {
+			#emit LOAD.S.alt iAddress
+			#emit LOAD.S.pri iValue
+			#emit FILL 4096
+			iSize -= 4096;
+			iAddress += 4096;
+		} else if (iSize >= 1024) {
+			#emit LOAD.S.alt iAddress
+			#emit LOAD.S.pri iValue
+			#emit FILL 1024
+			iSize -= 1024;
+			iAddress += 1024;
+		} else if (iSize >= 256) {
+			#emit LOAD.S.alt iAddress
+			#emit LOAD.S.pri iValue
+			#emit FILL 256
+			iSize -= 256;
+			iAddress += 256;
+		} else if (iSize >= 64) {
+			#emit LOAD.S.alt iAddress
+			#emit LOAD.S.pri iValue
+			#emit FILL 64
+			iSize -= 64;
+			iAddress += 64;
+		} else if (iSize >= 16) {
+			#emit LOAD.S.alt iAddress
+			#emit LOAD.S.pri iValue
+			#emit FILL 16
+			iSize -= 16;
+			iAddress += 16;
+		} else {
+			#emit LOAD.S.alt iAddress
+			#emit LOAD.S.pri iValue
+			#emit FILL 4
+			iSize -= 4;
+			iAddress += 4;
+		}
+	}
+
+	#pragma unused aArray
+}
+#file "utils/sync/IsPlayerSynced.pwn"
+#line 0
+#line 0
+
+
+
+
+
+
+stock AC_IsPlayerSynced(playerid, sync) {
+	if (IsPlayerConnected(playerid)) {
+		return (AC_players[playerid][AC_pSync] & (1 << sync)) ? true : false;
+	}
+	return false;
+}
+#file "utils/sync/SetPlayerSync.pwn"
+#line 0
+#line 0
+
+
+
+
+
+
+stock AC_SetPlayerSync(playerid, sync, status = true) {
+	if (IsPlayerConnected(playerid)) {
+		if (status) {
+			AC_players[playerid][AC_pSync] |= 1 << sync;
+			AC_players[playerid][AC_pSyncFails][sync] = 0;
+		} else {
+			AC_players[playerid][AC_pSync] &= ~(1 << sync);
+			++AC_players[playerid][AC_pSyncFails][sync];
+			if (AC_players[playerid][AC_pSyncFails][sync] % AC_SYNC_MAX_FAILS == 0) {
+				AC_CheatDetected(playerid, AC_cSync, sync, "");
+			}
+		}
+	}
+}
+#file "hooks/natives/GetPlayerMoney.pwn"
+#line 0
+#line 0
+
+forward AC_GetPlayerMoney(playerid); public AC_GetPlayerMoney(playerid) {
+#line 10
+		return CallRemoteFunction(#AC_GetPlayerMoney, "i", playerid);
+#line 12
+}
+#line 19
+#file "hooks/natives/GetPlayerSpecialAction.pwn"
+#line 0
+#line 0
+
+forward AC_GetPlayerSpecialAction(playerid); public AC_GetPlayerSpecialAction(playerid) {
+#line 9
+		return CallRemoteFunction(#AC_GetPlayerSpecialAction, "i", playerid);
+#line 11
+}
+#line 18
+#file "hooks/natives/GivePlayerMoney.pwn"
+#line 0
+#line 0
+
+forward AC_GivePlayerMoney(playerid, money); public AC_GivePlayerMoney(playerid, money) {
+#line 9
+		return CallRemoteFunction(#AC_GivePlayerMoney, "ii", playerid, money);
+#line 11
+}
+#line 18
+#file "hooks/natives/ResetPlayerMoney.pwn"
+#line 0
+#line 0
+
+forward AC_ResetPlayerMoney(playerid); public AC_ResetPlayerMoney(playerid) {
+#line 9
+		return CallRemoteFunction(#AC_ResetPlayerMoney, "i", playerid);
+#line 11
+}
+#line 18
+#file "hooks/natives/SetPlayerArmour.pwn"
+#line 0
+#line 0
+
+forward AC_SetPlayerArmour(playerid, Float:armour); public AC_SetPlayerArmour(playerid, Float:armour) {
+#line 10
+		return CallRemoteFunction(#AC_SetPlayerArmour, "if", playerid, armour);
+#line 12
+}
+#line 19
+#file "hooks/natives/SetPlayerHealth.pwn"
+#line 0
+#line 0
+
+forward AC_SetPlayerHealth(playerid, Float:health); public AC_SetPlayerHealth(playerid, Float:health) {
+#line 10
+		return CallRemoteFunction(#AC_SetPlayerHealth, "if", playerid, health);
+#line 12
+}
+#line 19
+#file "hooks/natives/SetPlayerSpecialAction.pwn"
+#line 0
+#line 0
+
+forward AC_SetPlayerSpecialAction(playerid, actionid); public AC_SetPlayerSpecialAction(playerid, actionid) {
+#line 9
+		return CallRemoteFunction(#AC_SetPlayerSpecialAction, "ii", playerid, actionid);
+#line 11
+}
+#line 18
+#file "hooks/natives/TogglePlayerControllable.pwn"
+#line 0
+#line 0
+
+forward AC_TogglePlayerControllable(playerid, toggle); public AC_TogglePlayerControllable(playerid, toggle) {
+#line 13
+		return CallRemoteFunction(#AC_TogglePlayerControllable, "ii", playerid, toggle);
+#line 15
+}
+#line 22
+#file "hooks/natives/TogglePlayerSpectating.pwn"
+#line 0
+#line 0
+
+forward AC_TogglePlayerSpectating(playerid, toggle); public AC_TogglePlayerSpectating(playerid, toggle) {
+#line 11
+		return CallRemoteFunction(#AC_TogglePlayerSpectating, "ii", playerid, toggle);
+#line 13
+}
+#line 20
+#file "hooks/callbacks/OnPlayerCommandText.pwn"
+#line 0
+#line 0
+#line 2
+
+
+#line 12
+
+#line 19
+
+#line 23
+
+#line 25
+#file "hooks/callbacks/OnPlayerConnect.pwn"
+#line 0
+#line 0
+#line 2
+
+
+#line 12
+
+#line 19
+
+#line 23
+
+#line 25
+#file "hooks/callbacks/OnPlayerDeath.pwn"
+#line 0
+#line 0
+#line 2
+
+
+#line 12
+
+#line 19
+
+#line 23
+
+#line 25
+#file "hooks/callbacks/OnPlayerSpawn.pwn"
+#line 0
+#line 0
+#line 2
+
+
+#line 12
+
+
+#line 21
+
+#line 28
+
+#line 32
+
+#line 34
+#file "hooks/callbacks/OnPlayerText.pwn"
+#line 0
+#line 0
+#line 2
+
+
+#line 12
+
+#line 19
+
+#line 23
+
+#line 25
+#file "hooks/callbacks/OnPlayerUpdate.pwn"
+#line 0
+#line 0
+#line 2
+
+
+#line 12
+
+#line 19
+
+#line 23
+
+#line 25
+#file "hooks/callbacks/OnScriptExit.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+#line 10
+
+
+#line 21
+
+#line 28
+
+#line 41
+
+#line 48
+
+#line 53
+
+#line 55
+#file "hooks/callbacks/OnScriptInit.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+#line 11
+
+
+#line 22
+
 #line 29
 
-	forward AC_GivePlayerMoney(playerid, money); stock AC_GivePlayerMoney(playerid, money) {
-		return CallRemoteFunction(#AC_GivePlayerMoney, "ii", playerid, money);
-	}
-#line 39
+#line 42
 
-	forward AC_ResetPlayerMoney(playerid); stock AC_ResetPlayerMoney(playerid) {
-		return CallRemoteFunction(#AC_ResetPlayerMoney, "i", playerid);
-	}
 #line 49
 
-	forward AC_SetPlayerArmour(playerid, Float:health); stock AC_SetPlayerArmour(playerid, Float:health) {
-		return CallRemoteFunction(#AC_SetPlayerArmour, "if", playerid, health);
-	}
-#line 59
+#line 54
 
-	forward AC_SetPlayerHealth(playerid, Float:health); stock AC_SetPlayerHealth(playerid, Float:health) {
-		return CallRemoteFunction(#AC_SetPlayerHealth, "if", playerid, health);
-	}
-#line 69
+#line 56
+#file "watchguard/Watchguard.pwn"
+#line 0
+#line 0
+#line 2
 
-#line 74
 
-	#endinput 
-#file test-server/filterscripts/test.pwn
-#line 5
+
+
+#line 8
+
+#line 23
+
+#line 45
+
+#line 48
+
+#line 50
+#file "watchguard/impl/Watchguard_Armour.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+
+#line 19
+
+#line 21
+#file "watchguard/impl/Watchguard_Freeze.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+
+#line 12
+
+#line 14
+#file "watchguard/impl/Watchguard_Health.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+
+#line 19
+
+#line 21
+#file "watchguard/impl/Watchguard_Jetpack.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+
+#line 10
+
+#line 14
+
+#line 16
+#file "watchguard/impl/Watchguard_Joypad.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+
+#line 14
+
+#line 16
+#file "watchguard/impl/Watchguard_Money.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+
+#line 13
+
+#line 15
+#file "watchguard/impl/Watchguard_Ping.pwn"
+#line 0
+#line 0
+#line 2
+
+
+
+
+
+#line 12
+
+#line 14
+#file "./Anticheat.inc"
+#line 0
+#line 0#file test-server/filterscripts/test.pwn
+#line 6
 
 main() {
 	print(" >> Anticheat test filterscript.");
