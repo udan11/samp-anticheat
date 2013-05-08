@@ -4,7 +4,7 @@
  * <param name="sync">Sync's ID.</param>
  * <param name="status">Is player synced or not?</param>
  */
-stock AC_SetPlayerSync(playerid, sync, status = true) {
+AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 	if (IsPlayerConnected(playerid)) {
 		if (status) {
 			AC_players[playerid][AC_pSync] |= 1 << sync;

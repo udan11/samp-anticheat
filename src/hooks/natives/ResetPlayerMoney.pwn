@@ -1,14 +1,16 @@
 // ResetPlayerMoney hook.
-AC_PUBLIC AC_ResetPlayerMoney(playerid) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_ResetPlayerMoney(playerid) {
 		if (IsPlayerConnected(playerid)) {
 			AC_players[playerid][AC_pMoney] = 0;
 		}
 		return ResetPlayerMoney(playerid);
-	#else
+	}
+#else
+	AC_STOCK AC_ResetPlayerMoney(playerid) {
 		return CallRemoteFunction(#AC_ResetPlayerMoney, "i", playerid);
-	#endif
-}
+	}
+#endif
 #if defined _ALS_ResetPlayerMoney
 	#undef ResetPlayerMoney
 #else

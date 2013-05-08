@@ -71,6 +71,8 @@
 #define AC_PUBLIC%0\32;%0(%1) \
 	forward %0(%1); public %0(%1)
 #define AC_STOCK%0\32;%0(%1) \
+	stock %0(%1)
+#define AC_STOCK_F%0\32;%0(%1) \
 	forward %0(%1); stock %0(%1)
 
 // Defines new functions. Not the real purpose of this anticheat.

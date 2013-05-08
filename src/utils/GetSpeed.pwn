@@ -5,7 +5,7 @@
  * <param name="vz">Z-axis of the vector.</param>
  * <returns>The speed.</returns>
  */
-AC_STOCK Float:GetSpeed(Float:vx, Float:vy, Float:vz) {
+AC_STOCK_F Float:GetSpeed(Float:vx, Float:vy, Float:vz) {
 	return floatsqroot(vx * vx + vy * vy + vz * vz)
 	// Forward declaration is required because of the retrun value (float).
 }

@@ -1,22 +1,48 @@
 #define FILTERSCRIPT
 
 #include <a_samp>
+
 #define AC_SLAVE
 #include <Anticheat>
 
-main() {
-	print(" >> Anticheat test filterscript.");
-}
+#include <sscanf2>
+
+main() {}
 
 public OnPlayerCommandText(playerid, cmdtext[]) {
-	new idx, cmd[256];
-	cmd = strtok(cmdtext, idx);
-	if (strcmp(cmd, "/fh50", true) == 0) {
-		SetPlayerHealth(playerid, 50.0);
-		return 1;
-	} else if (strcmp(cmd, "/fh100", true) == 0) {
-		SetPlayerHealth(playerid, 100.0);
-		return 1;
+	if (IsPlayerAdmin(playerid)) {
+		new cmd[64];
+		if (sscanf(cmdtext, "s[64] ", cmd)) {
+			return 0;
+		}
+		if (strcmp(cmd, "/f_sethealth", true) == 0) {
+			new Float:health;
+			if (sscanf(cmdtext, "{s[64]} f", health)) {
+				SendClientMessage(playerid, 0xCCCCCCFF, " ** Invalid command parameters.");
+			} else {
+				SetPlayerHealth(playerid, health);
+			}
+			return 1;
+		} else if (strcmp(cmd, "/f_setarmour", true) == 0) {
+			new Float:armour;
+			if (sscanf(cmdtext, "{s[64]} f", armour)) {
+				SendClientMessage(playerid, 0xCCCCCCFF, " ** Invalid command parameters.");
+			} else {
+				SetPlayerArmour(playerid, armour);
+			}
+			return 1;
+		} else if (strcmp(cmd, "/f_givemoney", true) == 0) {
+			new money;
+			if (sscanf(cmdtext, "{s[64]} i", money)) {
+				SendClientMessage(playerid, 0xCCCCCCFF, " ** Invalid command parameters.");
+			} else {
+				GivePlayerMoney(playerid, money);
+			}
+			return 1;
+		} else if (strcmp(cmd, "/f_resetmoney", true) == 0) {
+			ResetPlayerMoney(playerid);
+			return 1;
+		}
 	}
 	return 0;
 }
@@ -27,19 +53,4 @@ public OnFilterScriptInit() {
 
 public OnFilterScriptExit() {
 	return 1;
-}
-
-strtok(const string[], &index) {
-	new length = strlen(string);
-	while ((index < length) && (string[index] <= ' ')) {
-		index++;
-	}
-	new offset = index;
-	new result[20];
-	while ((index < length) && (string[index] > ' ') && ((index - offset) < (sizeof(result) - 1))) {
-		result[index - offset] = string[index];
-		index++;
-	}
-	result[index - offset] = EOS;
-	return result;
 }

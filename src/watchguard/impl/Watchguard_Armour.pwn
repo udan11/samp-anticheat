@@ -4,7 +4,7 @@
 	 * <summary>Checks if a player is using armour hack.</summary>
 	 * <param name="playerid">Player's ID.</param>
 	 */
-	stock AC_Watchguard_Armour(playerid) {
+	AC_STOCK AC_Watchguard_Armour(playerid) {
 		new Float:armour;
 		GetPlayerArmour(playerid, armour);
 		if (!AC_IsPlayerSynced(playerid, AC_sArmour)) {

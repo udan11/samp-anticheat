@@ -1,14 +1,16 @@
 // GetPlayerSpecialAction hook.
-AC_PUBLIC AC_GetPlayerSpecialAction(playerid) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_GetPlayerSpecialAction(playerid) {
 		if (IsPlayerConnected(playerid)) {
 			return AC_players[playerid][AC_pSpecialAction];
 		}
 		return SPECIAL_ACTION_NONE;
-	#else
+	}
+#else
+	AC_STOCK AC_GetPlayerSpecialAction(playerid) {
 		return CallRemoteFunction(#AC_GetPlayerSpecialAction, "i", playerid);
-	#endif
-}
+	}
+#endif
 #if defined _ALS_GetPlayerSpecialAction
 	#undef GetPlayerSpecialAction
 #else

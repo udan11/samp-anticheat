@@ -1,16 +1,18 @@
 // TogglePlayerSpectating hook.
-AC_PUBLIC AC_TogglePlayerSpectating(playerid, toggle) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_TogglePlayerSpectating(playerid, toggle) {
 		if (IsPlayerConnected(playerid)) {
 			if (toggle) {
 				AC_players[playerid][AC_pState] &= ~AC_psSpawn;
 			}
 		}
 		return TogglePlayerSpectating(playerid, toggle);
-	#else
+	}
+#else
+	AC_STOCK AC_TogglePlayerSpectating(playerid, toggle) {
 		return CallRemoteFunction(#AC_TogglePlayerSpectating, "ii", playerid, toggle);
-	#endif
-}
+	}
+#endif
 #if defined _ALS_TogglePlayerSpectating
 	#undef TogglePlayerSpectating
 #else

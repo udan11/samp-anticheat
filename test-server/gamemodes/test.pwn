@@ -1,37 +1,52 @@
 #include <a_samp>
+
 #define AC_DEBUG
 #define AC_MASTER
 #include <Anticheat>
 
-main() {
-	print(" >> Anticheat test gamemode.");
-}
+#include <sscanf2>
+
+main() {}
 
 public OnPlayerConnect(playerid) {
-	GameTextForPlayer(playerid, "~w~SA-MP: ~r~Bare Script", 5000, 5);
+	GameTextForPlayer(playerid, "~w~SA-MP: ~r~Anticheat Test Script", 5000, 5);
 	return 1;
 }
 
 public OnPlayerCommandText(playerid, cmdtext[]) {
-	new idx, cmd[256];
-	cmd = strtok(cmdtext, idx);
-	if (strcmp(cmd, "/gh50", true) == 0) {
-		SetPlayerHealth(playerid, 50.0);
-		return 1;
-	} else if (strcmp(cmd, "/gh100", true) == 0) {
-		SetPlayerHealth(playerid, 100.0);
-		return 1;
-	} else if (strcmp(cmd, "/money", true) == 0) {
-		GivePlayerMoney(playerid, 1500);
-		return 1;
-	} else if (strcmp(cmd, "/rmoney", true) == 0) {
-		ResetPlayerMoney(playerid);
-		return 1;
-	} else if (strcmp(cmd, "/veh", true) == 0) {
-		new Float:x, Float:y, Float:z;
-		GetPlayerPos(playerid, x, y, z);
-		CreateVehicle(522, x, y, z, 0.0, 0, 0, -1);
-		return 1;
+	if (IsPlayerAdmin(playerid)) {
+		new cmd[64];
+		if (sscanf(cmdtext, "s[64] ", cmd)) {
+			return 0;
+		}
+		if (strcmp(cmd, "/g_sethealth", true) == 0) {
+			new Float:health;
+			if (sscanf(cmdtext, "{s[64]} f", health)) {
+				SendClientMessage(playerid, 0xCCCCCCFF, " ** Invalid command parameters.");
+			} else {
+				SetPlayerHealth(playerid, health);
+			}
+			return 1;
+		} else if (strcmp(cmd, "/g_setarmour", true) == 0) {
+			new Float:armour;
+			if (sscanf(cmdtext, "{s[64]} f", armour)) {
+				SendClientMessage(playerid, 0xCCCCCCFF, " ** Invalid command parameters.");
+			} else {
+				SetPlayerArmour(playerid, armour);
+			}
+			return 1;
+		} else if (strcmp(cmd, "/g_givemoney", true) == 0) {
+			new money;
+			if (sscanf(cmdtext, "{s[64]} i", money)) {
+				SendClientMessage(playerid, 0xCCCCCCFF, " ** Invalid command parameters.");
+			} else {
+				GivePlayerMoney(playerid, money);
+			}
+			return 1;
+		} else if (strcmp(cmd, "/g_resetmoney", true) == 0) {
+			ResetPlayerMoney(playerid);
+			return 1;
+		}
 	}
 	return 0;
 }
@@ -60,19 +75,4 @@ public OnGameModeInit() {
 
 public OnGameModeExit() {
 	return 1;
-}
-
-strtok(const string[], &index) {
-	new length = strlen(string);
-	while ((index < length) && (string[index] <= ' ')) {
-		index++;
-	}
-	new offset = index;
-	new result[20];
-	while ((index < length) && (string[index] > ' ') && ((index - offset) < (sizeof(result) - 1))) {
-		result[index - offset] = string[index];
-		index++;
-	}
-	result[index - offset] = EOS;
-	return result;
 }

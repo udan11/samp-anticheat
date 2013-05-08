@@ -1,14 +1,16 @@
 // SetPlayerSpecialAction hook.
-AC_PUBLIC AC_SetPlayerSpecialAction(playerid, actionid) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_SetPlayerSpecialAction(playerid, actionid) {
 		if (IsPlayerConnected(playerid)) {
 			AC_players[playerid][AC_pSpecialAction] = actionid;
 		}
 		return SetPlayerSpecialAction(playerid, actionid);
-	#else
+	}
+#else
+	AC_STOCK AC_SetPlayerSpecialAction(playerid, actionid) {
 		return CallRemoteFunction(#AC_SetPlayerSpecialAction, "ii", playerid, actionid);
-	#endif
-}
+	}
+#endif
 #if defined _ALS_SetPlayerSpecialAction
 	#undef SetPlayerSpecialAction
 #else

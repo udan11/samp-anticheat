@@ -4,7 +4,7 @@
 	 * <summary>Checks if a player is using health hack.</summary>
 	 * <param name="playerid">Player's ID.</param>
 	 */
-	stock AC_Watchguard_Health(playerid) {
+	AC_STOCK AC_Watchguard_Health(playerid) {
 		new Float:health;
 		GetPlayerHealth(playerid, health);
 		if (!AC_IsPlayerSynced(playerid, AC_sHealth)) {

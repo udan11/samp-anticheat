@@ -73,6 +73,8 @@
 #define AC_PUBLIC%0\32;%0(%1) \
 	forward %0(%1); public %0(%1)
 #define AC_STOCK%0\32;%0(%1) \
+	stock %0(%1)
+#define AC_STOCK_F%0\32;%0(%1) \
 	forward %0(%1); stock %0(%1)
 
 // Defines new functions. Not the real purpose of this anticheat.
@@ -524,7 +526,7 @@ forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
  * <param name="extraid">Additional cheat ID (depends on hack tool, detection method, etc.).</param>
  * <param name="info">Additional information.</param>
  */
-stock AC_CheatDetected(playerid, cheatid, extraid = 0, info[] = "") {
+AC_STOCK AC_CheatDetected(playerid, cheatid, extraid = 0, info[] = "") {
 	_AC_DEBUG("[anticheat] AC_CheatDetected(playerid = %d, cheatid = %d, extraid = %d, info = %s", playerid, cheatid, extraid, info);
 	if (isnull(info)) {
 		CallLocalFunction(#AC_OnCheatDetected, "iiis", playerid, cheatid, extraid, "\1");
@@ -541,7 +543,7 @@ stock AC_CheatDetected(playerid, cheatid, extraid = 0, info[] = "") {
  * <param name="vz">Z-axis of the vector.</param>
  * <returns>The speed.</returns>
  */
-AC_STOCK Float:GetSpeed(Float:vx, Float:vy, Float:vz) {
+AC_STOCK_F Float:GetSpeed(Float:vx, Float:vy, Float:vz) {
 	return floatsqroot(vx * vx + vy * vy + vz * vz)
 	// Forward declaration is required because of the retrun value (float).
 }
@@ -569,7 +571,7 @@ AC_PUBLIC AC_IsPlayerAFK(playerid) {
  * <param name="playerid">Player's ID.</param>
  * <returns>True if the player is near a vending machine or false if not.</returns>
  */
-stock AC_IsPlayerAtVendingMachine(playerid) {
+AC_STOCK AC_IsPlayerAtVendingMachine(playerid) {
 	for (new i = 0; i != sizeof(AC_VENDING_MACHINES); ++i) {
 		if (IsPlayerInRangeOfPoint(playerid, AC_VENDING_MACHINE_RANGE, AC_VENDING_MACHINES[i][0], AC_VENDING_MACHINES[i][1], AC_VENDING_MACHINES[i][2])) {
 			return true;
@@ -584,23 +586,25 @@ stock AC_IsPlayerAtVendingMachine(playerid) {
  * <param name="playerid">Player's ID.</param>
  * <returns>True if player is spawned, false if not.</returns>
  */
-AC_PUBLIC AC_IsPlayerSpawned(playerid) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_IsPlayerSpawned(playerid) {
 		if (IsPlayerConnected(playerid)) {
 			return AC_players[playerid][AC_pState] & AC_psSpawn ? true : false;
 		}
 		return false;
-	#else
+	}
+#else
+	AC_STOCK AC_IsPlayerSpawned(playerid) {
 		return CallRemoteFunction(#AC_IsPlayerSpawned, "i", playerid);
-	#endif
-}
+	}
+#endif
 #file "utils/memset.pwn"
 #line 0
 /**
  * <author>Slice</author>
  * <remarks>http://forum.sa-mp.com/showthread.php?p=1606781</remarks>
  */
-stock AC_memset(aArray[], iValue, iSize = sizeof(aArray)) {
+AC_STOCK AC_memset(aArray[], iValue, iSize = sizeof(aArray)) {
 	new iAddress;
 	// Store the address of the array
 	#emit LOAD.S.pri 12
@@ -659,7 +663,7 @@ stock AC_memset(aArray[], iValue, iSize = sizeof(aArray)) {
  * <param name="sync">Sync's ID.</param>
  * <returns>True if player is synced, false if not.</returns>
  */
-stock AC_IsPlayerSynced(playerid, sync) {
+AC_STOCK AC_IsPlayerSynced(playerid, sync) {
 	if (IsPlayerConnected(playerid)) {
 		return (AC_players[playerid][AC_pSync] & (1 << sync)) ? true : false;
 	}
@@ -673,7 +677,7 @@ stock AC_IsPlayerSynced(playerid, sync) {
  * <param name="sync">Sync's ID.</param>
  * <param name="status">Is player synced or not?</param>
  */
-stock AC_SetPlayerSync(playerid, sync, status = true) {
+AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 	if (IsPlayerConnected(playerid)) {
 		if (status) {
 			AC_players[playerid][AC_pSync] |= 1 << sync;
@@ -690,17 +694,19 @@ stock AC_SetPlayerSync(playerid, sync, status = true) {
 #file "hooks/natives/GetPlayerMoney.pwn"
 #line 0
 // GetPlayerMoney hook.
-AC_PUBLIC AC_GetPlayerMoney(playerid) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_GetPlayerMoney(playerid) {
 		if (IsPlayerConnected(playerid)) {
 			new bad_money = U_GetPlayerMoney(playerid);
 			return bad_money < AC_players[playerid][AC_pMoney] ? bad_money : AC_players[playerid][AC_pMoney];
 		}
 		return 0;
-	#else
+	}
+#else
+	AC_STOCK AC_GetPlayerMoney(playerid) {
 		return CallRemoteFunction(#AC_GetPlayerMoney, "i", playerid);
-	#endif
-}
+	}
+#endif
 #if defined _ALS_GetPlayerMoney
 	#undef GetPlayerMoney
 #else
@@ -710,16 +716,18 @@ AC_PUBLIC AC_GetPlayerMoney(playerid) {
 #file "hooks/natives/GetPlayerSpecialAction.pwn"
 #line 0
 // GetPlayerSpecialAction hook.
-AC_PUBLIC AC_GetPlayerSpecialAction(playerid) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_GetPlayerSpecialAction(playerid) {
 		if (IsPlayerConnected(playerid)) {
 			return AC_players[playerid][AC_pSpecialAction];
 		}
 		return SPECIAL_ACTION_NONE;
-	#else
+	}
+#else
+	AC_STOCK AC_GetPlayerSpecialAction(playerid) {
 		return CallRemoteFunction(#AC_GetPlayerSpecialAction, "i", playerid);
-	#endif
-}
+	}
+#endif
 #if defined _ALS_GetPlayerSpecialAction
 	#undef GetPlayerSpecialAction
 #else
@@ -729,16 +737,18 @@ AC_PUBLIC AC_GetPlayerSpecialAction(playerid) {
 #file "hooks/natives/GivePlayerMoney.pwn"
 #line 0
 // GivePlayerMoney hook.
-AC_PUBLIC AC_GivePlayerMoney(playerid, money) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_GivePlayerMoney(playerid, money) {
 		if (IsPlayerConnected(playerid)) {
 			AC_players[playerid][AC_pMoney] += money;
 		}
 		return GivePlayerMoney(playerid, money);
-	#else
+	}
+#else
+	AC_STOCK AC_GivePlayerMoney(playerid, money) {
 		return CallRemoteFunction(#AC_GivePlayerMoney, "ii", playerid, money);
-	#endif
-}
+	}
+#endif
 #if defined _ALS_GivePlayerMoney
 	#undef GivePlayerMoney
 #else
@@ -748,16 +758,18 @@ AC_PUBLIC AC_GivePlayerMoney(playerid, money) {
 #file "hooks/natives/ResetPlayerMoney.pwn"
 #line 0
 // ResetPlayerMoney hook.
-AC_PUBLIC AC_ResetPlayerMoney(playerid) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_ResetPlayerMoney(playerid) {
 		if (IsPlayerConnected(playerid)) {
 			AC_players[playerid][AC_pMoney] = 0;
 		}
 		return ResetPlayerMoney(playerid);
-	#else
+	}
+#else
+	AC_STOCK AC_ResetPlayerMoney(playerid) {
 		return CallRemoteFunction(#AC_ResetPlayerMoney, "i", playerid);
-	#endif
-}
+	}
+#endif
 #if defined _ALS_ResetPlayerMoney
 	#undef ResetPlayerMoney
 #else
@@ -767,17 +779,19 @@ AC_PUBLIC AC_ResetPlayerMoney(playerid) {
 #file "hooks/natives/SetPlayerArmour.pwn"
 #line 0
 // SetPlayerArmour hook.
-AC_PUBLIC AC_SetPlayerArmour(playerid, Float:armour) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_SetPlayerArmour(playerid, Float:armour) {
 		if (IsPlayerConnected(playerid)) {
 			AC_players[playerid][AC_pArmour] = armour;
 			AC_SetPlayerSync(playerid, AC_sArmour, false);
 		}
 		return SetPlayerArmour(playerid, armour);
-	#else
+	}
+#else
+	AC_STOCK AC_SetPlayerArmour(playerid, Float:armour) {
 		return CallRemoteFunction(#AC_SetPlayerArmour, "if", playerid, armour);
-	#endif
-}
+	}
+#endif
 #if defined _ALS_SetPlayerArmour
 	#undef SetPlayerArmour
 #else
@@ -787,17 +801,19 @@ AC_PUBLIC AC_SetPlayerArmour(playerid, Float:armour) {
 #file "hooks/natives/SetPlayerHealth.pwn"
 #line 0
 // SetPlayerHealth hook.
-AC_PUBLIC AC_SetPlayerHealth(playerid, Float:health) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_SetPlayerHealth(playerid, Float:health) {
 		if (IsPlayerConnected(playerid)) {
 			AC_players[playerid][AC_pHealth] = health;
 			AC_SetPlayerSync(playerid, AC_sHealth, false);
 		}
 		return SetPlayerHealth(playerid, health);
-	#else
+	}
+#else
+	AC_STOCK AC_SetPlayerHealth(playerid, Float:health) {
 		return CallRemoteFunction(#AC_SetPlayerHealth, "if", playerid, health);
-	#endif
-}
+	}
+#endif
 #if defined _ALS_SetPlayerHealth
 	#undef SetPlayerHealth
 #else
@@ -807,16 +823,18 @@ AC_PUBLIC AC_SetPlayerHealth(playerid, Float:health) {
 #file "hooks/natives/SetPlayerSpecialAction.pwn"
 #line 0
 // SetPlayerSpecialAction hook.
-AC_PUBLIC AC_SetPlayerSpecialAction(playerid, actionid) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_SetPlayerSpecialAction(playerid, actionid) {
 		if (IsPlayerConnected(playerid)) {
 			AC_players[playerid][AC_pSpecialAction] = actionid;
 		}
 		return SetPlayerSpecialAction(playerid, actionid);
-	#else
+	}
+#else
+	AC_STOCK AC_SetPlayerSpecialAction(playerid, actionid) {
 		return CallRemoteFunction(#AC_SetPlayerSpecialAction, "ii", playerid, actionid);
-	#endif
-}
+	}
+#endif
 #if defined _ALS_SetPlayerSpecialAction
 	#undef SetPlayerSpecialAction
 #else
@@ -826,8 +844,8 @@ AC_PUBLIC AC_SetPlayerSpecialAction(playerid, actionid) {
 #file "hooks/natives/TogglePlayerControllable.pwn"
 #line 0
 // TogglePlayerControllable hook.
-AC_PUBLIC AC_TogglePlayerControllable(playerid, toggle) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_TogglePlayerControllable(playerid, toggle) {
 		if (IsPlayerConnected(playerid)) {
 			if (toggle) {
 				AC_players[playerid][AC_pState] &= ~AC_psFreeze;
@@ -836,10 +854,12 @@ AC_PUBLIC AC_TogglePlayerControllable(playerid, toggle) {
 			}
 		}
 		return TogglePlayerControllable(playerid, toggle);
-	#else
-		return CallRemoteFunction(#AC_TogglePlayerControllable, "ii", playerid, toggle);
-	#endif
 }
+#else
+	AC_STOCK AC_TogglePlayerControllable(playerid, toggle) {
+		return CallRemoteFunction(#AC_TogglePlayerControllable, "ii", playerid, toggle);
+	}
+#endif
 #if defined _ALS_TogglePlayerControllable
 	#undef TogglePlayerControllable
 #else
@@ -849,18 +869,20 @@ AC_PUBLIC AC_TogglePlayerControllable(playerid, toggle) {
 #file "hooks/natives/TogglePlayerSpectating.pwn"
 #line 0
 // TogglePlayerSpectating hook.
-AC_PUBLIC AC_TogglePlayerSpectating(playerid, toggle) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_TogglePlayerSpectating(playerid, toggle) {
 		if (IsPlayerConnected(playerid)) {
 			if (toggle) {
 				AC_players[playerid][AC_pState] &= ~AC_psSpawn;
 			}
 		}
 		return TogglePlayerSpectating(playerid, toggle);
-	#else
+	}
+#else
+	AC_STOCK AC_TogglePlayerSpectating(playerid, toggle) {
 		return CallRemoteFunction(#AC_TogglePlayerSpectating, "ii", playerid, toggle);
-	#endif
-}
+	}
+#endif
 #if defined _ALS_TogglePlayerSpectating
 	#undef TogglePlayerSpectating
 #else
@@ -1204,7 +1226,7 @@ AC_PUBLIC AC_TogglePlayerSpectating(playerid, toggle) {
 	 * <summary>Checks if a player is using armour hack.</summary>
 	 * <param name="playerid">Player's ID.</param>
 	 */
-	stock AC_Watchguard_Armour(playerid) {
+	AC_STOCK AC_Watchguard_Armour(playerid) {
 		new Float:armour;
 		GetPlayerArmour(playerid, armour);
 		if (!AC_IsPlayerSynced(playerid, AC_sArmour)) {
@@ -1226,7 +1248,7 @@ AC_PUBLIC AC_TogglePlayerSpectating(playerid, toggle) {
 	 * <summary>Checks if a player is freezed and make sure it stays so.</summary>
 	 * <param name="playerid">Player's ID.</param>
 	 */
-	stock AC_Watchguard_Freeze(playerid) {
+	AC_STOCK AC_Watchguard_Freeze(playerid) {
 		if (AC_players[playerid][AC_pState] & AC_psFreeze) {
 			TogglePlayerControllable(playerid, false);
 		}
@@ -1241,7 +1263,7 @@ AC_PUBLIC AC_TogglePlayerSpectating(playerid, toggle) {
 	 * <summary>Checks if a player is using health hack.</summary>
 	 * <param name="playerid">Player's ID.</param>
 	 */
-	stock AC_Watchguard_Health(playerid) {
+	AC_STOCK AC_Watchguard_Health(playerid) {
 		new Float:health;
 		GetPlayerHealth(playerid, health);
 		if (!AC_IsPlayerSynced(playerid, AC_sHealth)) {
@@ -1263,7 +1285,7 @@ AC_PUBLIC AC_TogglePlayerSpectating(playerid, toggle) {
 	 * <summary>Checks if a player is using jetpack hack.</summary>
 	 * <param name="playerid">Player's ID.</param>
 	 */
-	stock AC_Watchguard_Jetpack(playerid) {
+	AC_STOCK AC_Watchguard_Jetpack(playerid) {
 		new bad_action = U_GetPlayerSpecialAction(playerid), action = GetPlayerSpecialAction(playerid);
 		if ((bad_action == SPECIAL_ACTION_USEJETPACK) && (action != SPECIAL_ACTION_USEJETPACK)) {
 			// TODO: Check if the player is near a jetpack pickup.
@@ -1280,7 +1302,7 @@ AC_PUBLIC AC_TogglePlayerSpectating(playerid, toggle) {
 	 * <summary>Checks if a player is using a joypad.</summary>
 	 * <param name="playerid">Player's ID.</param>
 	 */
-	stock AC_Watchguard_Joypad(playerid) {
+	AC_STOCK AC_Watchguard_Joypad(playerid) {
 		new keys, ud, lr;
 		GetPlayerKeys(playerid, keys, ud, lr);
 		if (((ud != 128) && (ud != 0) && (ud != -128)) || ((lr != 128) && (lr != 0) && (lr != -128))) {
@@ -1297,7 +1319,7 @@ AC_PUBLIC AC_TogglePlayerSpectating(playerid, toggle) {
 	 * <summary>Checks if a player is using money hack.</summary>
 	 * <param name="playerid">Player's ID.</param>
 	 */
-	stock AC_Watchguard_Money(playerid) {
+	AC_STOCK AC_Watchguard_Money(playerid) {
 		new bad_money = U_GetPlayerMoney(playerid), money = GetPlayerMoney(playerid);
 		if (bad_money > money) {
 			AC_CheatDetected(playerid, AC_cMoney);
@@ -1313,7 +1335,7 @@ AC_PUBLIC AC_TogglePlayerSpectating(playerid, toggle) {
 	 * <summary>Checks if a player is using armour hack.</summary>
 	 * <param name="playerid">Player's ID.</param>
 	 */
-	stock AC_Watchguard_Ping(playerid) {
+	AC_STOCK AC_Watchguard_Ping(playerid) {
 		if (GetPlayerPing(playerid) > AC_MAX_PING) {
 			AC_CheatDetected(playerid, AC_cPing);
 		}

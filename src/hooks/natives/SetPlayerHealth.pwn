@@ -1,15 +1,17 @@
 // SetPlayerHealth hook.
-AC_PUBLIC AC_SetPlayerHealth(playerid, Float:health) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_SetPlayerHealth(playerid, Float:health) {
 		if (IsPlayerConnected(playerid)) {
 			AC_players[playerid][AC_pHealth] = health;
 			AC_SetPlayerSync(playerid, AC_sHealth, false);
 		}
 		return SetPlayerHealth(playerid, health);
-	#else
+	}
+#else
+	AC_STOCK AC_SetPlayerHealth(playerid, Float:health) {
 		return CallRemoteFunction(#AC_SetPlayerHealth, "if", playerid, health);
-	#endif
-}
+	}
+#endif
 #if defined _ALS_SetPlayerHealth
 	#undef SetPlayerHealth
 #else

@@ -1,15 +1,17 @@
 // SetPlayerArmour hook.
-AC_PUBLIC AC_SetPlayerArmour(playerid, Float:armour) {
-	#if defined AC_MASTER
+#if defined AC_MASTER
+	AC_PUBLIC AC_SetPlayerArmour(playerid, Float:armour) {
 		if (IsPlayerConnected(playerid)) {
 			AC_players[playerid][AC_pArmour] = armour;
 			AC_SetPlayerSync(playerid, AC_sArmour, false);
 		}
 		return SetPlayerArmour(playerid, armour);
-	#else
+	}
+#else
+	AC_STOCK AC_SetPlayerArmour(playerid, Float:armour) {
 		return CallRemoteFunction(#AC_SetPlayerArmour, "if", playerid, armour);
-	#endif
-}
+	}
+#endif
 #if defined _ALS_SetPlayerArmour
 	#undef SetPlayerArmour
 #else
