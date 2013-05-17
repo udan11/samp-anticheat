@@ -53,7 +53,7 @@
 		/**
 		 * <summary>Fake kill. The user is reported to have been killed by multiple persons in short interval.</summary>
 		 */
-		AC_cFakeKill, // TODO
+		AC_cFakeKill,
 		
 		/**
 		 * <summary>Teleport hack. Gives the ability to teleport.</summary>

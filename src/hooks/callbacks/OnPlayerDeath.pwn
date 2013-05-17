@@ -2,6 +2,23 @@
 
 	// OnPlayerDeath hook.
 	public OnPlayerDeath(playerid, killerid, reason) {
+		new now = GetTickCount();
+		if (killerid != INVALID_PLAYER_ID) {
+			if (now - AC_players[playerid][AC_pLastDeath] < AC_DEATH_TIME) {
+				AC_CheatDetected(playerid, AC_cFakeKill);
+			}
+			/*
+			// Alternative (not tested): The weapons don't match.
+			if (GetPlayerWeapon(killerid) != reason) {
+				AC_CheatDetected(playerid, AC_cFakeKill);
+			}
+			// Alternative (not tested): Target player is not streamed in for killer.
+			if (!IsPlayerStreamedInForPlayer(playerid, killerid)) {
+				AC_CheatDetected(playerid, AC_cFakeKill);
+			}
+			*/
+		}
+		AC_players[playerid][AC_pLastDeath] = now;
 		AC_players[playerid][AC_pState] &= ~AC_psSpawn;
 		#if defined AC_OnPlayerDeath
 			return AC_OnPlayerDeath(playerid, killerid, reason);

@@ -9,6 +9,11 @@
 	 * <summary>Maximum slots for weapons.</summary>
 	 */
 	#define AC_MAX_WEAPON_SLOTS				13
+	
+	/**
+	 * <summary>Minimum time between deaths.</summary>
+	 */
+	#define AC_DEATH_TIME					5000
 
 	/**
 	 * <summary>Whether two or three dimension vectors should be used.</summary>
