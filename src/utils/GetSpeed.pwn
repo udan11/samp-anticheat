@@ -6,6 +6,6 @@
  * <returns>The speed.</returns>
  */
 AC_STOCK_F Float:GetSpeed(Float:vx, Float:vy, Float:vz) {
-	return floatsqroot(vx * vx + vy * vy + vz * vz)
-	// Forward declaration is required because of the retrun value (float).
+	return floatsqroot(vx * vx + vy * vy + vz * vz);
+	// Forward declaration is required because of the return value (float).
 }

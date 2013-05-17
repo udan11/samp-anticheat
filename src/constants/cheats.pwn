@@ -130,7 +130,7 @@
 	};
 
 	/**
-	 * <summary>Variable that holds the state of specific anti-cheat module and it's name.</summary>
+	 * <summary>Variable that holds the state of specific anti-cheat module and its name.</summary>
 	 */
 	stock AC_cheats[AC_eCheats][AC_eCheatConfig] = {
 		// AC_cUnknown

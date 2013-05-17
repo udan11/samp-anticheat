@@ -3,7 +3,7 @@
 	/**
 	 * The ID of the watchguard timer.
 	 */
-	stock AC_watchguardTimer = 0;
+	static stock AC_watchguardTimer = 0;
 
 	/**
 	 * <summary>Stores a player's game data.</summary>
@@ -87,6 +87,6 @@
 	/**
 	 * <summary>Stores players' game data.</summary>
 	 */
-	new AC_players[MAX_PLAYERS][AC_ePlayer];
+	static stock AC_players[MAX_PLAYERS][AC_ePlayer];
 	
 #endif
