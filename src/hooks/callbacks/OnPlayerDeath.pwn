@@ -21,7 +21,7 @@
 			}
 			AC_players[playerid][AC_pLastDeath] = now;
 		}
-		AC_players[playerid][AC_pState] &= ~AC_psSpawn;
+		AC_players[playerid][AC_pState] &= ~AC_psIsSpawned;
 		#if defined AC_OnPlayerDeath
 			return AC_OnPlayerDeath(playerid, killerid, reason);
 		#else

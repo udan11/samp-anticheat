@@ -3,7 +3,7 @@
 	AC_PUBLIC AC_TogglePlayerSpectating(playerid, toggle) {
 		if (IsPlayerConnected(playerid)) {
 			if (toggle) {
-				AC_players[playerid][AC_pState] &= ~AC_psSpawn;
+				AC_players[playerid][AC_pState] &= ~AC_psIsSpawned;
 			}
 		}
 		return TogglePlayerSpectating(playerid, toggle);

@@ -1,6 +1,16 @@
 #if defined AC_MASTER
 
 	/**
+	 * <summary>The interval between m0d_sa checks.</summary>
+	 */
+	#define AC_MOD_SA_CHECK_INTERVAL		4000
+	
+	/**
+	 * <summary>m0d_sa magic constant.</summary>
+	 */
+	#define AC_MOD_SA_MAGIC					-0.75
+
+	/**
 	 * <summary>Minimum FPS rate accepted.</summary>
 	 */
 	#define AC_MIN_FPS						10

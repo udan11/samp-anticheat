@@ -2,9 +2,13 @@
 
 	// OnPlayerSpawn hook.
 	public OnPlayerSpawn(playerid) {
-		AC_players[playerid][AC_pState] = 0;
-		AC_players[playerid][AC_pState] |= AC_psSpawn;
-		AC_players[playerid][AC_pState] &= ~AC_psFreeze;
+		//AC_players[playerid][AC_pState] = 0;
+		AC_players[playerid][AC_pState] |= AC_psIsSpawned;
+		AC_players[playerid][AC_pState] &= ~AC_psIsFrozen;
+		if (!(AC_players[playerid][AC_pState] & AC_psWasSpawned)) { // First spawn.
+			AC_Watchguard_ModSa(playerid);
+			AC_players[playerid][AC_pState] |= AC_psWasSpawned;
+		}
 		AC_players[playerid][AC_pSync] = 0;
 		AC_players[playerid][AC_pLastUpdate] = GetTickCount();
 		AC_players[playerid][AC_pHealth] = 100.0;

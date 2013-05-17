@@ -19,10 +19,10 @@
 	 * Player states.
 	 */
 	enum _:AC_ePlayerState (<<= 1) {
-		AC_psSpawn = 1,						// bitmask  0
-		AC_psWasAFK,						// bitmask  1
-		AC_psFreeze,						// bitmask  2
-		AC_ps03,							// bitmask  3
+		AC_psIsSpawned = 1,					// bitmask  0
+		AC_psWasSpawned,					// bitmask  1
+		AC_psWasAFK,						// bitmask  2
+		AC_psIsFrozen,						// bitmask  3
 		AC_ps04,							// bitmask  4
 		AC_ps05,							// bitmask  5
 		AC_ps06,							// bitmask  6

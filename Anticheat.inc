@@ -218,7 +218,7 @@ forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
 		/**
 		 * <summary>Checks if a player is using the famous `m0d_sa` AIO hacking tool.</summary>
 		 */
-		AC_cModSa, // TODO
+		AC_cModSa,
 	};
 
 	/**
@@ -283,6 +283,16 @@ forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
 #file "constants/game.pwn"
 #line 0
 #if defined AC_MASTER
+
+	/**
+	 * <summary>The interval between m0d_sa checks.</summary>
+	 */
+	#define AC_MOD_SA_CHECK_INTERVAL		4000
+	
+	/**
+	 * <summary>m0d_sa magic constant.</summary>
+	 */
+	#define AC_MOD_SA_MAGIC					-0.75
 
 	/**
 	 * <summary>Minimum FPS rate accepted.</summary>
@@ -391,10 +401,10 @@ forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
 	 * Player states.
 	 */
 	enum _:AC_ePlayerState (<<= 1) {
-		AC_psSpawn = 1,						// bitmask  0
-		AC_psWasAFK,						// bitmask  1
-		AC_psFreeze,						// bitmask  2
-		AC_ps03,							// bitmask  3
+		AC_psIsSpawned = 1,					// bitmask  0
+		AC_psWasSpawned,					// bitmask  1
+		AC_psWasAFK,						// bitmask  2
+		AC_psIsFrozen,						// bitmask  3
 		AC_ps04,							// bitmask  4
 		AC_ps05,							// bitmask  5
 		AC_ps06,							// bitmask  6
@@ -634,7 +644,7 @@ AC_STOCK AC_IsPlayerAtVendingMachine(playerid) {
 #if defined AC_MASTER
 	AC_PUBLIC AC_IsPlayerSpawned(playerid) {
 		if (IsPlayerConnected(playerid)) {
-			return AC_players[playerid][AC_pState] & AC_psSpawn ? true : false;
+			return AC_players[playerid][AC_pState] & AC_psIsSpawned ? true : false;
 		}
 		return false;
 	}
@@ -893,9 +903,9 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 	AC_PUBLIC AC_TogglePlayerControllable(playerid, toggle) {
 		if (IsPlayerConnected(playerid)) {
 			if (toggle) {
-				AC_players[playerid][AC_pState] &= ~AC_psFreeze;
+				AC_players[playerid][AC_pState] &= ~AC_psIsFrozen;
 			} else {
-				AC_players[playerid][AC_pState] |= AC_psFreeze;
+				AC_players[playerid][AC_pState] |= AC_psIsFrozen;
 			}
 		}
 		return TogglePlayerControllable(playerid, toggle);
@@ -918,7 +928,7 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 	AC_PUBLIC AC_TogglePlayerSpectating(playerid, toggle) {
 		if (IsPlayerConnected(playerid)) {
 			if (toggle) {
-				AC_players[playerid][AC_pState] &= ~AC_psSpawn;
+				AC_players[playerid][AC_pState] &= ~AC_psIsSpawned;
 			}
 		}
 		return TogglePlayerSpectating(playerid, toggle);
@@ -1011,7 +1021,7 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 			}
 			AC_players[playerid][AC_pLastDeath] = now;
 		}
-		AC_players[playerid][AC_pState] &= ~AC_psSpawn;
+		AC_players[playerid][AC_pState] &= ~AC_psIsSpawned;
 		#if defined AC_OnPlayerDeath
 			return AC_OnPlayerDeath(playerid, killerid, reason);
 		#else
@@ -1037,9 +1047,13 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 
 	// OnPlayerSpawn hook.
 	public OnPlayerSpawn(playerid) {
-		AC_players[playerid][AC_pState] = 0;
-		AC_players[playerid][AC_pState] |= AC_psSpawn;
-		AC_players[playerid][AC_pState] &= ~AC_psFreeze;
+		//AC_players[playerid][AC_pState] = 0;
+		AC_players[playerid][AC_pState] |= AC_psIsSpawned;
+		AC_players[playerid][AC_pState] &= ~AC_psIsFrozen;
+		if (!(AC_players[playerid][AC_pState] & AC_psWasSpawned)) { // First spawn.
+			AC_Watchguard_ModSa(playerid);
+			AC_players[playerid][AC_pState] |= AC_psWasSpawned;
+		}
 		AC_players[playerid][AC_pSync] = 0;
 		AC_players[playerid][AC_pLastUpdate] = GetTickCount();
 		AC_players[playerid][AC_pHealth] = 100.0;
@@ -1270,6 +1284,7 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 				AC_players[playerid][AC_pState] &= ~AC_psWasAFK;
 			}
 			// Anti-cheat modules calls.
+			// TODO: Hook other modules.
 			if (AC_cheats[AC_cUnknown][AC_ccIsEnabled]) {
 				AC_Watchguard_Freeze(playerid);
 			}
@@ -1294,7 +1309,7 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 			if (AC_cheats[AC_cJetpack][AC_ccIsEnabled]) {
 				AC_Watchguard_Jetpack(playerid);
 			}
-			// TODO: Hook other modules.
+			// AC_cModSa is a one-time check. It can be efectuated later, but it has to be triggered manually.
 		}
 	}
 	
@@ -1346,7 +1361,7 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 	 * <param name="playerid">Player's ID.</param>
 	 */
 	AC_STOCK AC_Watchguard_Freeze(playerid) {
-		if (AC_players[playerid][AC_pState] & AC_psFreeze) {
+		if (AC_players[playerid][AC_pState] & AC_psIsFrozen) {
 			TogglePlayerControllable(playerid, false);
 		}
 	}
@@ -1404,6 +1419,39 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 		GetPlayerKeys(playerid, keys, ud, lr);
 		if (((ud != 128) && (ud != 0) && (ud != -128)) || ((lr != 128) && (lr != 0) && (lr != -128))) {
 			AC_CheatDetected(playerid, AC_cJoypad);
+		}
+	}
+	
+#endif
+#file "watchguard/impl/Watchguard_ModSa.pwn"
+#line 0
+#if defined AC_MASTER
+
+	/**
+	 * <summary>Initiates a m0d_sa check.</summary>
+	 * <param name="playerid">Player's ID.</param>
+	 */
+	AC_STOCK AC_Watchguard_ModSa(playerid) {
+		SetCameraBehindPlayer(playerid);
+		TogglePlayerControllable(playerid, false);
+		SetTimerEx(#AC_Watchguard_ModSa_, AC_MOD_SA_CHECK_INTERVAL, false, "i", playerid);
+	}
+	
+	/**
+	 * <summary>Checks if a player is using m0d_sa.</summary>
+	 * <param name="playerid">Player's ID.</param>
+	 */
+	AC_PUBLIC AC_Watchguard_ModSa_(playerid) {
+		new Float:vector[3];
+		GetPlayerCameraFrontVector(playerid, vector[0], vector[1], vector[2]);
+		TogglePlayerControllable(playerid, true);
+		if (AC_IsPlayerAFK(playerid)) {
+			// Player tries to by-pass this check by going into main menu and blocking updates.
+			AC_Watchguard_ModSa(playerid);
+		} else {
+			if (vector[2] < AC_MOD_SA_MAGIC) {
+				AC_CheatDetected(playerid, AC_cModSa);
+			}
 		}
 	}
 	

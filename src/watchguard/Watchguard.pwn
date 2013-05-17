@@ -21,6 +21,7 @@
 				AC_players[playerid][AC_pState] &= ~AC_psWasAFK;
 			}
 			// Anti-cheat modules calls.
+			// TODO: Hook other modules.
 			if (AC_cheats[AC_cUnknown][AC_ccIsEnabled]) {
 				AC_Watchguard_Freeze(playerid);
 			}
@@ -45,7 +46,7 @@
 			if (AC_cheats[AC_cJetpack][AC_ccIsEnabled]) {
 				AC_Watchguard_Jetpack(playerid);
 			}
-			// TODO: Hook other modules.
+			// AC_cModSa is a one-time check. It can be efectuated later, but it has to be triggered manually.
 		}
 	}
 	

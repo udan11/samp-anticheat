@@ -3,9 +3,9 @@
 	AC_PUBLIC AC_TogglePlayerControllable(playerid, toggle) {
 		if (IsPlayerConnected(playerid)) {
 			if (toggle) {
-				AC_players[playerid][AC_pState] &= ~AC_psFreeze;
+				AC_players[playerid][AC_pState] &= ~AC_psIsFrozen;
 			} else {
-				AC_players[playerid][AC_pState] |= AC_psFreeze;
+				AC_players[playerid][AC_pState] |= AC_psIsFrozen;
 			}
 		}
 		return TogglePlayerControllable(playerid, toggle);

@@ -5,7 +5,7 @@
 	 * <param name="playerid">Player's ID.</param>
 	 */
 	AC_STOCK AC_Watchguard_Freeze(playerid) {
-		if (AC_players[playerid][AC_pState] & AC_psFreeze) {
+		if (AC_players[playerid][AC_pState] & AC_psIsFrozen) {
 			TogglePlayerControllable(playerid, false);
 		}
 	}

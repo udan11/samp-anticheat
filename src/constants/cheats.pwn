@@ -118,7 +118,7 @@
 		/**
 		 * <summary>Checks if a player is using the famous `m0d_sa` AIO hacking tool.</summary>
 		 */
-		AC_cModSa, // TODO
+		AC_cModSa,
 	};
 
 	/**

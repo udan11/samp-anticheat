@@ -6,7 +6,7 @@
 #if defined AC_MASTER
 	AC_PUBLIC AC_IsPlayerSpawned(playerid) {
 		if (IsPlayerConnected(playerid)) {
-			return AC_players[playerid][AC_pState] & AC_psSpawn ? true : false;
+			return AC_players[playerid][AC_pState] & AC_psIsSpawned ? true : false;
 		}
 		return false;
 	}
