@@ -24,6 +24,11 @@
 		 * <summary>Keeps track of player's sync failures.</summary>
 		 */
 		AC_pSyncFails[AC_eSync],
+		
+		/**
+		 * <summary>Stores latest drunk level (used for FPS measurements).</summary>
+		 */
+		AC_pDrunkLevel,
 
 		/**
 		 * <summary>Stores latest FPS measurements.</summary>

@@ -77,6 +77,7 @@
 
 // Defines new functions. Not the real purpose of this anticheat.
 #if defined AC_NEW_FUNCTIONS
+	#define GetPlayerFPS			AC_GetPlayerFPS
 	#define IsPlayerAFK				AC_IsPlayerAFK
 	#define IsPlayerSpawned			AC_IsPlayerSpawned
 #endif

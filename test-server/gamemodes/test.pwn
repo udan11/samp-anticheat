@@ -8,8 +8,31 @@
 
 main() {}
 
+new Text:fpsTexts[MAX_PLAYERS];
+
 public OnPlayerConnect(playerid) {
 	GameTextForPlayer(playerid, "~w~SA-MP: ~r~Anticheat Test Script", 5000, 5);
+	fpsTexts[playerid] = TextDrawCreate(630.000000, 432.000000, "FPS: ?");
+	TextDrawAlignment(fpsTexts[playerid], 3);
+	TextDrawBackgroundColor(fpsTexts[playerid], 725113087);
+	TextDrawFont(fpsTexts[playerid], 2);
+	TextDrawLetterSize(fpsTexts[playerid], 0.230000, 1.299998);
+	TextDrawColor(fpsTexts[playerid], 462348543);
+	TextDrawSetOutline(fpsTexts[playerid], 1);
+	TextDrawSetProportional(fpsTexts[playerid], 1);
+	TextDrawShowForPlayer(playerid, fpsTexts[playerid]);
+	return 1;
+}
+
+public OnPlayerDisconnect(playerid, reason) {
+	TextDrawDestroy(fpsTexts[playerid]);
+	return 1;
+}
+
+public OnPlayerUpdate(playerid) {
+	new fps = AC_GetPlayerFPS(playerid), str[32];
+	format(str, sizeof(str), "FPS: %d", fps);
+	TextDrawSetString(fpsTexts[playerid], str);
 	return 1;
 }
 

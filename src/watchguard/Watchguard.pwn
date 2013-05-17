@@ -5,7 +5,7 @@
 	 */
 	AC_PUBLIC AC_Watchguard() {
 		foreach (new playerid : Player) {
-			// There is no point in checking players who are AFK or aren't spawned.
+			// There is no point in checking players who aren't spawned or are AFK.
 			if (!AC_IsPlayerSpawned(playerid)) {
 				continue;
 			} else if (AC_IsPlayerAFK(playerid)) {
@@ -26,6 +26,9 @@
 			}
 			if (AC_cheats[AC_cPing][AC_ccIsEnabled]) {
 				AC_Watchguard_Ping(playerid);
+			}
+			if (AC_cheats[AC_cPing][AC_ccIsEnabled]) {
+				AC_Watchguard_FPS(playerid);
 			}
 			if (AC_cheats[AC_cHealth][AC_ccIsEnabled]) {
 				AC_Watchguard_Health(playerid);

@@ -1,6 +1,11 @@
 #if defined AC_MASTER
 
 	/**
+	 * <summary>Minimum FPS rate accepted.</summary>
+	 */
+	#define AC_MIN_FPS						10
+
+	/**
 	 * <summary>Multiple measurements are done to deal with FPS spikes.</summary>
 	 */
 	#define AC_MAX_FPS_INDEX				4

@@ -79,6 +79,7 @@
 
 // Defines new functions. Not the real purpose of this anticheat.
 #if defined AC_NEW_FUNCTIONS
+	#define GetPlayerFPS			AC_GetPlayerFPS
 	#define IsPlayerAFK				AC_IsPlayerAFK
 	#define IsPlayerSpawned			AC_IsPlayerSpawned
 #endif
@@ -127,7 +128,7 @@ forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
 		/**
 		 * <summary>Not an actual hack. Players with low FPS usually spoils other players' gameplay.</summary>
 		 */
-		AC_cFPS, // TODO
+		AC_cFPS,
 		
 		/**
 		 * <summary>Not an actual hack. Used for AFK players.</summary>
@@ -152,7 +153,7 @@ forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
 		/**
 		 * <summary>Fake kill. The user is reported to have been killed by multiple persons in short interval.</summary>
 		 */
-		AC_cFakeKill, // TODO
+		AC_cFakeKill,
 		
 		/**
 		 * <summary>Teleport hack. Gives the ability to teleport.</summary>
@@ -229,7 +230,7 @@ forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
 	};
 
 	/**
-	 * <summary>Variable that holds the state of specific anti-cheat module and it's name.</summary>
+	 * <summary>Variable that holds the state of specific anti-cheat module and its name.</summary>
 	 */
 	stock AC_cheats[AC_eCheats][AC_eCheatConfig] = {
 		// AC_cUnknown
@@ -284,6 +285,11 @@ forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
 #if defined AC_MASTER
 
 	/**
+	 * <summary>Minimum FPS rate accepted.</summary>
+	 */
+	#define AC_MIN_FPS						10
+
+	/**
 	 * <summary>Multiple measurements are done to deal with FPS spikes.</summary>
 	 */
 	#define AC_MAX_FPS_INDEX				4
@@ -292,6 +298,11 @@ forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
 	 * <summary>Maximum slots for weapons.</summary>
 	 */
 	#define AC_MAX_WEAPON_SLOTS				13
+	
+	/**
+	 * <summary>Minimum time between deaths.</summary>
+	 */
+	#define AC_DEATH_TIME					5000
 
 	/**
 	 * <summary>Whether two or three dimension vectors should be used.</summary>
@@ -430,7 +441,7 @@ forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
 	/**
 	 * The ID of the watchguard timer.
 	 */
-	stock AC_watchguardTimer = 0;
+	static stock AC_watchguardTimer = 0;
 
 	/**
 	 * <summary>Stores a player's game data.</summary>
@@ -451,6 +462,11 @@ forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
 		 * <summary>Keeps track of player's sync failures.</summary>
 		 */
 		AC_pSyncFails[AC_eSync],
+		
+		/**
+		 * <summary>Stores latest drunk level (used for FPS measurements).</summary>
+		 */
+		AC_pDrunkLevel,
 
 		/**
 		 * <summary>Stores latest FPS measurements.</summary>
@@ -514,13 +530,13 @@ forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
 	/**
 	 * <summary>Stores players' game data.</summary>
 	 */
-	new AC_players[MAX_PLAYERS][AC_ePlayer];
+	static stock AC_players[MAX_PLAYERS][AC_ePlayer];
 	
 #endif
 #file "utils/CheatDetected.pwn"
 #line 0
 /**
- * Triggers the `Anticheat_OnCheatDetected` callback.
+ * <summary>Triggers the `Anticheat_OnCheatDetected` callback.</summary>
  * <param name="playerid">Player's ID.</param>
  * <param name="cheatid">Cheat ID.</param>
  * <param name="extraid">Additional cheat ID (depends on hack tool, detection method, etc.).</param>
@@ -528,11 +544,40 @@ forward AC_OnCheatDetected(playerid, cheatid, extraid, info[]);
  */
 AC_STOCK AC_CheatDetected(playerid, cheatid, extraid = 0, info[] = "") {
 	_AC_DEBUG("[anticheat] AC_CheatDetected(playerid = %d, cheatid = %d, extraid = %d, info = %s", playerid, cheatid, extraid, info);
+	if (!AC_cheats[cheatid][AC_ccIsEnabled]) {
+		_AC_DEBUG("[anticheat] Oops.. this cheat has been disabled.");
+		return;
+	}
 	if (isnull(info)) {
 		CallLocalFunction(#AC_OnCheatDetected, "iiis", playerid, cheatid, extraid, "\1");
 	} else {
 		CallLocalFunction(#AC_OnCheatDetected, "iiis", playerid, cheatid, extraid, info);
 	}
+}
+#file "utils/GetPlayerFPS.pwn"
+#line 0
+/**
+ * <summary>Checks if a player is AFK.</summary>
+ * <param name="playerid">Player's ID.</param>
+ * <returns>Player's FPS rate.</returns>
+ */
+AC_PUBLIC AC_GetPlayerFPS(playerid) {
+	#if defined AC_MASTER
+		if (IsPlayerConnected(playerid)) {
+			new fps;
+			for (new i = 0; i != AC_MAX_FPS_INDEX; ++i) {
+				if (AC_players[playerid][AC_pFPS][i] != 0) {
+					fps += AC_players[playerid][AC_pFPS][i];
+				} else {
+					fps += AC_MIN_FPS;
+				}
+			}
+			return fps / AC_MAX_FPS_INDEX;
+		}
+		return 0;
+	#else
+		return CallRemoteFunction(#AC_GetPlayerFPS, "i", playerid);
+	#endif
 }
 #file "utils/GetSpeed.pwn"
 #line 0
@@ -544,8 +589,8 @@ AC_STOCK AC_CheatDetected(playerid, cheatid, extraid = 0, info[] = "") {
  * <returns>The speed.</returns>
  */
 AC_STOCK_F Float:GetSpeed(Float:vx, Float:vy, Float:vz) {
-	return floatsqroot(vx * vx + vy * vy + vz * vz)
-	// Forward declaration is required because of the retrun value (float).
+	return floatsqroot(vx * vx + vy * vy + vz * vz);
+	// Forward declaration is required because of the return value (float).
 }
 #file "utils/IsPlayerAFK.pwn"
 #line 0
@@ -946,10 +991,29 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 #if defined AC_MASTER
 
 	// OnPlayerDeath hook.
-	public OnPlayerDeath(playerid) {
+	public OnPlayerDeath(playerid, killerid, reason) {
+		if (AC_cheats[AC_cFakeKill][AC_ccIsEnabled]) {
+			new now = GetTickCount();
+			if (killerid != INVALID_PLAYER_ID) {
+				if (now - AC_players[playerid][AC_pLastDeath] < AC_DEATH_TIME) {
+					AC_CheatDetected(playerid, AC_cFakeKill);
+				}
+				/*
+				// Alternative (not tested): The weapons don't match.
+				if (GetPlayerWeapon(killerid) != reason) {
+					AC_CheatDetected(playerid, AC_cFakeKill);
+				}
+				// Alternative (not tested): Target player is not streamed in for killer.
+				if (!IsPlayerStreamedInForPlayer(playerid, killerid)) {
+					AC_CheatDetected(playerid, AC_cFakeKill);
+				}
+				*/
+			}
+			AC_players[playerid][AC_pLastDeath] = now;
+		}
 		AC_players[playerid][AC_pState] &= ~AC_psSpawn;
 		#if defined AC_OnPlayerDeath
-			return AC_OnPlayerDeath(playerid);
+			return AC_OnPlayerDeath(playerid, killerid, reason);
 		#else
 			return 1;
 		#endif
@@ -963,7 +1027,7 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 	#define OnPlayerDeath AC_OnPlayerDeath
 
 	#if defined AC_OnPlayerDeath
-		forward AC_OnPlayerDeath(playerid);
+		forward AC_OnPlayerDeath(playerid, killerid, reason);
 	#endif
 	
 #endif
@@ -1035,6 +1099,20 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 	// OnPlayerUpdate hook.
 	public OnPlayerUpdate(playerid) {
 		AC_players[playerid][AC_pLastUpdate] = GetTickCount();
+		new drunkLevel = GetPlayerDrunkLevel(playerid);
+		if (drunkLevel < 100) {
+			// 2000 is the maximum drunk level the player doesn't notice.
+			SetPlayerDrunkLevel(playerid, 2000);
+			AC_players[playerid][AC_pDrunkLevel] = 2000;
+		} else if (AC_players[playerid][AC_pDrunkLevel] != drunkLevel) {
+			new fps = AC_players[playerid][AC_pDrunkLevel] - drunkLevel;
+			if (0 < fps < 200) {
+				new index = (AC_players[playerid][AC_pFPSIndex] + 1) % AC_MAX_FPS_INDEX;
+				AC_players[playerid][AC_pFPS][index] = fps;
+				AC_players[playerid][AC_pFPSIndex] = index;
+			}
+			AC_players[playerid][AC_pDrunkLevel] = drunkLevel;
+		}
 		#if defined AC_OnPlayerUpdate
 			return AC_OnPlayerUpdate(playerid);
 		#else
@@ -1176,7 +1254,7 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 	 */
 	AC_PUBLIC AC_Watchguard() {
 		foreach (new playerid : Player) {
-			// There is no point in checking players who are AFK or aren't spawned.
+			// There is no point in checking players who aren't spawned or are AFK.
 			if (!AC_IsPlayerSpawned(playerid)) {
 				continue;
 			} else if (AC_IsPlayerAFK(playerid)) {
@@ -1197,6 +1275,9 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 			}
 			if (AC_cheats[AC_cPing][AC_ccIsEnabled]) {
 				AC_Watchguard_Ping(playerid);
+			}
+			if (AC_cheats[AC_cPing][AC_ccIsEnabled]) {
+				AC_Watchguard_FPS(playerid);
 			}
 			if (AC_cheats[AC_cHealth][AC_ccIsEnabled]) {
 				AC_Watchguard_Health(playerid);
@@ -1236,6 +1317,22 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 				AC_CheatDetected(playerid, AC_cArmour);
 			}
 			AC_players[playerid][AC_pArmour] = armour;
+		}
+	}
+	
+#endif
+#file "watchguard/impl/Watchguard_FPS.pwn"
+#line 0
+#if defined AC_MASTER
+
+	/**
+	 * <summary>Checks if a player has low fps.</summary>
+	 * <param name="playerid">Player's ID.</param>
+	 */
+	AC_STOCK AC_Watchguard_FPS(playerid) {
+		new fps = AC_GetPlayerFPS(playerid);
+		if (fps < AC_MIN_FPS) {
+			AC_CheatDetected(playerid, AC_cFPS, fps);
 		}
 	}
 	
@@ -1332,12 +1429,13 @@ AC_STOCK AC_SetPlayerSync(playerid, sync, status = true) {
 #if defined AC_MASTER
 
 	/**
-	 * <summary>Checks if a player is using armour hack.</summary>
+	 * <summary>Checks if a player has big ping.</summary>
 	 * <param name="playerid">Player's ID.</param>
 	 */
 	AC_STOCK AC_Watchguard_Ping(playerid) {
-		if (GetPlayerPing(playerid) > AC_MAX_PING) {
-			AC_CheatDetected(playerid, AC_cPing);
+		new ping = GetPlayerPing(playerid);
+		if (ping > AC_MAX_PING) {
+			AC_CheatDetected(playerid, AC_cPing, ping);
 		}
 	}
 	

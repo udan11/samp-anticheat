@@ -28,7 +28,7 @@
 		/**
 		 * <summary>Not an actual hack. Players with low FPS usually spoils other players' gameplay.</summary>
 		 */
-		AC_cFPS, // TODO
+		AC_cFPS,
 		
 		/**
 		 * <summary>Not an actual hack. Used for AFK players.</summary>
