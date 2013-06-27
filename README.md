@@ -19,11 +19,11 @@ __WARNING!__ If there is more than one master instance per server the server mig
 1.    Include the Anticheat in your script:
 	*	__Master (core)__:
 	
-			#define ANTICHEAT_MASTER
+			#define AC_MASTER
 			#include <Anticheat>
 	*	__Slave__: 
 	
-			#define ANTICHEAT_SLAVE
+			#define AC_SLAVE
 			#include <Anticheat>
 2.	Compile your script.
 
